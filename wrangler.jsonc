@@ -6,7 +6,7 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
   "workers_dev": true,
-  "vars": { "APP_URL": "http://localhost:8787", "READ_ONLY": "false" },
+  "vars": { "APP_URL": "https://onceupontoday.site/", "READ_ONLY": "false" },
   "d1_databases": [
     {
       "binding": "DB",
