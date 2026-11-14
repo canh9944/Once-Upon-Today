@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    env_file: .env.local
+    environment:
+      DATABASE_PATH: /app/data/app.sqlite
+      UPLOAD_DIR: /app/data/uploads
+    volumes:
+      - once-data:/app/data
+volumes:
+  once-data:

@@ -1,0 +1,41 @@
+{
+    "name":  "once-upon-today-backend",
+    "version":  "1.0.0",
+    "private":  true,
+    "scripts":  {
+                    "build":  "tsc -p tsconfig.json",
+                    "start":  "node dist/backend/src/main.js",
+                    "start:dev":  "tsx watch src/main.ts",
+                    "migrate:legacy":  "node dist/backend/src/migrate.js",
+                    "typecheck":  "tsc -p tsconfig.json --noEmit"
+                },
+    "dependencies":  {
+                         "@nestjs/common":  "^11.1.0",
+                         "@nestjs/core":  "^11.1.0",
+                         "@nestjs/platform-express":  "^11.1.0",
+                         "better-sqlite3":  "^11.10.0",
+                         "cookie-parser":  "^1.4.7",
+                         "dompurify":  "^3.4.17",
+                         "dotenv":  "^16.6.0",
+                         "express":  "^5.1.0",
+                         "jose":  "^6.2.17",
+                         "jsdom":  "^26.1.0",
+                         "reflect-metadata":  "^0.2.2",
+                         "rxjs":  "^7.8.2",
+                         "sharp":  "^0.35.5",
+                         "typeorm":  "^0.3.28"
+                     },
+    "devDependencies":  {
+                            "@types/better-sqlite3":  "^7.6.13",
+                            "@types/cookie-parser":  "^1.4.9",
+                            "@types/express":  "^5.0.0",
+                            "@types/jsdom":  "^21.1.7",
+                            "@types/multer":  "^2.0.0",
+                            "@types/node":  "^22.0.0",
+                            "tsx":  "^4.20.0",
+                            "typescript":  "^5.7.0"
+                        },
+    "overrides":  {
+                      "glob":  "^14.0.2"
+                  }
+}

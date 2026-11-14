@@ -1,0 +1,15 @@
+node_modules
+.next
+.next-app
+.open-next
+.tools
+.wrangler
+.git
+.env*
+!.env.example
+.dev.vars*
+backend
+data
+backups
+artifacts
+*.tsbuildinfo

@@ -1,0 +1,9 @@
+# Local Workers preview only. Copy to .dev.vars and replace these values.
+# Production values must be set with wrangler secret put.
+APP_URL=http://localhost:8787
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=replace-with-a-long-unique-password
+SESSION_SECRET=replace-with-at-least-32-random-characters
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+ADMIN_GOOGLE_EMAILS=

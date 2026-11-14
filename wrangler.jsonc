@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "once-upon-today",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {"directory": ".open-next/assets", "binding": "ASSETS"},
+  "workers_dev": true,
+  "vars": {"APP_URL": "http://localhost:8787", "READ_ONLY": "false"},
+  "d1_databases": [{"binding":"DB","database_name":"once-upon-today","database_id":"REPLACE_WITH_D1_DATABASE_ID","migrations_dir":"database/migrations"}],
+  "r2_buckets": [{"binding":"MEDIA","bucket_name":"once-upon-today-media"}]
+}
