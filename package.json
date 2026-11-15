@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test:ad-placements": "node scripts/runtime.mjs --import tsx scripts/test-ad-placements.mts",
+    "test:ad-units": "node scripts/runtime.mjs --import tsx scripts/test-ad-units.mts",
     "test:adsense": "node scripts/runtime.mjs scripts/test-adsense.mjs",
     "dev": "node scripts/runtime.mjs node_modules/next/dist/bin/next dev",
     "dev:frontend": "node scripts/runtime.mjs node_modules/next/dist/bin/next dev",
