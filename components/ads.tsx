@@ -29,7 +29,6 @@ export default function Ads({placement}:{placement:'home-feature'|'home-feed'|'a
     return ()=>observer.disconnect();
   },[]);
   return <aside ref={container} className="ad" data-ad-placement={placement} lang={locale} aria-label={t.ad}>
-    <span className="ad-label">{t.ad}</span>
     <ins className="adsbygoogle" data-site-ad="true" style={{display:'block'}} data-ad-client={adsenseClient} data-ad-slot={adsenseSlot} data-ad-format="auto" data-full-width-responsive="true"/>
   </aside>;
 }
