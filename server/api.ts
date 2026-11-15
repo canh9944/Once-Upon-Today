@@ -17,6 +17,8 @@ const json=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'C
 async function body(req:Request){try{return await req.json();}catch{fail('validationError');}}
 async function route(req:Request):Promise<Response>{
  const url=new URL(req.url),path=url.pathname.replace(/^\/api\/?/,''),method=req.method;
+ const requestedLanguage=url.searchParams.get('language');
+ if(method==='GET'&&['posts','search'].includes(path)&&requestedLanguage&&requestedLanguage!=='all'&&!isLocale(requestedLanguage))fail('validationError');
  const remote=contentOrigin();
  if(remote){
   if(path==='health'&&method==='GET')return json({ok:true,database:null,contentSource:remote});
@@ -24,7 +26,7 @@ async function route(req:Request):Promise<Response>{
   if(path==='auth'&&method==='DELETE')return json({ok:true});
   if(path==='events'&&method==='POST')return json({ok:true});
   if(path==='posts'&&method==='GET')return json({posts:await remotePosts({country:url.searchParams.get('country')||undefined,language:url.searchParams.get('language')||undefined})});
-  if(path==='search'&&method==='GET')return json({posts:await remoteSearch({query:url.searchParams.get('q')||'',country:url.searchParams.get('country')||undefined,genre:url.searchParams.get('genre')||undefined})});
+  if(path==='search'&&method==='GET')return json({posts:await remoteSearch({query:url.searchParams.get('q')||'',country:url.searchParams.get('country')||undefined,genre:url.searchParams.get('genre')||undefined,language:url.searchParams.get('language')||undefined})});
   if(path.startsWith('stories/')&&method==='GET'){const post=await remoteStory(decodeURIComponent(path.slice(8)));if(!post)fail('notFound',404);return json({post});}
   fail('requestError',403);
  }
@@ -32,9 +34,9 @@ async function route(req:Request):Promise<Response>{
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(method))fail('maintenance',503);
  if(path==='health'&&method==='GET')return json({ok:true,database:getPlatform().kind==='node'?'sqlite':'d1'});
  if(path==='search'&&method==='GET'){
-  const query=url.searchParams.get('q')||'',country=url.searchParams.get('country')||undefined,genre=url.searchParams.get('genre')||undefined;
-  if(query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
-  return json({posts:await searchStories({query,country,genre})});
+  const query=url.searchParams.get('q')||'',country=url.searchParams.get('country')||undefined,genre=url.searchParams.get('genre')||undefined,language=url.searchParams.get('language')||undefined;
+  if(language&&language!=='all'&&!isLocale(language)||query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
+  return json({posts:await searchStories({query,country,genre,language})});
  }
  if(path==='auth'&&method==='GET'){const user=await currentUser(req);return json({authenticated:!!user,user,googleEnabled:!!(configured()&&env.GOOGLE_CLIENT_ID&&env.GOOGLE_CLIENT_SECRET&&env.APP_URL)});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
@@ -53,7 +55,7 @@ async function route(req:Request):Promise<Response>{
   if(!flow||!equal(url.searchParams.get('state')||'',flow.state)||url.searchParams.has('error')||!url.searchParams.get('code'))return reject('oauthFailed');
   try{const identity=await googleIdentity(url.searchParams.get('code')!,flow);if(!validEmail(identity.email))return reject('oauthFailed');const email=normalizeEmail(identity.email),existing=await one<Account>('SELECT * FROM users WHERE googleSub=?',[identity.sub]),collision=await one<Account>('SELECT * FROM users WHERE email=?',[email]);if(collision&&collision.id!==existing?.id)return reject('accountExists');const id=existing?.id||randomUUID();if(existing)await db.run('UPDATE users SET email=?,name=? WHERE id=?',[email,identity.name.slice(0,80),id]);else await db.run('INSERT INTO users VALUES(?,?,?,NULL,?,?)',[id,email,identity.name.slice(0,80),identity.sub,new Date().toISOString()]);const res=NextResponse.redirect(destination,307);await setSession(req,res,id);res.cookies.set(oauthCookie,'',{...cookieOptions(),maxAge:0});return res;}catch{return reject('oauthFailed');}
  }
- if(path==='posts'&&method==='GET'){const language=url.searchParams.get('language')||undefined,country=url.searchParams.get('country')||undefined;if(language&&!isLocale(language)||country&&!isCountryCode(country))fail('validationError');return json({posts:await listPosts({country,language,admin:(await currentUser(req))?.role==='admin'})});}
+ if(path==='posts'&&method==='GET'){const language=url.searchParams.get('language')||undefined,country=url.searchParams.get('country')||undefined;if(language&&language!=='all'&&!isLocale(language)||country&&!isCountryCode(country))fail('validationError');return json({posts:await listPosts({country,language,admin:(await currentUser(req))?.role==='admin'})});}
  if((path.startsWith('posts/')||path.startsWith('stories/'))&&method==='GET'){const editing=path.startsWith('posts/');if(editing)await admin(req);const post=await getPost(path.split('/')[1],editing);if(!post)fail('notFound',404);return json({post});}
  if(path==='posts'&&method==='POST'){
   await admin(req,true);const p=await body(req);if(!p||!['title','excerpt','category'].every(k=>typeof p[k]==='string'&&p[k].trim()&&p[k].length<1000)||typeof p.content!=='string'||!p.content.trim()||p.content.length>MAX_POST_CONTENT||!isCountryCode(p.country)||!isLocale(p.language)||typeof p.published!=='boolean'||p.contentFormat!==undefined&&!['text','html'].includes(p.contentFormat))fail('validationError');

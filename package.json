@@ -30,7 +30,9 @@
     "backup": "node scripts/runtime.mjs scripts/transfer.mjs export",
     "restore": "node scripts/runtime.mjs scripts/transfer.mjs import",
     "test:cloudflare": "node scripts/runtime.mjs scripts/cloudflare-smoke.mjs",
-    "test:shadcn": "node scripts/runtime.mjs --import tsx scripts/test-shadcn-browser.mts"
+    "test:shadcn": "node scripts/runtime.mjs --import tsx scripts/test-shadcn-browser.mts",
+    "test:language": "node scripts/runtime.mjs --import tsx scripts/test-language-filter.mts",
+    "test:language:browser": "node scripts/runtime.mjs --import tsx scripts/test-language-browser.mts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.17",

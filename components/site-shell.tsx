@@ -10,8 +10,8 @@ import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from './ui/se
 import {Slider} from './ui/slider';
 import {ArrowUpRight,Globe2,Moon,SlidersHorizontal,Sun} from 'lucide-react';
 import {brand,categories,categoryName,categoryValue,isLocale,languageNames,locales} from '@/lib/i18n';
-import {countries} from '@/lib/data';
-import {browseHref} from '@/lib/country-selection';
+import {languageBrowseHref as browseHref} from '@/lib/language-selection';
+import {languages,languageLabel,isLanguageSelection} from '@/shared/languages';
 import {useSite} from './site-context';
 import {AuthControl} from './auth-provider';
 import HeaderSearch from './header-search';
@@ -22,17 +22,17 @@ export function LanguageSelect(){
   const {locale,t}=useSite(),router=useRouter(),pathname=usePathname();
   return <div className="language-select"><Globe2 size={15}/><Select value={locale} onValueChange={next=>{if(isLocale(next))router.push('/'+next+(pathname.split('/')[2]==='admin'?'/'+pathname.split('/').slice(2).join('/'):''));}}><SelectTrigger size="sm" aria-label={t.language}><SelectValue/></SelectTrigger><SelectContent position="popper">{locales.map(code=><SelectItem lang={code} key={code} value={code}>{languageNames[code]}</SelectItem>)}</SelectContent></Select></div>;
 }
-export function Brand({footer=false}:{footer?:boolean}){const {country}=useSite();return <Link href={browseHref(country)} className={footer?'footer-logo once-brand':'logo once-brand'}><img className="brand-mark" src="/brand/mark.svg" alt="" width={48} height={48}/><span className="brand-wordmark">Once Upon<span className="brand-today">Today<span className="brand-dot">.</span></span></span></Link>;}
+export function Brand({footer=false}:{footer?:boolean}){const {language}=useSite();return <Link href={browseHref(language)} className={footer?'footer-logo once-brand':'logo once-brand'}><img className="brand-mark" src="/brand/mark.svg" alt="" width={48} height={48}/><span className="brand-wordmark">Once Upon<span className="brand-today">Today<span className="brand-dot">.</span></span></span></Link>;}
 
 function HeaderFilters({children}:{children:ReactNode}){
-  const {locale,t,country,countryLabels}=useSite(),router=useRouter(),search=useSearchParams();
+  const {locale,t,language}=useSite(),router=useRouter(),search=useSearchParams();
   const query=search.get('q')||'';
   const rawGenre=categoryValue(search.get('genre')||'all'),genre=categories.some(c=>c===rawGenre)?rawGenre:'all';
   return <><Brand/>
     <HeaderSearch genre={genre}/>
     <div className="header-right"><div className="header-selections">
-    <div className="header-country"><Globe2 size={18}/><span className="sr-only">{t.country}</span><SearchableSelect label={t.country} value={country} onChange={value=>router.push(browseHref(value))} options={[{value:'all',label:t.allCountries},...countries.map(c=>({value:c.code,label:c.flag+' '+countryLabels[c.code],keywords:c.name}))]} searchPlaceholder={uiCopy(locale).searchOptions} emptyMessage={uiCopy(locale).noOptions}/></div>
-    <div className="header-genre"><span className="sr-only">{t.category}</span><SearchableSelect label={t.category} value={genre} onChange={value=>router.push(browseHref(country,{genre:value,query}))} options={[{value:'all',label:t.category+': '+t.all},...categories.map(c=>({value:c,label:categoryName(c,locale)}))]} searchPlaceholder={t.search} emptyMessage={t.empty}/></div>
+    <div className="header-country header-language"><Globe2 size={18}/><span className="sr-only">{t.language}</span><SearchableSelect label={t.language} value={language} onChange={value=>{if(isLanguageSelection(value))router.push(browseHref(value,{genre,query}));}} options={[{value:'all',label:uiCopy(locale).allLanguages},...languages.map(code=>({value:code,label:languageLabel(code,locale),keywords:languageNames[code]+' '+code}))]} searchPlaceholder={uiCopy(locale).searchOptions} emptyMessage={uiCopy(locale).noOptions}/></div>
+    <div className="header-genre"><span className="sr-only">{t.category}</span><SearchableSelect label={t.category} value={genre} onChange={value=>router.push(browseHref(language,{genre:value,query}))} options={[{value:'all',label:t.category+': '+t.all},...categories.map(c=>({value:c,label:categoryName(c,locale)}))]} searchPlaceholder={t.search} emptyMessage={t.empty}/></div>
     </div>{children}</div>
   </>;
 }

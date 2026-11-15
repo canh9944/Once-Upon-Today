@@ -1,3 +1,4 @@
+import {languages} from '../shared/languages';
 import assert from 'node:assert/strict';
 import {chromium,expect} from '@playwright/test';
 import {dictionary} from '../lib/i18n';
@@ -36,8 +37,8 @@ try{
     await expect(page.locator('.reader-body')).toHaveCSS('font-size','19px');
     await page.getByRole('button',{name:t.done,exact:true}).click();await expect(page.locator('.reading-settings')).toHaveCount(0);
     await page.locator('.header-country button').click();
-    await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(51);
-    await page.locator('.searchable-select-popover input').fill('US-UK');
+    await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(languages.length+1);
+    await page.locator('.searchable-select-popover input').fill('English');
     await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(1);
     await page.locator('.searchable-select-popover input').press('Escape');
     assert.ok(page.url().includes('/posts/'),'Dismissing combobox must preserve article');

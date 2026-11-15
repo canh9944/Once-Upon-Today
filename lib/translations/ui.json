@@ -16,7 +16,8 @@
     "relatedHint": "More stories you might enjoy.",
     "previousStories": "Previous stories",
     "nextStories": "Next stories",
-    "carouselLabel": "Story carousel"
+    "carouselLabel": "Story carousel",
+    "allLanguages": "All languages"
   },
   "vi": {
     "popularStories": "Câu chuyện phổ biến",
@@ -35,7 +36,8 @@
     "relatedHint": "Khám phá thêm những câu chuyện có thể bạn thích.",
     "previousStories": "Bài viết trước",
     "nextStories": "Bài viết tiếp theo",
-    "carouselLabel": "Danh sách bài viết dạng trượt"
+    "carouselLabel": "Danh sách bài viết dạng trượt",
+    "allLanguages": "Tất cả ngôn ngữ"
   },
   "fr": {
     "popularStories": "Histoires populaires",
@@ -54,7 +56,8 @@
     "relatedHint": "Plus d'histoires qui pourraient vous plaire.",
     "previousStories": "Histoires précédentes",
     "nextStories": "Histoires suivantes",
-    "carouselLabel": "Carrousel d'histoires"
+    "carouselLabel": "Carrousel d'histoires",
+    "allLanguages": "Toutes les langues"
   },
   "de": {
     "popularStories": "Beliebte Geschichten",
@@ -73,7 +76,8 @@
     "relatedHint": "Weitere Geschichten, die Ihnen gefallen könnten.",
     "previousStories": "Frühere Geschichten",
     "nextStories": "Nächste Geschichten",
-    "carouselLabel": "Geschichtenkarussell"
+    "carouselLabel": "Geschichtenkarussell",
+    "allLanguages": "Alle Sprachen"
   },
   "es": {
     "popularStories": "historias populares",
@@ -92,7 +96,8 @@
     "relatedHint": "Más historias que quizás disfrutes.",
     "previousStories": "Historias anteriores",
     "nextStories": "Próximas historias",
-    "carouselLabel": "carrusel de historias"
+    "carouselLabel": "carrusel de historias",
+    "allLanguages": "Todos los idiomas"
   },
   "it": {
     "popularStories": "Storie popolari",
@@ -111,7 +116,8 @@
     "relatedHint": "Altre storie che potrebbero piacerti.",
     "previousStories": "Storie precedenti",
     "nextStories": "Prossime storie",
-    "carouselLabel": "Carosello di storie"
+    "carouselLabel": "Carosello di storie",
+    "allLanguages": "Tutte le lingue"
   },
   "pt": {
     "popularStories": "Histórias populares",
@@ -130,7 +136,8 @@
     "relatedHint": "Mais histórias que você pode gostar.",
     "previousStories": "Histórias anteriores",
     "nextStories": "Próximas histórias",
-    "carouselLabel": "Carrossel de histórias"
+    "carouselLabel": "Carrossel de histórias",
+    "allLanguages": "Todos os idiomas"
   },
   "nl": {
     "popularStories": "Populaire verhalen",
@@ -149,7 +156,8 @@
     "relatedHint": "Meer verhalen waar je misschien van geniet.",
     "previousStories": "Vorige verhalen",
     "nextStories": "Volgende verhalen",
-    "carouselLabel": "Verhalencarrousel"
+    "carouselLabel": "Verhalencarrousel",
+    "allLanguages": "Alle talen"
   },
   "pl": {
     "popularStories": "Popularne historie",
@@ -168,7 +176,8 @@
     "relatedHint": "Więcej historii, które mogą Ci się spodobać.",
     "previousStories": "Poprzednie historie",
     "nextStories": "Kolejne historie",
-    "carouselLabel": "Karuzela opowieści"
+    "carouselLabel": "Karuzela opowieści",
+    "allLanguages": "Wszystkie języki"
   },
   "da": {
     "popularStories": "Populære historier",
@@ -187,7 +196,8 @@
     "relatedHint": "Flere historier, du måske vil nyde.",
     "previousStories": "Tidligere historier",
     "nextStories": "Næste historier",
-    "carouselLabel": "Historiekarrusel"
+    "carouselLabel": "Historiekarrusel",
+    "allLanguages": "Alle sprog"
   },
   "sv": {
     "popularStories": "Populära berättelser",
@@ -206,7 +216,8 @@
     "relatedHint": "Fler berättelser du kanske gillar.",
     "previousStories": "Tidigare berättelser",
     "nextStories": "Nästa berättelser",
-    "carouselLabel": "Berättelsekarusell"
+    "carouselLabel": "Berättelsekarusell",
+    "allLanguages": "Alla språk"
   },
   "ja": {
     "popularStories": "人気のストーリー",
@@ -225,7 +236,8 @@
     "relatedHint": "より多くのストーリーをお楽しみいただけます。",
     "previousStories": "以前の話",
     "nextStories": "次のストーリー",
-    "carouselLabel": "ストーリーカルーセル"
+    "carouselLabel": "ストーリーカルーセル",
+    "allLanguages": "すべての言語"
   },
   "ko": {
     "popularStories": "인기있는 이야기",
@@ -244,7 +256,8 @@
     "relatedHint": "당신이 즐길 수 있는 더 많은 이야기.",
     "previousStories": "이전 이야기",
     "nextStories": "다음 이야기",
-    "carouselLabel": "스토리 캐러셀"
+    "carouselLabel": "스토리 캐러셀",
+    "allLanguages": "모든 언어"
   },
   "th": {
     "popularStories": "เรื่องราวยอดนิยม",
@@ -263,7 +276,8 @@
     "relatedHint": "เรื่องราวอื่นๆ ที่คุณอาจเพลิดเพลิน",
     "previousStories": "เรื่องก่อนหน้า",
     "nextStories": "เรื่องต่อไป",
-    "carouselLabel": "ม้าหมุนเรื่องราว"
+    "carouselLabel": "ม้าหมุนเรื่องราว",
+    "allLanguages": "ทุกภาษา"
   },
   "nb": {
     "popularStories": "Populære historier",
@@ -282,7 +296,8 @@
     "relatedHint": "Flere historier du kanskje liker.",
     "previousStories": "Tidligere historier",
     "nextStories": "Neste historier",
-    "carouselLabel": "Historiekarusell"
+    "carouselLabel": "Historiekarusell",
+    "allLanguages": "Alle språk"
   },
   "fi": {
     "popularStories": "Suosittuja tarinoita",
@@ -301,7 +316,8 @@
     "relatedHint": "Lisää tarinoita, joista saatat nauttia.",
     "previousStories": "Edelliset tarinat",
     "nextStories": "Seuraavat tarinat",
-    "carouselLabel": "Tarinakaruselli"
+    "carouselLabel": "Tarinakaruselli",
+    "allLanguages": "Kaikki kielet"
   },
   "el": {
     "popularStories": "Δημοφιλείς ιστορίες",
@@ -320,7 +336,8 @@
     "relatedHint": "Περισσότερες ιστορίες μπορείτε να απολαύσετε.",
     "previousStories": "Προηγούμενες ιστορίες",
     "nextStories": "Επόμενες ιστορίες",
-    "carouselLabel": "Καρουζέλ ιστορίας"
+    "carouselLabel": "Καρουζέλ ιστορίας",
+    "allLanguages": "Όλες οι γλώσσες"
   },
   "is": {
     "popularStories": "Vinsælar sögur",
@@ -339,7 +356,8 @@
     "relatedHint": "Fleiri sögur sem þú gætir haft gaman af.",
     "previousStories": "Fyrri sögur",
     "nextStories": "Næstu sögur",
-    "carouselLabel": "Söguhringekja"
+    "carouselLabel": "Söguhringekja",
+    "allLanguages": "Öll tungumál"
   },
   "cs": {
     "popularStories": "Populární příběhy",
@@ -358,7 +376,8 @@
     "relatedHint": "Další příběhy, které by se vám mohly líbit.",
     "previousStories": "Předchozí příběhy",
     "nextStories": "Další příběhy",
-    "carouselLabel": "Příběhový kolotoč"
+    "carouselLabel": "Příběhový kolotoč",
+    "allLanguages": "Všechny jazyky"
   },
   "sk": {
     "popularStories": "Populárne príbehy",
@@ -377,7 +396,8 @@
     "relatedHint": "Ďalšie príbehy, ktoré by sa vám mohli páčiť.",
     "previousStories": "Predchádzajúce príbehy",
     "nextStories": "Ďalšie príbehy",
-    "carouselLabel": "Príbehový kolotoč"
+    "carouselLabel": "Príbehový kolotoč",
+    "allLanguages": "Všetky jazyky"
   },
   "ro": {
     "popularStories": "Povești populare",
@@ -396,7 +416,8 @@
     "relatedHint": "Mai multe povești care s-ar putea să vă placă.",
     "previousStories": "Povești anterioare",
     "nextStories": "Poveștile următoare",
-    "carouselLabel": "Carusel de povești"
+    "carouselLabel": "Carusel de povești",
+    "allLanguages": "Toate limbile"
   },
   "hu": {
     "popularStories": "Népszerű történetek",
@@ -415,7 +436,8 @@
     "relatedHint": "További történetek, amelyeket élvezhetsz.",
     "previousStories": "Korábbi történetek",
     "nextStories": "Következő történetek",
-    "carouselLabel": "Mesekörhinta"
+    "carouselLabel": "Mesekörhinta",
+    "allLanguages": "Minden nyelv"
   },
   "uk": {
     "popularStories": "Популярні історії",
@@ -434,7 +456,8 @@
     "relatedHint": "Більше історій, які можуть вам сподобатися.",
     "previousStories": "Попередні історії",
     "nextStories": "Наступні історії",
-    "carouselLabel": "Сюжетна карусель"
+    "carouselLabel": "Сюжетна карусель",
+    "allLanguages": "Усі мови"
   },
   "bg": {
     "popularStories": "Популярни истории",
@@ -453,7 +476,8 @@
     "relatedHint": "Още истории, които може да ви харесат.",
     "previousStories": "Предишни истории",
     "nextStories": "Следващи истории",
-    "carouselLabel": "Приказна въртележка"
+    "carouselLabel": "Приказна въртележка",
+    "allLanguages": "Всички езици"
   },
   "hr": {
     "popularStories": "Popularne priče",
@@ -472,7 +496,8 @@
     "relatedHint": "Više priča koje bi vam se mogle svidjeti.",
     "previousStories": "Prethodne priče",
     "nextStories": "Sljedeće priče",
-    "carouselLabel": "Vrtuljak priča"
+    "carouselLabel": "Vrtuljak priča",
+    "allLanguages": "Svi jezici"
   },
   "sl": {
     "popularStories": "Priljubljene zgodbe",
@@ -491,7 +516,8 @@
     "relatedHint": "Več zgodb, ki vam bodo morda všeč.",
     "previousStories": "Prejšnje zgodbe",
     "nextStories": "Naslednje zgodbe",
-    "carouselLabel": "Vrtiljak zgodb"
+    "carouselLabel": "Vrtiljak zgodb",
+    "allLanguages": "Vsi jeziki"
   },
   "et": {
     "popularStories": "Populaarsed lood",
@@ -510,7 +536,8 @@
     "relatedHint": "Rohkem lugusid, mis teile meeldivad.",
     "previousStories": "Eelmised lood",
     "nextStories": "Järgmised lood",
-    "carouselLabel": "Lugude karussell"
+    "carouselLabel": "Lugude karussell",
+    "allLanguages": "Kõik keeled"
   },
   "lv": {
     "popularStories": "Populāri stāsti",
@@ -529,7 +556,8 @@
     "relatedHint": "Vairāk stāstu, kas jums varētu patikt.",
     "previousStories": "Iepriekšējie stāsti",
     "nextStories": "Nākamie stāsti",
-    "carouselLabel": "Stāstu karuselis"
+    "carouselLabel": "Stāstu karuselis",
+    "allLanguages": "Visas valodas"
   },
   "lt": {
     "popularStories": "Populiarios istorijos",
@@ -548,7 +576,8 @@
     "relatedHint": "Daugiau istorijų, kurios jums gali patikti.",
     "previousStories": "Ankstesnės istorijos",
     "nextStories": "Tolesnės istorijos",
-    "carouselLabel": "Pasakojimų karuselė"
+    "carouselLabel": "Pasakojimų karuselė",
+    "allLanguages": "Visos kalbos"
   },
   "lb": {
     "popularStories": "Populär Geschichten",
@@ -567,7 +596,8 @@
     "relatedHint": "Méi Geschichten déi Dir genéisst.",
     "previousStories": "Virdrun Geschichte",
     "nextStories": "Nächst Geschichten",
-    "carouselLabel": "Geschicht Karussell"
+    "carouselLabel": "Geschicht Karussell",
+    "allLanguages": "All Sproochen"
   },
   "mt": {
     "popularStories": "Stejjer popolari",
@@ -586,7 +616,8 @@
     "relatedHint": "Aktar stejjer li tista’ tgawdi.",
     "previousStories": "Stejjer preċedenti",
     "nextStories": "Stejjer li jmiss",
-    "carouselLabel": "Karużell tal-istorja"
+    "carouselLabel": "Karużell tal-istorja",
+    "allLanguages": "Il-lingwi kollha"
   },
   "sq": {
     "popularStories": "Tregime të njohura",
@@ -605,7 +636,8 @@
     "relatedHint": "Më shumë histori që mund t'ju pëlqejnë.",
     "previousStories": "Historitë e mëparshme",
     "nextStories": "Historitë e radhës",
-    "carouselLabel": "Karuseli i tregimit"
+    "carouselLabel": "Karuseli i tregimit",
+    "allLanguages": "Të gjitha gjuhët"
   },
   "ca": {
     "popularStories": "Històries populars",
@@ -624,7 +656,8 @@
     "relatedHint": "Més històries que us poden agradar.",
     "previousStories": "Històries anteriors",
     "nextStories": "Propers contes",
-    "carouselLabel": "Carrusel de contes"
+    "carouselLabel": "Carrusel de contes",
+    "allLanguages": "Totes les llengües"
   },
   "bs": {
     "popularStories": "Popularne priče",
@@ -643,7 +676,8 @@
     "relatedHint": "Više priča u kojima biste mogli uživati.",
     "previousStories": "Prethodne priče",
     "nextStories": "Sljedeće priče",
-    "carouselLabel": "Story carousel"
+    "carouselLabel": "Story carousel",
+    "allLanguages": "Svi jezici"
   },
   "be": {
     "popularStories": "Папулярныя гісторыі",
@@ -662,7 +696,8 @@
     "relatedHint": "Больш гісторый, якія могуць вам спадабацца.",
     "previousStories": "Папярэднія гісторыі",
     "nextStories": "Наступныя гісторыі",
-    "carouselLabel": "Сюжэтная карусель"
+    "carouselLabel": "Сюжэтная карусель",
+    "allLanguages": "Усе мовы"
   },
   "sr-Latn": {
     "popularStories": "Popularne priče",
@@ -681,7 +716,8 @@
     "relatedHint": "Više priča koje bi vam se mogle svidjeti.",
     "previousStories": "Prethodne priče",
     "nextStories": "Sljedeće priče",
-    "carouselLabel": "Vrtuljak priča"
+    "carouselLabel": "Vrtuljak priča",
+    "allLanguages": "Svi jezici"
   },
   "sr": {
     "popularStories": "Популарне приче",
@@ -700,7 +736,8 @@
     "relatedHint": "Више прича у којима ћете можда уживати.",
     "previousStories": "Претходне приче",
     "nextStories": "Следеће приче",
-    "carouselLabel": "Вртешка прича"
+    "carouselLabel": "Вртешка прича",
+    "allLanguages": "Сви језици"
   },
   "mk": {
     "popularStories": "Популарни приказни",
@@ -719,7 +756,8 @@
     "relatedHint": "Повеќе приказни може да уживате.",
     "previousStories": "Претходни приказни",
     "nextStories": "Следни приказни",
-    "carouselLabel": "Рингишпил со приказна"
+    "carouselLabel": "Рингишпил со приказна",
+    "allLanguages": "Сите јазици"
   },
   "ru": {
     "popularStories": "Популярные истории",
@@ -738,7 +776,8 @@
     "relatedHint": "Еще больше историй, которые могут вам понравиться.",
     "previousStories": "Предыдущие истории",
     "nextStories": "Следующие истории",
-    "carouselLabel": "Карусель историй"
+    "carouselLabel": "Карусель историй",
+    "allLanguages": "Все языки"
   },
   "tr": {
     "popularStories": "Popüler hikayeler",
@@ -757,6 +796,7 @@
     "relatedHint": "Hoşunuza gidebilecek daha fazla hikaye.",
     "previousStories": "Önceki hikayeler",
     "nextStories": "Sonraki hikayeler",
-    "carouselLabel": "Hikaye atlıkarınca"
+    "carouselLabel": "Hikaye atlıkarınca",
+    "allLanguages": "Tüm diller"
   }
 }

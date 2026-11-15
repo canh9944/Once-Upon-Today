@@ -1,3 +1,4 @@
+import {languageGroup,languageLabel,type Language} from '../shared/languages';
 import assert from 'node:assert/strict';
 import {chromium,expect} from '@playwright/test';
 import {countries} from '../shared/data';
@@ -23,7 +24,7 @@ try{
       const response=await page.goto(origin+browseHref(country.code));assert.equal(response?.status(),200,`${country.code} page failed`);
       await expect(page.locator('html')).toHaveAttribute('lang',locale);
       await expect(page.locator('.section-heading h1')).toContainText(t.stories);
-      await expect(page.locator('.header-country button')).toContainText(countryName(country.code,locale));
+      await expect(page.locator('.header-country button')).toContainText(languageLabel(languageGroup(locale) as Language,locale));
       await page.locator('.header-genre button').click();
       await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(9);
       assert.deepEqual(await page.locator('.searchable-select-popover [role="option"]>span').allTextContents(),[`${t.category}: ${t.all}`,...categories.map(c=>categoryName(c,locale))]);

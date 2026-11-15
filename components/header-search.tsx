@@ -4,7 +4,7 @@ import Link from 'next/link';
 import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import {useEffect,useRef,useState,type FormEvent,type KeyboardEvent} from 'react';
 import {ArrowUpRight,Search,TrendingUp} from 'lucide-react';
-import {articleHref,browseHref} from '@/lib/country-selection';
+import {languageArticleHref as articleHref,languageBrowseHref as browseHref} from '@/lib/language-selection';
 import {categoryName} from '@/lib/i18n';
 import type {SearchStory} from '@/shared/search';
 import {useSite} from './site-context';
@@ -14,15 +14,15 @@ import {Command,CommandInput,CommandList,CommandItem} from './ui/command';
 import StoryImage from './story-image';
 
 export default function HeaderSearch({genre}:{genre:string}){
-  const {locale,t,country}=useSite(),router=useRouter(),pathname=usePathname(),search=useSearchParams();
+  const {locale,t,language}=useSite(),router=useRouter(),pathname=usePathname(),search=useSearchParams();
   const committedQuery=search.get('q')||'',input=useRef<HTMLInputElement>(null),form=useRef<HTMLFormElement>(null),keyboardSelection=useRef(false);
   const [query,setQuery]=useState(committedQuery),[open,setOpen]=useState(false),[selected,setSelected]=useState('');
   const [result,setResult]=useState<{key:string;posts:SearchStory[];error:boolean}|null>(null);
-  const key=new URLSearchParams({country,genre,q:query.trim()}).toString();
+  const key=new URLSearchParams({language,genre,q:query.trim()}).toString();
   const loading=open&&result?.key!==key,posts=result?.key===key?result.posts:[];
   const ui=uiCopy(locale),label=query.trim()?ui.searchResults:ui.popularStories;
   function close(){setOpen(false);keyboardSelection.current=false;}
-  useEffect(()=>{setQuery(committedQuery);setOpen(false);keyboardSelection.current=false;},[committedQuery,pathname,country,genre]);
+  useEffect(()=>{setQuery(committedQuery);setOpen(false);keyboardSelection.current=false;},[committedQuery,pathname,language,genre]);
   useEffect(()=>{
     if(!open)return;
     const controller=new AbortController(),timeout=setTimeout(async()=>{
@@ -31,11 +31,11 @@ export default function HeaderSearch({genre}:{genre:string}){
     },query.trim()?180:0);
     return ()=>{clearTimeout(timeout);controller.abort();};
   },[open,key,query]);
-  const href=(post:SearchStory)=>articleHref(post,country,{genre,query});
+  const href=(post:SearchStory)=>articleHref(post,language,{genre,query});
   function submit(event?:FormEvent){
     event?.preventDefault();close();const nextQuery=query.trim();
-    if(nextQuery===committedQuery.trim()||(!nextQuery&&pathname!==browseHref(country).split('?')[0]))return;
-    router.push(browseHref(country,{genre,query:nextQuery}));
+    if(nextQuery===committedQuery.trim()||(!nextQuery&&pathname.split('/').filter(Boolean).length>1))return;
+    router.push(browseHref(language,{genre,query:nextQuery}));
   }
   function keyDown(event:KeyboardEvent){
     if(event.key==='ArrowDown'||event.key==='ArrowUp'){keyboardSelection.current=true;setOpen(true);}

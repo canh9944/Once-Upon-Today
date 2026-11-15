@@ -2,6 +2,7 @@ import type {Post} from '../shared/data';
 import {normalizeSearch,type SearchStory} from '../shared/search';
 import {categoryValue} from '../shared/categories';
 import {englishMarket,normalizeCountry,matchesCountry,isCountryCode} from '../shared/countries';
+import {matchesLanguage} from '../shared/languages';
 
 /** Local public preview only. Production continues to use its own storage adapter. */
 export function contentOrigin(){
@@ -18,7 +19,8 @@ export async function contentResponse(endpoint:string){
 function remoteImage(value:string){return value.replace(/(^|["'\s(=])(\/api\/uploads\/[a-f0-9-]{36}\.(?:jpg|png|webp))/g,(_,prefix,src)=>`${prefix}${contentOrigin()}${src}`);}
 export function remotePost(post:Post):Post{return {...post,category:categoryValue(post.category),image:remoteImage(post.image),content:remoteImage(post.content)};}
 export async function remotePosts(filters:{country?:string;language?:string}={}):Promise<Post[]>{
-  const params=new URLSearchParams();if(filters.country&&filters.country!=='all'&&normalizeCountry(filters.country)!==englishMarket)params.set('country',filters.country);if(filters.language)params.set('language',filters.language);
+  // Fetch the public list so language groups include regional editions even on older APIs.
+  const params=new URLSearchParams();if(filters.country&&filters.country!=='all'&&normalizeCountry(filters.country)!==englishMarket)params.set('country',filters.country);
   let response=await contentResponse(`posts${params.size?'?'+params:''}`);
   // The deployed API may not yet recognize countries added to this UI.
   // Retry its public list, then filter locally without changing the selected country.
@@ -28,7 +30,7 @@ export async function remotePosts(filters:{country?:string;language?:string}={})
   }
   if(!response.ok)throw new Error(`Content API returned HTTP ${response.status}`);
   const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid content API response.');
-  return data.posts.filter((p:Post)=>p.published===true&&matchesCountry(p.country,filters.country)&&(!filters.language||p.language===filters.language)).map(remotePost);
+  return data.posts.filter((p:Post)=>p.published===true&&matchesCountry(p.country,filters.country)&&matchesLanguage(p.language,filters.language)).map(remotePost);
 }
 export async function remoteStory(id:string):Promise<Post|null>{
   const response=await contentResponse(`stories/${encodeURIComponent(id)}`);
@@ -36,14 +38,16 @@ export async function remoteStory(id:string):Promise<Post|null>{
   if(!response.ok)throw new Error(`Content API returned HTTP ${response.status}`);
   const {post}=await response.json();return post?.published===true?remotePost(post):null;
 }
-export async function remoteSearch(filters:{query?:string;country?:string;genre?:string}):Promise<SearchStory[]>{
+export async function remoteSearch(filters:{query?:string;country?:string;genre?:string;language?:string}):Promise<SearchStory[]>{
   const genre=categoryValue(filters.genre||'all');
   const params=new URLSearchParams({q:filters.query||'',country:normalizeCountry(filters.country||'all'),genre});
+  if(filters.language&&filters.language!=='all')params.set('language',filters.language);
   const response=await contentResponse(`search?${params}`);
-  if(response.ok){const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid search API response.');return data.posts.map((p:SearchStory)=>({...p,category:categoryValue(p.category),image:remoteImage(p.image)}));}
+  let ranked:SearchStory[]=[];
+  if(response.ok){const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid search API response.');ranked=data.posts.map((p:SearchStory)=>({...p,category:categoryValue(p.category),image:remoteImage(p.image)}));if(!filters.language||filters.language==='all')return ranked;}
   // Older deployments may not yet expose the suggestions endpoint.
-  const unsupportedCountry=response.status===400&&filters.country&&isCountryCode(filters.country);
-  if(response.status!==404&&!unsupportedCountry)throw new Error(`Search API returned HTTP ${response.status}`);
+  const unsupportedFilter=response.status===400&&(filters.language||filters.country&&isCountryCode(filters.country));
+  if(!response.ok&&response.status!==404&&!unsupportedFilter)throw new Error(`Search API returned HTTP ${response.status}`);
   const terms=normalizeSearch(filters.query||'').split(/\s+/).filter(Boolean);
-  return (await remotePosts({country:filters.country})).filter(p=>(genre==='all'||p.category===genre)&&terms.every(term=>normalizeSearch(`${p.title} ${p.excerpt} ${p.author} ${p.category}`).includes(term))).slice(0,6).map(({id,title,image,category,language,author})=>({id,title,image,category,language,author,views:0}));
+  return (await remotePosts({country:filters.country,language:filters.language})).filter(p=>(genre==='all'||p.category===genre)&&terms.every(term=>normalizeSearch(`${p.title} ${p.excerpt} ${p.author} ${p.category}`).includes(term))).sort((a,b)=>{const rank=(id:string)=>{const index=ranked.findIndex(p=>p.id===id);return index<0?Infinity:index;};return rank(a.id)-rank(b.id);}).slice(0,6).map(({id,title,image,category,language,author})=>({id,title,image,category,language,author,views:ranked.find(p=>p.id===id)?.views||0}));
 }
