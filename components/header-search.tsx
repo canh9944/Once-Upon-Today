@@ -47,8 +47,7 @@ export default function HeaderSearch({genre}:{genre:string}){
   }
   return <Popover open={open} onOpenChange={value=>{setOpen(value);if(!value)keyboardSelection.current=false;}}><Command className="header-search" label={t.search} shouldFilter={false} value={selected} onValueChange={setSelected} onKeyDownCapture={keyDown} loop>
     <PopoverAnchor asChild><form ref={form} role="search" onSubmit={submit}>
-      <CommandInput ref={input} autoComplete="off" maxLength={200} aria-label={t.search} aria-expanded={open} placeholder={t.search} value={query} onFocus={()=>setOpen(true)} onClick={()=>setOpen(true)} onValueChange={value=>{setQuery(value);setOpen(true);keyboardSelection.current=false;}}/>
-      <Button type="submit" variant="ghost" size="icon" aria-label={t.search}><Search size={17}/></Button>
+      <CommandInput ref={input} appearance="search" action={<Button type="submit" variant="ghost" size="icon" aria-label={t.search}><Search size={17}/></Button>} autoComplete="off" maxLength={200} aria-label={t.search} aria-expanded={open} placeholder={t.search} value={query} onFocus={()=>setOpen(true)} onClick={()=>setOpen(true)} onValueChange={value=>{setQuery(value);setOpen(true);keyboardSelection.current=false;}}/>
     </form></PopoverAnchor>
     <PopoverContent className="search-suggestions" align="start" collisionPadding={16} aria-label={label} onOpenAutoFocus={event=>event.preventDefault()} onCloseAutoFocus={event=>event.preventDefault()} onInteractOutside={event=>{if(form.current?.contains(event.target as Node))event.preventDefault();}}>
       <div className="search-suggestions-heading"><TrendingUp size={15}/><span>{label}</span></div>

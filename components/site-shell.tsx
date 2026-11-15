@@ -31,8 +31,8 @@ function HeaderFilters({children}:{children:ReactNode}){
   return <><Brand/>
     <HeaderSearch genre={genre}/>
     <div className="header-right"><div className="header-selections">
-    <div className="header-country header-language"><Globe2 size={18}/><span className="sr-only">{t.language}</span><SearchableSelect label={t.language} value={language} onChange={value=>{if(isLanguageSelection(value))router.push(browseHref(value,{genre,query}));}} options={[{value:'all',label:uiCopy(locale).allLanguages},...languages.map(code=>({value:code,label:languageLabel(code,locale),keywords:languageNames[code]+' '+code}))]} searchPlaceholder={uiCopy(locale).searchOptions} emptyMessage={uiCopy(locale).noOptions}/></div>
-    <div className="header-genre"><span className="sr-only">{t.category}</span><SearchableSelect label={t.category} value={genre} onChange={value=>router.push(browseHref(language,{genre:value,query}))} options={[{value:'all',label:t.category+': '+t.all},...categories.map(c=>({value:c,label:categoryName(c,locale)}))]} searchPlaceholder={t.search} emptyMessage={t.empty}/></div>
+    <div className="header-country header-language"><Globe2 size={18}/><span className="sr-only">{t.language}</span><SearchableSelect label={t.language} value={language} onChange={value=>{if(isLanguageSelection(value))router.push(browseHref(value,{genre,query}));}} options={[{value:'all',label:uiCopy(locale).allLanguages},...languages.map(code=>({value:code,label:languageLabel(code,locale),keywords:languageNames[code]+' '+code}))]} searchPlaceholder={uiCopy(locale).searchLanguage} emptyMessage={uiCopy(locale).noOptions}/></div>
+    <div className="header-genre"><span className="sr-only">{t.category}</span><SearchableSelect label={t.category} value={genre} onChange={value=>router.push(browseHref(language,{genre:value,query}))} options={[{value:'all',label:t.category+': '+t.all},...categories.map(c=>({value:c,label:categoryName(c,locale)}))]} searchPlaceholder={uiCopy(locale).searchCategory} emptyMessage={uiCopy(locale).noOptions}/></div>
     </div>{children}</div>
   </>;
 }

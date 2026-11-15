@@ -168,12 +168,20 @@ html{scroll-padding-top:130px}
 /* shadcn primitives composed with the existing editorial design. */
 .related-slide{display:flex;flex-basis:33.333333%;padding-left:20px}.related-slide .related-card{width:100%;height:100%;box-shadow:none}.related-carousel [data-slot="carousel-content"]{padding:6px 2px 12px;margin:0 -2px}.related-controls [data-slot^="carousel-"]{position:static;transform:none}
 .searchable-select-popover[data-slot="popover-content"]{position:relative;top:auto;left:auto;right:auto;width:max(var(--radix-popover-trigger-width),280px);max-width:calc(100vw - 32px);padding:0;background:var(--paper);color:var(--text)}
-.searchable-select-popover [data-slot="command-input-wrapper"]{height:45px}.searchable-select-popover [data-slot="command-input"]{font-size:16px}.searchable-select-option[data-selected="true"]{background:var(--soft);color:var(--green)}
+.searchable-select-option[data-selected="true"]{background:var(--soft);color:var(--green)}
 .reading-settings{display:grid;gap:20px;width:290px;background:var(--paper);color:var(--text)}.reading-setting{display:grid;gap:12px}.reading-setting [data-slot="select-trigger"]{width:100%}.reading-setting [data-slot="slider"]{min-height:24px}
 .language-select [data-slot="select-trigger"]{max-width:155px;font-size:11px;border:0;box-shadow:none;padding:4px}.language-select [data-slot="select-value"]{overflow:hidden;text-overflow:ellipsis}
 @media(max-width:900px){.related-slide{flex-basis:50%}}
 @media(max-width:600px){.related-slide{flex-basis:85%}}
 
-.header-search[data-slot="command"]{overflow:visible;background:transparent;border-radius:0;height:auto}.header-search form{width:100%}.header-search [data-slot="command-input-wrapper"]{height:41px;padding:0;border:0}.header-search [data-slot="command-input-wrapper"]>svg{display:none}.header-search [data-slot="command-input"]{height:41px;padding:10px 43px 10px 12px;border:1px solid var(--line);border-radius:6px;box-shadow:0 1px 2px #0001}.header-search [data-slot="command-input"]:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.header-search[data-slot="command"]{overflow:visible;background:transparent;border-radius:0;height:auto}.header-search form{width:100%}
 .search-suggestions[data-slot="popover-content"]{position:relative;top:auto;left:auto;right:auto;padding:0;max-width:calc(100vw - 32px);background:var(--paper);color:var(--text)}.search-suggestion[data-selected="true"]{background:var(--soft)}
 @media(max-width:760px){.search-suggestions[data-slot="popover-content"]{width:var(--radix-popover-trigger-width)}}
+
+/* Shared shadcn CommandInput search appearance for story and filter searches. */
+.command-search-field{position:relative;display:flex;align-items:center;width:100%;height:41px;padding:0;border:0}
+.command-search-field .command-search-input{height:41px;width:100%;padding:10px 43px 10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--text);font-size:12px;box-shadow:0 1px 2px #0001}
+.command-search-field .command-search-input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.command-search-action{position:absolute;right:2px;top:2px;display:grid;place-items:center;width:36px;height:36px;color:var(--muted)}.command-search-action>button{position:static;width:36px;height:36px}.command-search-action>svg{pointer-events:none}
+.filter-search-field{padding:8px}
+@media(max-width:760px){.command-search-field .command-search-input{font-size:16px}}
