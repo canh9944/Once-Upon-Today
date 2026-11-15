@@ -38,16 +38,20 @@ export async function remoteStory(id:string):Promise<Post|null>{
   if(!response.ok)throw new Error(`Content API returned HTTP ${response.status}`);
   const {post}=await response.json();return post?.published===true?remotePost(post):null;
 }
-export async function remoteSearch(filters:{query?:string;country?:string;genre?:string;language?:string}):Promise<SearchStory[]>{
-  const genre=categoryValue(filters.genre||'all');
+export async function remoteSearch(filters:{query?:string;country?:string;genre?:string;language?:string;offset?:number;limit?:number}):Promise<SearchStory[]>{
+  const genre=categoryValue(filters.genre||'all'),offset=filters.offset||0,limit=filters.limit??6;
   const params=new URLSearchParams({q:filters.query||'',country:normalizeCountry(filters.country||'all'),genre});
   if(filters.language&&filters.language!=='all')params.set('language',filters.language);
+  params.set('offset',String(offset));params.set('limit',String(Math.min(limit,30)));
   const response=await contentResponse(`search?${params}`);
   let ranked:SearchStory[]=[];
-  if(response.ok){const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid search API response.');ranked=data.posts.map((p:SearchStory)=>({...p,category:categoryValue(p.category),image:remoteImage(p.image)}));if(!filters.language||filters.language==='all')return ranked;}
+  if(response.ok){const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid search API response.');ranked=data.posts.map((p:SearchStory)=>({...p,category:categoryValue(p.category),image:remoteImage(p.image)}));if('nextOffset' in data){
+    if(ranked.length<limit&&Number.isSafeInteger(data.nextOffset)&&data.nextOffset>offset){params.set('offset',String(data.nextOffset));params.set('limit',String(Math.min(30,limit-ranked.length)));const extra=await contentResponse(`search?${params}`);if(!extra.ok)throw new Error('Search API unavailable');const next=await extra.json();if(!Array.isArray(next.posts))throw new Error('Invalid search API response.');const seen=new Set(ranked.map(p=>p.id));for(const p of next.posts as SearchStory[])if(!seen.has(p.id)){seen.add(p.id);ranked.push({...p,category:categoryValue(p.category),image:remoteImage(p.image)});}}
+    return ranked.slice(0,limit);
+  }}
   // Older deployments may not yet expose the suggestions endpoint.
   const unsupportedFilter=response.status===400&&(filters.language||filters.country&&isCountryCode(filters.country));
   if(!response.ok&&response.status!==404&&!unsupportedFilter)throw new Error(`Search API returned HTTP ${response.status}`);
   const terms=normalizeSearch(filters.query||'').split(/\s+/).filter(Boolean);
-  return (await remotePosts({country:filters.country,language:filters.language})).filter(p=>(genre==='all'||p.category===genre)&&terms.every(term=>normalizeSearch(`${p.title} ${p.excerpt} ${p.author} ${p.category}`).includes(term))).sort((a,b)=>{const rank=(id:string)=>{const index=ranked.findIndex(p=>p.id===id);return index<0?Infinity:index;};return rank(a.id)-rank(b.id);}).slice(0,6).map(({id,title,image,category,language,author})=>({id,title,image,category,language,author,views:ranked.find(p=>p.id===id)?.views||0}));
+  return (await remotePosts({country:filters.country,language:filters.language})).filter(p=>(genre==='all'||p.category===genre)&&terms.every(term=>normalizeSearch(`${p.title} ${p.excerpt} ${p.author} ${p.category}`).includes(term))).sort((a,b)=>{const rank=(id:string)=>{const index=ranked.findIndex(p=>p.id===id);return index<0?Infinity:index;};return rank(a.id)-rank(b.id);}).slice(offset,offset+limit).map(({id,title,image,category,language,author})=>({id,title,image,category,language,author,views:ranked.find(p=>p.id===id)?.views||0}));
 }

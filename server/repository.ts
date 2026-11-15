@@ -6,15 +6,15 @@ import {categoryAliases,categoryValue} from '../shared/categories';
 import {countryMembers} from '../shared/countries';
 import {languageMembers} from '../shared/languages';
 
-export async function searchStories({query='',country,genre,language}:{query?:string;country?:string;genre?:string;language?:string}={}):Promise<SearchStory[]>{
-  if(contentOrigin())return remoteSearch({query,country,genre,language});
+export async function searchStories({query='',country,genre,language,offset=0,limit=6}:{query?:string;country?:string;genre?:string;language?:string;offset?:number;limit?:number}={}):Promise<SearchStory[]>{
+  if(contentOrigin())return remoteSearch({query,country,genre,language,offset,limit});
   const conditions=['p.published=1'],args:unknown[]=[];
   if(country&&country!=='all'){const members=countryMembers(country);conditions.push(`p.country IN (${members.map(()=>'?').join(',')})`);args.push(...members);}
   if(language&&language!=='all'){const members=languageMembers(language);conditions.push(`p.language IN (${members.map(()=>'?').join(',')})`);args.push(...members);}
   if(genre&&genre!=='all'){const aliases=categoryAliases(genre);conditions.push(`p.category IN (${aliases.map(()=>'?').join(',')})`);args.push(...aliases);}
   const posts=await getPlatform().db.all<SearchStory&{excerpt:string}>(`SELECT p.id,p.title,p.excerpt,p.image,p.category,p.language,p.author,COALESCE(v.views,0) views FROM posts p LEFT JOIN (SELECT postId,COUNT(*) views FROM events WHERE type='view' GROUP BY postId) v ON v.postId=p.id WHERE ${conditions.join(' AND ')} ORDER BY views DESC,p.date DESC,p.id ASC`,args);
   const terms=normalizeSearch(query).split(/\s+/).filter(Boolean);
-  return posts.filter(post=>{const text=normalizeSearch(`${post.title} ${post.excerpt} ${post.author} ${post.category}`);return terms.every(term=>text.includes(term));}).slice(0,6).map(({excerpt,...post})=>post);
+  return posts.filter(post=>{const text=normalizeSearch(`${post.title} ${post.excerpt} ${post.author} ${post.category}`);return terms.every(term=>text.includes(term));}).slice(offset,offset+limit).map(({excerpt,...post})=>post);
 }
 export const tables={posts:['id','title','excerpt','content','contentFormat','country','language','category','image','author','date','published'],users:['id','email','name','passwordHash','googleSub','createdAt','facebookSub','appleSub'],events:['key','visitor','type','postId','date'],uploads:['filename','mime','size','createdAt'],imports:['source','completedAt']} as const;
 export async function one<T>(sql:string,params:unknown[]=[]):Promise<T|null>{return (await getPlatform().db.all<T>(sql,params))[0]||null;}

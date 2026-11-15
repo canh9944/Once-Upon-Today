@@ -28,6 +28,14 @@ try{
   assert.deepEqual((await remoteSearch({language:'fr'})).map(p=>p.id),['belgium','france'],'Whitelist requested language even if old API ignores the filter');
   globalThis.fetch=async input=>String(input).includes('/search')?new Response('{}',{status:400}):Response.json({posts});
   assert.deepEqual((await remoteSearch({language:'fr'})).map(p=>p.id),['france','belgium']);
+  const many=Array.from({length:40},(_,i)=>({...post,id:`remote-${i}`,language:'fr'}));
+  // Deployed APIs without pagination must still expose results after the first six.
+  globalThis.fetch=async input=>String(input).includes('/search')?Response.json({posts:many.slice(0,6).map(p=>({...p,views:1}))}):Response.json({posts:many});
+  assert.deepEqual((await remoteSearch({offset:6,limit:7})).map(p=>p.id),many.slice(6,13).map(p=>p.id));
+  // New APIs supply pagination; use their order and handle a 31-row lookahead.
+  let requests=0;
+  globalThis.fetch=async input=>{requests++;const url=new URL(String(input));assert.ok(url.pathname.endsWith('/search'));const offset=Number(url.searchParams.get('offset')),limit=Number(url.searchParams.get('limit'));assert.ok(limit<=30);return Response.json({posts:many.slice(offset,offset+limit).map(p=>({...p,views:1})),nextOffset:offset+limit<many.length?offset+limit:null});};
+  assert.deepEqual((await remoteSearch({offset:6,limit:31})).map(p=>p.id),many.slice(6,37).map(p=>p.id));assert.equal(requests,2);
 }finally{
   globalThis.fetch=previousFetch;
   for(const key of ['NODE_ENV','DEPLOY_TARGET','CONTENT_API_URL','APP_URL']){if(previousEnv[key]===undefined)delete process.env[key];else process.env[key]=previousEnv[key];}

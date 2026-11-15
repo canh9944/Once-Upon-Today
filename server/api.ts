@@ -11,7 +11,7 @@ import type {Post} from '../shared/data';
 import {brand,isLocale} from '../shared/domain';
 import {MAX_IMAGE_BYTES,MAX_POST_CONTENT,isImageSource} from '../shared/content';
 import {hasContent,sanitizeContent} from '../shared/sanitize-content';
-import {contentOrigin,remotePosts,remoteStory,remoteSearch} from './remote-content';
+import {contentOrigin,remotePosts,remoteStory} from './remote-content';
 import {categoryValue} from '../shared/categories';
 import {localAuthEnabled} from './local-auth';
 
@@ -21,6 +21,13 @@ async function route(req:Request):Promise<Response>{
  const url=new URL(req.url),path=url.pathname.replace(/^\/api\/?/,''),method=req.method;
  const requestedLanguage=url.searchParams.get('language');
  if(method==='GET'&&['posts','search'].includes(path)&&requestedLanguage&&requestedLanguage!=='all'&&!isLocale(requestedLanguage))fail('validationError');
+ if(path==='search'&&method==='GET'){
+  const query=url.searchParams.get('q')||'',country=url.searchParams.get('country')||undefined,genre=url.searchParams.get('genre')||undefined,language=url.searchParams.get('language')||undefined;
+  const offset=Number(url.searchParams.get('offset')||0),pageSize=Number(url.searchParams.get('limit')||6);
+  if(query.length>200||country&&country!=='all'&&!isCountryCode(country)||!Number.isSafeInteger(offset)||offset<0||offset>1000000||!Number.isSafeInteger(pageSize)||pageSize<1||pageSize>30)fail('validationError');
+  const found=await searchStories({query,country,genre,language,offset,limit:pageSize+1});
+  return json({posts:found.slice(0,pageSize),nextOffset:found.length>pageSize?offset+pageSize:null});
+ }
  const remote=contentOrigin();
  if(remote){
   if(path==='health'&&method==='GET')return json({ok:true,database:null,contentSource:remote});
@@ -28,18 +35,12 @@ async function route(req:Request):Promise<Response>{
   if(path==='auth'&&method==='DELETE'&&!localAuthEnabled())return json({ok:true});
   if(path==='events'&&method==='POST')return json({ok:true});
   if(path==='posts'&&method==='GET')return json({posts:await remotePosts({country:url.searchParams.get('country')||undefined,language:url.searchParams.get('language')||undefined})});
-  if(path==='search'&&method==='GET')return json({posts:await remoteSearch({query:url.searchParams.get('q')||'',country:url.searchParams.get('country')||undefined,genre:url.searchParams.get('genre')||undefined,language:url.searchParams.get('language')||undefined})});
   if(path.startsWith('stories/')&&method==='GET'){const post=await remoteStory(decodeURIComponent(path.slice(8)));if(!post)fail('notFound',404);return json({post});}
   if(!localAuthEnabled()||!/^auth(?:\/|$)/.test(path))fail('requestError',403);
  }
  const {db,objects,env}=getPlatform();
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(method))fail('maintenance',503);
  if(path==='health'&&method==='GET')return json({ok:true,database:getPlatform().kind==='node'?'sqlite':'d1'});
- if(path==='search'&&method==='GET'){
-  const query=url.searchParams.get('q')||'',country=url.searchParams.get('country')||undefined,genre=url.searchParams.get('genre')||undefined,language=url.searchParams.get('language')||undefined;
-  if(language&&language!=='all'&&!isLocale(language)||query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
-  return json({posts:await searchStories({query,country,genre,language})});
- }
  if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple'),...(localAuthEnabled()?{authStorage:'memory'}:{})});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
  if(path==='auth/account'&&method==='DELETE'){
