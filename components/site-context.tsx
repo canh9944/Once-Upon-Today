@@ -8,7 +8,7 @@ import {resolveLanguage,languageLocale,languageBrowseHref} from '@/lib/language-
 import type {LanguageSelection} from '@/shared/languages';
 
 type Preferences={dark:boolean;font:'sans'|'serif'|'mono';size:number};
-type SiteState={locale:Locale;language:LanguageSelection;country:string;countryLabels:Record<string,string>;listHref:string;t:Dictionary;preferences:Preferences;setPreferences:(value:Preferences)=>void;saved:string[];toggleSaved:(id:string)=>void;liked:string[];like:(id:string)=>void};
+type SiteState={locale:Locale;language:LanguageSelection;country:string;countryLabels:Record<string,string>;listHref:string;t:Dictionary;preferences:Preferences;setPreferences:(value:Preferences)=>void;saved:string[];toggleSaved:(id:string)=>void;liked:string[];like:(id:string)=>void;clearReaderData:()=>void};
 const Context=createContext<SiteState|null>(null);
 // Preserve the original storage keys so rebranding does not erase readers' preferences or bookmarks.
 export function track(type:'view'|'like',postId:string){
@@ -36,7 +36,8 @@ export function SiteProvider({locale:routeLocale,children,countryLabels}:{locale
   },[]);
   useEffect(()=>{if(ready){document.documentElement.dataset.theme=preferences.dark?'dark':'light';persist('atlas-preferences',preferences);}},[preferences,ready]);
   const toggleSaved=useCallback((id:string)=>setSaved(previous=>{const next=previous.includes(id)?previous.filter(x=>x!==id):[...previous,id];persist('atlas-saved',next);return next;}),[]);
+  const clearReaderData=useCallback(()=>{setSaved([]);setLiked([]);for(const key of ['atlas-saved','atlas-liked','atlas-visitor'])try{localStorage.removeItem(key);}catch{}},[]);
   const like=useCallback((id:string)=>{setLiked(previous=>{if(previous.includes(id))return previous;const next=[...previous,id];persist('atlas-liked',next);return next;});track('like',id);},[]);
-  return <Context.Provider value={{locale,language,country,countryLabels:countryLabels[locale],listHref,t:dictionary(locale),preferences,setPreferences,saved,toggleSaved,liked,like}}><AuthProvider locale={locale}>{children}</AuthProvider></Context.Provider>;
+  return <Context.Provider value={{locale,language,country,countryLabels:countryLabels[locale],listHref,t:dictionary(locale),preferences,setPreferences,saved,toggleSaved,liked,like,clearReaderData}}><AuthProvider locale={locale}>{children}</AuthProvider></Context.Provider>;
 }
 export function useSite(){const context=useContext(Context);if(!context)throw new Error('SiteProvider is required');return context;}

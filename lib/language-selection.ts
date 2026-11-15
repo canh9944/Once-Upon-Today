@@ -22,6 +22,10 @@ export function languageSwitchHref(pathname:string,search:string,language:Langua
     params.set('lang',language);
     return `${pathname}?${params}`;
   }
+  if(/^\/[^/]+\/(privacy-policy|terms-of-service|user-data-deletion)\/?$/.test(pathname)){
+    params.set('lang',language);
+    return `/${language==='all'?'en':language}/${pathname.split('/')[2]}?${params}`;
+  }
   return languageBrowseHref(language,{genre:params.get('genre')||undefined,query:params.get('q')||undefined});
 }
 export function languageArticleHref(post:{id:string;language:Locale},language:LanguageSelection,filters:{genre?:string;query?:string}={}){

@@ -1,6 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {uiCopy} from '@/lib/ui-i18n';
+import {legalLabels} from '@/lib/legal-labels';
 import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import {useState,type ReactNode} from 'react';
 import {Button} from './ui/button';
@@ -42,4 +43,4 @@ export function SiteHeader(){
     <Popover open={settings} onOpenChange={setSettings}><PopoverTrigger asChild><Button type="button" variant="ghost" size="icon" aria-label={t.reading} className="icon-btn"><SlidersHorizontal size={19}/></Button></PopoverTrigger><PopoverContent align="end" className="reading-settings" aria-label={t.reading}><strong>{t.reading}</strong><div className="reading-setting"><Label>{t.font}</Label><Select value={preferences.font} onValueChange={font=>{if(font==='sans'||font==='serif'||font==='mono')setPreferences({...preferences,font});}}><SelectTrigger aria-label={t.font}><SelectValue/></SelectTrigger><SelectContent position="popper"><SelectItem value="sans">{ui.sans}</SelectItem><SelectItem value="serif">{ui.serif}</SelectItem><SelectItem value="mono">{ui.mono}</SelectItem></SelectContent></Select></div><div className="reading-setting"><Label>{t.size}: {preferences.size}px</Label><Slider min={16} max={26} step={1} value={[preferences.size]} aria-label={t.size} onValueChange={([size])=>setPreferences({...preferences,size})}/></div><Button type="button" variant="outline" onClick={()=>setSettings(false)}>{t.done}</Button></PopoverContent></Popover>
     </div></HeaderFilters></div></header></>;
 }
-export function SiteFooter(){const {locale,t}=useSite();return <footer><Brand footer/><span>© 2026 {brand}. {t.copyright}</span><Link href={`/${locale}/admin`}>{t.editors}<ArrowUpRight size={14}/></Link></footer>;}
+export function SiteFooter(){const {locale,t}=useSite(),legal=legalLabels(locale);return <footer><Brand footer/><span>© 2026 {brand}. {t.copyright}</span><Link href={`/${locale}/admin`}>{t.editors}<ArrowUpRight size={14}/></Link><nav className="footer-legal" aria-label={legal.navigation}><Link href={`/${locale}/privacy-policy`}>{legal.privacy}</Link><Link href={`/${locale}/terms-of-service`}>{legal.terms}</Link><Link href={`/${locale}/user-data-deletion`}>{legal.deletion}</Link></nav></footer>;}

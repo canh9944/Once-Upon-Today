@@ -36,7 +36,8 @@
     "test:language": "node scripts/runtime.mjs --import tsx scripts/test-language-filter.mts",
     "test:language:browser": "node scripts/runtime.mjs --import tsx scripts/test-language-browser.mts",
     "test:social-login": "node scripts/runtime.mjs node_modules/tsx/dist/cli.mjs --tsconfig scripts/tsconfig.server-tests.json scripts/test-social-login.mts",
-    "test:social-login:browser": "node scripts/runtime.mjs scripts/test-social-login-browser.mjs"
+    "test:social-login:browser": "node scripts/runtime.mjs scripts/test-social-login-browser.mjs",
+    "test:legal": "node scripts/runtime.mjs --import tsx scripts/test-legal-pages.mts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.17",

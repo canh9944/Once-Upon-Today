@@ -1,0 +1,242 @@
+{
+  "en": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "deletion": "User Data Deletion",
+    "navigation": "Policies and your data"
+  },
+  "vi": {
+    "privacy": "Chính sách bảo mật",
+    "terms": "Điều khoản dịch vụ",
+    "deletion": "Xóa dữ liệu người dùng",
+    "navigation": "Chính sách và dữ liệu của bạn"
+  },
+  "de": {
+    "privacy": "Datenschutzrichtlinie",
+    "terms": "Nutzungsbedingungen",
+    "deletion": "Löschung von Benutzerdaten",
+    "navigation": "Richtlinien und Ihre Daten"
+  },
+  "fr": {
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation",
+    "deletion": "Suppression des données utilisateur",
+    "navigation": "Politiques et vos données"
+  },
+  "es": {
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio",
+    "deletion": "Eliminación de datos de usuario",
+    "navigation": "Políticas y tus datos"
+  },
+  "it": {
+    "privacy": "Informativa sulla privacy",
+    "terms": "Termini di servizio",
+    "deletion": "Cancellazione dei dati dell'utente",
+    "navigation": "Politiche e i tuoi dati"
+  },
+  "pt": {
+    "privacy": "Política de Privacidade",
+    "terms": "Termos de Serviço",
+    "deletion": "Exclusão de dados do usuário",
+    "navigation": "Políticas e seus dados"
+  },
+  "nl": {
+    "privacy": "Privacybeleid",
+    "terms": "Servicevoorwaarden",
+    "deletion": "Verwijdering van gebruikersgegevens",
+    "navigation": "Beleid en uw gegevens"
+  },
+  "da": {
+    "privacy": "Privatlivspolitik",
+    "terms": "Servicevilkår",
+    "deletion": "Sletning af brugerdata",
+    "navigation": "Politikker og dine data"
+  },
+  "pl": {
+    "privacy": "Polityka prywatności",
+    "terms": "Warunki świadczenia usług",
+    "deletion": "Usuwanie danych użytkownika",
+    "navigation": "Polityka i Twoje dane"
+  },
+  "sv": {
+    "privacy": "Sekretesspolicy",
+    "terms": "Användarvillkor",
+    "deletion": "Radering av användardata",
+    "navigation": "Policyer och dina uppgifter"
+  },
+  "ko": {
+    "privacy": "개인 정보 보호 정책",
+    "terms": "서비스 약관",
+    "deletion": "사용자 데이터 삭제",
+    "navigation": "정책 및 데이터"
+  },
+  "ja": {
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "deletion": "ユーザーデータの削除",
+    "navigation": "ポリシーとあなたのデータ"
+  },
+  "th": {
+    "privacy": "นโยบายความเป็นส่วนตัว",
+    "terms": "ข้อกำหนดในการให้บริการ",
+    "deletion": "การลบข้อมูลผู้ใช้",
+    "navigation": "นโยบายและข้อมูลของคุณ"
+  },
+  "fi": {
+    "privacy": "Tietosuojakäytäntö",
+    "terms": "Palveluehdot",
+    "deletion": "Käyttäjätietojen poistaminen",
+    "navigation": "Käytännöt ja tietosi"
+  },
+  "nb": {
+    "privacy": "Personvernerklæring",
+    "terms": "Vilkår for bruk",
+    "deletion": "Sletting av brukerdata",
+    "navigation": "Retningslinjer og dine data"
+  },
+  "el": {
+    "privacy": "Πολιτική Απορρήτου",
+    "terms": "Όροι Παροχής Υπηρεσιών",
+    "deletion": "Διαγραφή δεδομένων χρήστη",
+    "navigation": "Πολιτικές και τα δεδομένα σας"
+  },
+  "is": {
+    "privacy": "Persónuverndarstefna",
+    "terms": "Þjónustuskilmálar",
+    "deletion": "Eyðing notendagagna",
+    "navigation": "Stefna og gögnin þín"
+  },
+  "cs": {
+    "privacy": "Zásady ochrany osobních údajů",
+    "terms": "Podmínky služby",
+    "deletion": "Smazání uživatelských dat",
+    "navigation": "Zásady a vaše data"
+  },
+  "hu": {
+    "privacy": "Adatvédelmi szabályzat",
+    "terms": "Szolgáltatási feltételek",
+    "deletion": "Felhasználói adatok törlése",
+    "navigation": "Szabályzatok és az Ön adatai"
+  },
+  "sk": {
+    "privacy": "Zásady ochrany osobných údajov",
+    "terms": "Zmluvné podmienky",
+    "deletion": "Vymazanie údajov používateľa",
+    "navigation": "Zásady a vaše údaje"
+  },
+  "ro": {
+    "privacy": "Politica de confidențialitate",
+    "terms": "Termeni și condiții",
+    "deletion": "Ștergerea datelor utilizatorului",
+    "navigation": "Politicile și datele dvs"
+  },
+  "uk": {
+    "privacy": "Політика конфіденційності",
+    "terms": "Умови обслуговування",
+    "deletion": "Видалення даних користувача",
+    "navigation": "Політика та ваші дані"
+  },
+  "bg": {
+    "privacy": "Политика за поверителност",
+    "terms": "Условия за ползване",
+    "deletion": "Изтриване на потребителски данни",
+    "navigation": "Политики и вашите данни"
+  },
+  "hr": {
+    "privacy": "Politika privatnosti",
+    "terms": "Uvjeti usluge",
+    "deletion": "Brisanje korisničkih podataka",
+    "navigation": "Politike i vaši podaci"
+  },
+  "et": {
+    "privacy": "Privaatsuspoliitika",
+    "terms": "Kasutustingimused",
+    "deletion": "Kasutajaandmete kustutamine",
+    "navigation": "Eeskirjad ja teie andmed"
+  },
+  "sl": {
+    "privacy": "Politika zasebnosti",
+    "terms": "Pogoji storitve",
+    "deletion": "Brisanje uporabniških podatkov",
+    "navigation": "Politike in vaši podatki"
+  },
+  "lv": {
+    "privacy": "Privātuma politika",
+    "terms": "Pakalpojuma noteikumi",
+    "deletion": "Lietotāja datu dzēšana",
+    "navigation": "Politikas un jūsu dati"
+  },
+  "lt": {
+    "privacy": "Privatumo politika",
+    "terms": "Paslaugų teikimo sąlygos",
+    "deletion": "Vartotojo duomenų ištrynimas",
+    "navigation": "Politika ir jūsų duomenys"
+  },
+  "sq": {
+    "privacy": "Politika e privatësisë",
+    "terms": "Kushtet e Shërbimit",
+    "deletion": "Fshirja e të dhënave të përdoruesit",
+    "navigation": "Politikat dhe të dhënat tuaja"
+  },
+  "lb": {
+    "privacy": "Privatsphär Politik",
+    "terms": "Konditioune vum Service",
+    "deletion": "Benotzerdaten Läschen",
+    "navigation": "Politiken an Är Donnéeën"
+  },
+  "mt": {
+    "privacy": "Politika ta' Privatezza",
+    "terms": "Termini tas-Servizz",
+    "deletion": "Tħassir tad-Dejta tal-Utent",
+    "navigation": "Politiki u d-data tiegħek"
+  },
+  "ca": {
+    "privacy": "Política de privadesa",
+    "terms": "Condicions del servei",
+    "deletion": "Supressió de dades d'usuari",
+    "navigation": "Polítiques i les teves dades"
+  },
+  "sr-Latn": {
+    "privacy": "Politika privatnosti",
+    "terms": "Uvjeti usluge",
+    "deletion": "Brisanje korisničkih podataka",
+    "navigation": "Politike i vaši podaci"
+  },
+  "bs": {
+    "privacy": "Politika privatnosti",
+    "terms": "Uslovi korištenja usluge",
+    "deletion": "Brisanje korisničkih podataka",
+    "navigation": "Pravila i vaši podaci"
+  },
+  "be": {
+    "privacy": "Палітыка прыватнасці",
+    "terms": "Умовы абслугоўвання",
+    "deletion": "Выдаленне дадзеных карыстальніка",
+    "navigation": "Палітыкі і вашы дадзеныя"
+  },
+  "mk": {
+    "privacy": "Политика за приватност",
+    "terms": "Услови за користење",
+    "deletion": "Бришење на кориснички податоци",
+    "navigation": "Политики и вашите податоци"
+  },
+  "sr": {
+    "privacy": "Политика приватности",
+    "terms": "Услови коришћења услуге",
+    "deletion": "Брисање корисничких података",
+    "navigation": "Смернице и ваши подаци"
+  },
+  "ru": {
+    "privacy": "Политика конфиденциальности",
+    "terms": "Условия использования",
+    "deletion": "Удаление пользовательских данных",
+    "navigation": "Политики и ваши данные"
+  },
+  "tr": {
+    "privacy": "Gizlilik Politikası",
+    "terms": "Hizmet Şartları",
+    "deletion": "Kullanıcı Verilerinin Silinmesi",
+    "navigation": "Politikalar ve verileriniz"
+  }
+}

@@ -69,5 +69,14 @@ try{
  assert.equal((await getPlatform().db.all<{count:number}>('SELECT COUNT(*) count FROM users'))[0].count,3);
  const db=new Database(process.env.DATABASE_PATH!);migrateLocal(db);migrateLocal(db);assert.equal(db.prepare('SELECT COUNT(*) count FROM users').get()!.count,3);db.close();
  const oldKey=process.env.APPLE_PRIVATE_KEY;delete process.env.APPLE_PRIVATE_KEY;assert.throws(()=>socialConfig('apple'));const disabled=await (await request('/api/auth')).json();assert.equal(disabled.appleEnabled,false);process.env.APPLE_PRIVATE_KEY=oldKey;
+ const facebookSession=session(await callback(await start('facebook'))),secondSession=session(await callback(await start('facebook')));
+ assert.equal((await request('/api/auth/account','DELETE',{confirm:true})).status,403);
+ assert.equal((await request('/api/auth/account','DELETE',{confirm:true},facebookSession,'https://evil.example')).status,403);
+ assert.equal((await request('/api/auth/account','DELETE',{confirm:false},facebookSession)).status,400);
+ assert.equal((await getPlatform().db.all<{count:number}>('SELECT COUNT(*) count FROM users'))[0].count,3);
+ const deletion=await request('/api/auth/account','DELETE',{confirm:true},facebookSession);assert.equal(deletion.status,200);assert.match(deletion.headers.get('set-cookie')!,/Max-Age=0/);
+ assert.equal((await getPlatform().db.all('SELECT * FROM users WHERE facebookSub=?',['facebook-subject'])).length,0);
+ assert.equal((await (await request('/api/auth','GET',undefined,secondSession)).json()).user,null);
+ assert.equal((await getPlatform().db.all<{count:number}>('SELECT COUNT(*) count FROM users'))[0].count,2);
  console.log('PASS: Google/Facebook/Apple callbacks, signed identity checks, Apple client secret/form POST, sessions/logout, safe return URLs, CSRF, nonce, email collision, missing email, reader permissions, returning users and repeat migrations.');
 }finally{globalThis.fetch=realFetch;/* Windows holds the runtime SQLite handle until process exit; fixture is outside the workspace. */}

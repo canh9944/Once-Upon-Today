@@ -41,6 +41,12 @@ async function route(req:Request):Promise<Response>{
  }
  if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple')});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
+ if(path==='auth/account'&&method==='DELETE'){
+  origin(req);const user=await currentUser(req);if(!user||user.id==='env-admin')fail('requestError',403);
+  const data=await body(req);if(data?.confirm!==true)fail('validationError');
+  await db.batch([{sql:'DELETE FROM sessions WHERE userId=?',params:[user.id]},{sql:'DELETE FROM users WHERE id=?',params:[user.id]}]);
+  const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;
+ }
  if((path==='auth'||path==='auth/signup')&&method==='POST'){
   origin(req);if(!configured())fail('configError',503);const signup=path.endsWith('signup');await limit(req,signup?'signup':'login',signup?5:10);const p=await body(req);
   if(!validEmail(p?.email)||typeof p.password!=='string'||p.password.length>128)fail(signup?'signupValidation':'loginError');const email=normalizeEmail(p.email);let id:string|undefined;

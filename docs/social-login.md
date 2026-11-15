@@ -38,6 +38,17 @@ Register these exact callback URLs:
 | Facebook | `https://onceupontoday.site/api/auth/facebook/callback` |
 | Apple | `https://onceupontoday.site/api/auth/apple/callback` |
 
+Public policy URLs for provider app settings:
+
+- Privacy Policy: `https://onceupontoday.site/en/privacy-policy`
+- Terms of Service: `https://onceupontoday.site/en/terms-of-service`
+- User Data Deletion instructions: `https://onceupontoday.site/en/user-data-deletion`
+
+The deletion URL is a public instructions page, not a Meta signed-request
+callback. Signed-in users can delete their website account there with explicit
+confirmation. The server removes the account and all its sessions; it does not
+delete the user's external social account.
+
 Google: create/configure an OAuth web client and publish the consent screen for
 public use. Facebook: enable Facebook Login for web, set the valid OAuth redirect
 URI, request `email` and `public_profile`, and complete Meta's required app/public
