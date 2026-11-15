@@ -2,6 +2,7 @@
 import {createContext,useContext,useEffect,useState,useCallback,type ReactNode} from 'react';
 import {dictionary,type Locale,type Dictionary} from '@/lib/i18n';
 import {AuthProvider} from './auth-provider';
+import {recordTraffic,stopTraffic,clearTrafficSession} from '@/lib/traffic-client';
 import {usePathname,useSearchParams} from 'next/navigation';
 import {resolveCountry} from '@/lib/country-selection';
 import {resolveLanguage,languageLocale,languageBrowseHref} from '@/lib/language-selection';
@@ -13,12 +14,14 @@ const Context=createContext<SiteState|null>(null);
 // Preserve the original storage keys so rebranding does not erase readers' preferences or bookmarks.
 export function track(type:'view'|'like',postId:string){
   try{let visitor=localStorage.getItem('atlas-visitor');if(!visitor){visitor=crypto.randomUUID();localStorage.setItem('atlas-visitor',visitor);}
+    if(type==='view')try{recordTraffic(postId,visitor);}catch{}
     void fetch('/api/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({visitor,type,postId})}).catch(()=>{});
   }catch{/* Reading remains available when browser storage is disabled. */}
 }
 function persist(key:string,value:unknown){try{localStorage.setItem(key,JSON.stringify(value));}catch{}}
 export function SiteProvider({locale:routeLocale,children,countryLabels}:{locale:Locale;children:ReactNode;countryLabels:Record<Locale,Record<string,string>>}){
   const search=useSearchParams(),pathname=usePathname();
+  useEffect(()=>()=>stopTraffic(),[pathname]);
   const country=resolveCountry(routeLocale,search.get('country'));
   const language=resolveLanguage(routeLocale,search.get('lang'),search.get('country'));
   const locale=pathname.split('/')[2]==='admin'?routeLocale:languageLocale(routeLocale,language);
@@ -36,7 +39,7 @@ export function SiteProvider({locale:routeLocale,children,countryLabels}:{locale
   },[]);
   useEffect(()=>{if(ready){document.documentElement.dataset.theme=preferences.dark?'dark':'light';persist('atlas-preferences',preferences);}},[preferences,ready]);
   const toggleSaved=useCallback((id:string)=>setSaved(previous=>{const next=previous.includes(id)?previous.filter(x=>x!==id):[...previous,id];persist('atlas-saved',next);return next;}),[]);
-  const clearReaderData=useCallback(()=>{setSaved([]);setLiked([]);for(const key of ['atlas-saved','atlas-liked','atlas-visitor'])try{localStorage.removeItem(key);}catch{}},[]);
+  const clearReaderData=useCallback(()=>{setSaved([]);setLiked([]);clearTrafficSession();for(const key of ['atlas-saved','atlas-liked','atlas-visitor'])try{localStorage.removeItem(key);}catch{}},[]);
   const like=useCallback((id:string)=>{setLiked(previous=>{if(previous.includes(id))return previous;const next=[...previous,id];persist('atlas-liked',next);return next;});track('like',id);},[]);
   return <Context.Provider value={{locale,language,country,countryLabels:countryLabels[locale],listHref,t:dictionary(locale),preferences,setPreferences,saved,toggleSaved,liked,like,clearReaderData}}><AuthProvider locale={locale}>{children}</AuthProvider></Context.Provider>;
 }

@@ -5,13 +5,14 @@ import {dictionary,categoryName,countryName,languageNames,locales,isLocale,forma
 import {authCopy} from '../lib/auth-i18n';
 import {editorCopy} from '../lib/editor-i18n';
 import {uiCopy} from '../lib/ui-i18n';
+import {analyticsCopy} from '../lib/analytics-i18n';
 import {countryLocale,countryLocales,resolveCountry,browseHref} from '../lib/country-selection';
 
 const keys=(object:object)=>Object.keys(object).sort();
-const reference={main:keys(dictionary('en')),auth:keys(authCopy('en')),editor:keys(editorCopy('en')),ui:keys(uiCopy('en'))};
+const reference={main:keys(dictionary('en')),auth:keys(authCopy('en')),editor:keys(editorCopy('en')),ui:keys(uiCopy('en')),analytics:keys(analyticsCopy('en'))};
 for(const locale of locales){
   assert.ok(isLocale(locale));assert.ok(languageNames[locale]);
-  const sections={main:dictionary(locale),auth:authCopy(locale),editor:editorCopy(locale),ui:uiCopy(locale)};
+  const sections={main:dictionary(locale),auth:authCopy(locale),editor:editorCopy(locale),ui:uiCopy(locale),analytics:analyticsCopy(locale)};
   assert.notEqual(sections.main.login.toLowerCase(),sections.auth.signup.toLowerCase(),`${locale}: sign-in and sign-up need distinct labels`);
   for(const [name,copy] of Object.entries(sections)){
     assert.deepEqual(keys(copy),reference[name as keyof typeof reference],`${locale}: incomplete ${name} keys`);

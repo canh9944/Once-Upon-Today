@@ -14,6 +14,9 @@ import {hasContent,sanitizeContent} from '../shared/sanitize-content';
 import {contentOrigin,remotePosts,remoteStory} from './remote-content';
 import {categoryValue} from '../shared/categories';
 import {localAuthEnabled} from './local-auth';
+import {captureTraffic,dateRange,trafficAnalytics} from './analytics';
+import {adsenseCallback,adsenseChannels,adsenseConnect,disconnectAdsense,revenueStatus,syncRevenue} from './adsense-reporting';
+import {cleanTag,fanpageSlug} from '../shared/analytics';
 
 const json=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'private, no-store'}});
 async function body(req:Request){try{return await req.json();}catch{fail('validationError');}}
@@ -33,7 +36,8 @@ async function route(req:Request):Promise<Response>{
   if(path==='health'&&method==='GET')return json({ok:true,database:null,contentSource:remote});
   if(path==='auth'&&method==='GET'&&!localAuthEnabled())return json({authenticated:false,user:null,googleEnabled:false,remoteOrigin:remote});
   if(path==='auth'&&method==='DELETE'&&!localAuthEnabled())return json({ok:true});
-  if(path==='events'&&method==='POST')return json({ok:true});
+  if(['events','traffic'].includes(path)&&method==='POST')return json({ok:true});
+  if(path==='analytics/channel'&&method==='GET')return json({channel:null});
   if(path==='posts'&&method==='GET')return json({posts:await remotePosts({country:url.searchParams.get('country')||undefined,language:url.searchParams.get('language')||undefined})});
   if(path.startsWith('stories/')&&method==='GET'){const post=await remoteStory(decodeURIComponent(path.slice(8)));if(!post)fail('notFound',404);return json({post});}
   if(!localAuthEnabled()||!/^auth(?:\/|$)/.test(path))fail('requestError',403);
@@ -41,6 +45,16 @@ async function route(req:Request):Promise<Response>{
  const {db,objects,env}=getPlatform();
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(method))fail('maintenance',503);
  if(path==='health'&&method==='GET')return json({ok:true,database:getPlatform().kind==='node'?'sqlite':'d1'});
+ if(path==='traffic'&&method==='POST'){origin(req);await limit(req,'traffic',1000);await captureTraffic(req,await body(req));return json({ok:true});}
+ if(path==='analytics/channel'&&method==='GET'){const slug=fanpageSlug(url.searchParams.get('fanpage'));const page=slug?await one<{adChannel:string|null}>('SELECT adChannel FROM fanpages WHERE slug=?',[slug]):null;return NextResponse.json({channel:page?.adChannel||null},{headers:{'Cache-Control':'public,max-age=300'}});}
+ if(path==='analytics'&&method==='GET'){await admin(req);const range=dateRange(url);return json({...await trafficAnalytics(range),pages:await db.all('SELECT slug,name,adChannel FROM fanpages ORDER BY name,slug'),revenue:await revenueStatus(range)});}
+ if(path==='analytics/fanpages'&&method==='POST'){await admin(req,true);const p=await body(req),slug=fanpageSlug(p?.slug),name=cleanTag(p?.name),channel=p?.adChannel?String(p.adChannel):null;if(!slug||!name||channel&&!/^\d{1,20}$/.test(channel))fail('validationError');try{await db.run('INSERT INTO fanpages(slug,name,adChannel,createdAt) VALUES(?,?,?,?) ON CONFLICT(slug) DO UPDATE SET name=excluded.name,adChannel=excluded.adChannel',[slug,name,channel,new Date().toISOString()]);}catch(e){if(String(e).includes('UNIQUE'))fail('fanpageChannelConflict',409);throw e;}return json({ok:true});}
+ if(path==='adsense/connect'&&method==='POST'){await admin(req,true);await limit(req,'adsense-connect',10);const p=await body(req);return adsenseConnect(req,p?.locale);}
+ if(path==='adsense/callback'&&method==='GET')return adsenseCallback(req);
+ if(path==='adsense/channels'&&method==='GET'){await admin(req);return json({channels:await adsenseChannels()});}
+ if(path==='adsense/sync'&&method==='POST'){await admin(req,true);await limit(req,'adsense-sync',10);return json(await syncRevenue(dateRange(url)));}
+ if(path==='adsense/disconnect'&&method==='POST'){await admin(req,true);await disconnectAdsense();return json({ok:true});}
+
  if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple'),...(localAuthEnabled()?{authStorage:'memory'}:{})});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
  if(path==='auth/account'&&method==='DELETE'){

@@ -8,4 +8,4 @@ export interface ObjectStorage{
   put(key:string,bytes:Uint8Array,contentType:string):Promise<void>;
   get(key:string):Promise<{bytes:Uint8Array;contentType:string}|null>;
 }
-export type Platform={kind:'node'|'cloudflare';db:SqlDatabase;objects:ObjectStorage;env:Record<string,string|undefined>};
+export type Platform={kind:'node'|'cloudflare';db:SqlDatabase;objects:ObjectStorage;env:Record<string,string|undefined>;country?:string};

@@ -39,7 +39,9 @@
     "test:social-login:browser": "node scripts/runtime.mjs scripts/test-social-login-browser.mjs",
     "test:legal": "node scripts/runtime.mjs --import tsx scripts/test-legal-pages.mts",
     "test:local-auth": "node scripts/runtime.mjs node_modules/tsx/dist/cli.mjs --tsconfig scripts/tsconfig.server-tests.json scripts/test-local-auth.mts",
-    "test:pagination": "node scripts/runtime.mjs --import tsx scripts/test-home-pagination.mts"
+    "test:pagination": "node scripts/runtime.mjs --import tsx scripts/test-home-pagination.mts",
+    "test:analytics": "node scripts/runtime.mjs node_modules/tsx/dist/cli.mjs --tsconfig scripts/tsconfig.server-tests.json scripts/test-analytics.mts",
+    "test:analytics:browser": "node scripts/runtime.mjs --import tsx scripts/test-analytics-browser.mts"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.17",
