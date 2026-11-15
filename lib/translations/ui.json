@@ -24,7 +24,8 @@
     "apple": "Continue with Apple",
     "socialUnavailable": "This sign-in method is currently unavailable.",
     "socialError": "Sign-in could not be completed. Please try again.",
-    "socialEmailMissing": "Please allow access to your email address, or use another sign-in method."
+    "socialEmailMissing": "Please allow access to your email address, or use another sign-in method.",
+    "localAuthNotice": "Local test mode. Accounts are separate from the live website and reset when the development server restarts."
   },
   "vi": {
     "popularStories": "Câu chuyện phổ biến",
@@ -51,7 +52,8 @@
     "apple": "Tiếp tục với Apple",
     "socialUnavailable": "Phương thức đăng nhập này hiện chưa khả dụng.",
     "socialError": "Không thể hoàn tất đăng nhập. Vui lòng thử lại.",
-    "socialEmailMissing": "Vui lòng cho phép truy cập địa chỉ email hoặc dùng phương thức đăng nhập khác."
+    "socialEmailMissing": "Vui lòng cho phép truy cập địa chỉ email hoặc dùng phương thức đăng nhập khác.",
+    "localAuthNotice": "Chế độ kiểm thử local. Tài khoản tách biệt với website thật và sẽ mất khi khởi động lại dev server."
   },
   "fr": {
     "popularStories": "Histoires populaires",
@@ -78,7 +80,8 @@
     "apple": "Continuer avec Apple",
     "socialUnavailable": "Cette méthode de connexion est actuellement indisponible.",
     "socialError": "La connexion n'a pas pu être complétée. Veuillez réessayer.",
-    "socialEmailMissing": "Veuillez autoriser l'accès à votre adresse e-mail ou utiliser une autre méthode de connexion."
+    "socialEmailMissing": "Veuillez autoriser l'accès à votre adresse e-mail ou utiliser une autre méthode de connexion.",
+    "localAuthNotice": "Mode test local. Les comptes sont séparés du site Web en direct et réinitialisés au redémarrage du serveur de développement."
   },
   "de": {
     "popularStories": "Beliebte Geschichten",
@@ -105,7 +108,8 @@
     "apple": "Weiter mit Apple",
     "socialUnavailable": "Diese Anmeldemethode ist derzeit nicht verfügbar.",
     "socialError": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
-    "socialEmailMissing": "Bitte erlauben Sie den Zugriff auf Ihre E-Mail-Adresse oder verwenden Sie eine andere Anmeldemethode."
+    "socialEmailMissing": "Bitte erlauben Sie den Zugriff auf Ihre E-Mail-Adresse oder verwenden Sie eine andere Anmeldemethode.",
+    "localAuthNotice": "Lokaler Testmodus. Konten sind von der Live-Website getrennt und werden beim Neustart des Entwicklungsservers zurückgesetzt."
   },
   "es": {
     "popularStories": "historias populares",
@@ -132,7 +136,8 @@
     "apple": "Continuar con Apple",
     "socialUnavailable": "Este método de inicio de sesión no está disponible actualmente.",
     "socialError": "No se pudo completar el inicio de sesión. Por favor inténtalo de nuevo.",
-    "socialEmailMissing": "Permita el acceso a su dirección de correo electrónico o utilice otro método de inicio de sesión."
+    "socialEmailMissing": "Permita el acceso a su dirección de correo electrónico o utilice otro método de inicio de sesión.",
+    "localAuthNotice": "Modo de prueba local. Las cuentas están separadas del sitio web activo y se restablecen cuando se reinicia el servidor de desarrollo."
   },
   "it": {
     "popularStories": "Storie popolari",
@@ -159,7 +164,8 @@
     "apple": "Continua con Apple",
     "socialUnavailable": "Questo metodo di accesso non è al momento disponibile.",
     "socialError": "Impossibile completare l'accesso. Per favore riprova.",
-    "socialEmailMissing": "Consenti l'accesso al tuo indirizzo email o utilizza un altro metodo di accesso."
+    "socialEmailMissing": "Consenti l'accesso al tuo indirizzo email o utilizza un altro metodo di accesso.",
+    "localAuthNotice": "Modalità di prova locale. Gli account sono separati dal sito Web live e vengono ripristinati al riavvio del server di sviluppo."
   },
   "pt": {
     "popularStories": "Histórias populares",
@@ -186,7 +192,8 @@
     "apple": "Continuar com a Apple",
     "socialUnavailable": "Este método de login não está disponível no momento.",
     "socialError": "Não foi possível concluir o login. Por favor, tente novamente.",
-    "socialEmailMissing": "Permita o acesso ao seu endereço de e-mail ou use outro método de login."
+    "socialEmailMissing": "Permita o acesso ao seu endereço de e-mail ou use outro método de login.",
+    "localAuthNotice": "Modo de teste local. As contas são separadas do site ativo e redefinidas quando o servidor de desenvolvimento é reiniciado."
   },
   "nl": {
     "popularStories": "Populaire verhalen",
@@ -213,7 +220,8 @@
     "apple": "Ga verder met Apple",
     "socialUnavailable": "Deze inlogmethode is momenteel niet beschikbaar.",
     "socialError": "Het inloggen kon niet worden voltooid. Probeer het opnieuw.",
-    "socialEmailMissing": "Geef toegang tot uw e-mailadres of gebruik een andere inlogmethode."
+    "socialEmailMissing": "Geef toegang tot uw e-mailadres of gebruik een andere inlogmethode.",
+    "localAuthNotice": "Lokale testmodus. Accounts zijn gescheiden van de live website en worden opnieuw ingesteld wanneer de ontwikkelingsserver opnieuw wordt opgestart."
   },
   "pl": {
     "popularStories": "Popularne historie",
@@ -240,7 +248,8 @@
     "apple": "Kontynuuj z Apple",
     "socialUnavailable": "Ta metoda logowania jest obecnie niedostępna.",
     "socialError": "Nie można ukończyć logowania. Spróbuj ponownie.",
-    "socialEmailMissing": "Zezwól na dostęp do swojego adresu e-mail lub użyj innej metody logowania."
+    "socialEmailMissing": "Zezwól na dostęp do swojego adresu e-mail lub użyj innej metody logowania.",
+    "localAuthNotice": "Lokalny tryb testowy. Konta są oddzielone od działającej witryny internetowej i resetowane po ponownym uruchomieniu serwera programistycznego."
   },
   "da": {
     "popularStories": "Populære historier",
@@ -267,7 +276,8 @@
     "apple": "Fortsæt med Apple",
     "socialUnavailable": "Denne login-metode er ikke tilgængelig i øjeblikket.",
     "socialError": "Login kunne ikke fuldføres. Prøv venligst igen.",
-    "socialEmailMissing": "Tillad venligst adgang til din e-mailadresse, eller brug en anden login-metode."
+    "socialEmailMissing": "Tillad venligst adgang til din e-mailadresse, eller brug en anden login-metode.",
+    "localAuthNotice": "Lokal testtilstand. Konti er adskilt fra live-webstedet og nulstilles, når udviklingsserveren genstarter."
   },
   "sv": {
     "popularStories": "Populära berättelser",
@@ -294,7 +304,8 @@
     "apple": "Fortsätt med Apple",
     "socialUnavailable": "Den här inloggningsmetoden är för närvarande inte tillgänglig.",
     "socialError": "Inloggningen kunde inte slutföras. Försök igen.",
-    "socialEmailMissing": "Tillåt åtkomst till din e-postadress eller använd en annan inloggningsmetod."
+    "socialEmailMissing": "Tillåt åtkomst till din e-postadress eller använd en annan inloggningsmetod.",
+    "localAuthNotice": "Lokalt testläge. Konton är separata från livewebbplatsen och återställs när utvecklingsservern startar om."
   },
   "ja": {
     "popularStories": "人気のストーリー",
@@ -321,7 +332,8 @@
     "apple": "Apple で続行",
     "socialUnavailable": "このサインイン方法は現在利用できません。",
     "socialError": "サインインを完了できませんでした。もう一度試してください。",
-    "socialEmailMissing": "電子メール アドレスへのアクセスを許可するか、別のサインイン方法を使用してください。"
+    "socialEmailMissing": "電子メール アドレスへのアクセスを許可するか、別のサインイン方法を使用してください。",
+    "localAuthNotice": "ローカルテストモード。アカウントは実際の Web サイトとは別のものであり、開発サーバーが再起動するとリセットされます。"
   },
   "ko": {
     "popularStories": "인기있는 이야기",
@@ -348,7 +360,8 @@
     "apple": "Apple과 함께 계속하세요",
     "socialUnavailable": "현재 이 로그인 방법을 사용할 수 없습니다.",
     "socialError": "로그인을 완료할 수 없습니다. 다시 시도해 주세요.",
-    "socialEmailMissing": "귀하의 이메일 주소에 대한 액세스를 허용하거나 다른 로그인 방법을 사용하십시오."
+    "socialEmailMissing": "귀하의 이메일 주소에 대한 액세스를 허용하거나 다른 로그인 방법을 사용하십시오.",
+    "localAuthNotice": "로컬 테스트 모드. 계정은 라이브 웹사이트와 별개이며 개발 서버가 다시 시작되면 재설정됩니다."
   },
   "th": {
     "popularStories": "เรื่องราวยอดนิยม",
@@ -375,7 +388,8 @@
     "apple": "ต่อด้วยแอปเปิล",
     "socialUnavailable": "วิธีการลงชื่อเข้าใช้นี้ไม่สามารถใช้งานได้ในขณะนี้",
     "socialError": "ไม่สามารถลงชื่อเข้าใช้ให้เสร็จสิ้นได้ โปรดลองอีกครั้ง",
-    "socialEmailMissing": "โปรดอนุญาตให้เข้าถึงที่อยู่อีเมลของคุณหรือใช้วิธีการลงชื่อเข้าใช้อื่น"
+    "socialEmailMissing": "โปรดอนุญาตให้เข้าถึงที่อยู่อีเมลของคุณหรือใช้วิธีการลงชื่อเข้าใช้อื่น",
+    "localAuthNotice": "โหมดทดสอบท้องถิ่น บัญชีจะแยกจากเว็บไซต์ที่ใช้งานจริงและรีเซ็ตเมื่อเซิร์ฟเวอร์การพัฒนารีสตาร์ท"
   },
   "nb": {
     "popularStories": "Populære historier",
@@ -402,7 +416,8 @@
     "apple": "Fortsett med Apple",
     "socialUnavailable": "Denne påloggingsmetoden er for øyeblikket utilgjengelig.",
     "socialError": "Pålogging kunne ikke fullføres. Vennligst prøv igjen.",
-    "socialEmailMissing": "Gi tilgang til e-postadressen din, eller bruk en annen påloggingsmetode."
+    "socialEmailMissing": "Gi tilgang til e-postadressen din, eller bruk en annen påloggingsmetode.",
+    "localAuthNotice": "Lokal testmodus. Kontoer er atskilt fra live-nettstedet og tilbakestilles når utviklingsserveren starter på nytt."
   },
   "fi": {
     "popularStories": "Suosittuja tarinoita",
@@ -429,7 +444,8 @@
     "apple": "Jatka Applella",
     "socialUnavailable": "Tämä kirjautumistapa ei ole tällä hetkellä käytettävissä.",
     "socialError": "Kirjautumista ei voitu suorittaa loppuun. Yritä uudelleen.",
-    "socialEmailMissing": "Anna pääsy sähköpostiosoitteeseesi tai käytä toista kirjautumistapaa."
+    "socialEmailMissing": "Anna pääsy sähköpostiosoitteeseesi tai käytä toista kirjautumistapaa.",
+    "localAuthNotice": "Paikallinen testitila. Tilit ovat erillään elävästä verkkosivustosta ja nollataan, kun kehityspalvelin käynnistyy uudelleen."
   },
   "el": {
     "popularStories": "Δημοφιλείς ιστορίες",
@@ -456,7 +472,8 @@
     "apple": "Συνεχίστε με την Apple",
     "socialUnavailable": "Αυτή η μέθοδος σύνδεσης δεν είναι διαθέσιμη αυτήν τη στιγμή.",
     "socialError": "Δεν ήταν δυνατή η ολοκλήρωση της σύνδεσης. Δοκιμάστε ξανά.",
-    "socialEmailMissing": "Επιτρέψτε την πρόσβαση στη διεύθυνση email σας ή χρησιμοποιήστε άλλη μέθοδο σύνδεσης."
+    "socialEmailMissing": "Επιτρέψτε την πρόσβαση στη διεύθυνση email σας ή χρησιμοποιήστε άλλη μέθοδο σύνδεσης.",
+    "localAuthNotice": "Λειτουργία τοπικής δοκιμής. Οι λογαριασμοί είναι ξεχωριστοί από τον ζωντανό ιστότοπο και επαναφέρονται κατά την επανεκκίνηση του διακομιστή ανάπτυξης."
   },
   "is": {
     "popularStories": "Vinsælar sögur",
@@ -483,7 +500,8 @@
     "apple": "Haltu áfram með Apple",
     "socialUnavailable": "Þessi innskráningaraðferð er ekki tiltæk eins og er.",
     "socialError": "Ekki tókst að ljúka innskráningu. Vinsamlegast reyndu aftur.",
-    "socialEmailMissing": "Vinsamlegast leyfðu aðgang að netfanginu þínu eða notaðu aðra innskráningaraðferð."
+    "socialEmailMissing": "Vinsamlegast leyfðu aðgang að netfanginu þínu eða notaðu aðra innskráningaraðferð.",
+    "localAuthNotice": "Staðbundin prófunarhamur. Reikningar eru aðskildir frá lifandi vefsíðu og endurstilltir þegar þróunarþjónninn endurræsir sig."
   },
   "cs": {
     "popularStories": "Populární příběhy",
@@ -510,7 +528,8 @@
     "apple": "Pokračujte s Apple",
     "socialUnavailable": "Tato metoda přihlášení je momentálně nedostupná.",
     "socialError": "Přihlášení nebylo možné dokončit. Zkuste to prosím znovu.",
-    "socialEmailMissing": "Povolte prosím přístup ke své e-mailové adrese nebo použijte jiný způsob přihlášení."
+    "socialEmailMissing": "Povolte prosím přístup ke své e-mailové adrese nebo použijte jiný způsob přihlášení.",
+    "localAuthNotice": "Místní testovací režim. Účty jsou oddělené od živého webu a resetují se po restartování vývojového serveru."
   },
   "sk": {
     "popularStories": "Populárne príbehy",
@@ -537,7 +556,8 @@
     "apple": "Pokračujte s Apple",
     "socialUnavailable": "Tento spôsob prihlásenia je momentálne nedostupný.",
     "socialError": "Prihlásenie nebolo možné dokončiť. Skúste to znova.",
-    "socialEmailMissing": "Povoľte prístup k svojej e-mailovej adrese alebo použite iný spôsob prihlásenia."
+    "socialEmailMissing": "Povoľte prístup k svojej e-mailovej adrese alebo použite iný spôsob prihlásenia.",
+    "localAuthNotice": "Miestny testovací režim. Účty sú oddelené od aktívnej webovej stránky a resetujú sa po reštartovaní vývojového servera."
   },
   "ro": {
     "popularStories": "Povești populare",
@@ -564,7 +584,8 @@
     "apple": "Continuați cu Apple",
     "socialUnavailable": "Această metodă de conectare este momentan indisponibilă.",
     "socialError": "Conectarea nu a putut fi finalizată. Vă rugăm să încercați din nou.",
-    "socialEmailMissing": "Vă rugăm să permiteți accesul la adresa dvs. de e-mail sau să utilizați o altă metodă de conectare."
+    "socialEmailMissing": "Vă rugăm să permiteți accesul la adresa dvs. de e-mail sau să utilizați o altă metodă de conectare.",
+    "localAuthNotice": "Mod de testare local. Conturile sunt separate de site-ul web live și se resetează atunci când serverul de dezvoltare repornește."
   },
   "hu": {
     "popularStories": "Népszerű történetek",
@@ -591,7 +612,8 @@
     "apple": "Folytassa az Apple-lel",
     "socialUnavailable": "Ez a bejelentkezési mód jelenleg nem érhető el.",
     "socialError": "A bejelentkezést nem sikerült befejezni. Kérjük, próbálja újra.",
-    "socialEmailMissing": "Kérjük, engedélyezze az e-mail címéhez való hozzáférést, vagy használjon másik bejelentkezési módot."
+    "socialEmailMissing": "Kérjük, engedélyezze az e-mail címéhez való hozzáférést, vagy használjon másik bejelentkezési módot.",
+    "localAuthNotice": "Helyi teszt mód. A fiókok elkülönülnek az élő webhelytől, és a fejlesztői szerver újraindulásakor visszaállnak."
   },
   "uk": {
     "popularStories": "Популярні історії",
@@ -618,7 +640,8 @@
     "apple": "Продовжуйте з Apple",
     "socialUnavailable": "Цей спосіб входу наразі недоступний.",
     "socialError": "Не вдалося виконати вхід. Спробуйте ще раз.",
-    "socialEmailMissing": "Надайте доступ до своєї адреси електронної пошти або скористайтеся іншим способом входу."
+    "socialEmailMissing": "Надайте доступ до своєї адреси електронної пошти або скористайтеся іншим способом входу.",
+    "localAuthNotice": "Локальний тестовий режим. Облікові записи відокремлені від активного веб-сайту та скидаються під час перезапуску сервера розробки."
   },
   "bg": {
     "popularStories": "Популярни истории",
@@ -645,7 +668,8 @@
     "apple": "Продължете с Apple",
     "socialUnavailable": "Този метод за влизане в момента не е наличен.",
     "socialError": "Влизането не можа да бъде завършено. Моля, опитайте отново.",
-    "socialEmailMissing": "Моля, разрешете достъп до вашия имейл адрес или използвайте друг метод за влизане."
+    "socialEmailMissing": "Моля, разрешете достъп до вашия имейл адрес или използвайте друг метод за влизане.",
+    "localAuthNotice": "Локален тестов режим. Акаунтите са отделни от уебсайта на живо и се нулират, когато сървърът за разработка се рестартира."
   },
   "hr": {
     "popularStories": "Popularne priče",
@@ -672,7 +696,8 @@
     "apple": "Nastavite s Appleom",
     "socialUnavailable": "Ovaj način prijave trenutno nije dostupan.",
     "socialError": "Prijava nije mogla biti dovršena. Molimo pokušajte ponovo.",
-    "socialEmailMissing": "Please allow access to your email address, or use another sign-in method."
+    "socialEmailMissing": "Please allow access to your email address, or use another sign-in method.",
+    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene."
   },
   "sl": {
     "popularStories": "Priljubljene zgodbe",
@@ -699,7 +724,8 @@
     "apple": "Nadaljujte z Appleom",
     "socialUnavailable": "Ta način prijave trenutno ni na voljo.",
     "socialError": "Prijave ni bilo mogoče dokončati. prosim poskusite ponovno",
-    "socialEmailMissing": "Dovolite dostop do svojega e-poštnega naslova ali uporabite drug način prijave."
+    "socialEmailMissing": "Dovolite dostop do svojega e-poštnega naslova ali uporabite drug način prijave.",
+    "localAuthNotice": "Lokalni testni način. Računi so ločeni od spletnega mesta v živo in se ponastavijo, ko se razvojni strežnik znova zažene."
   },
   "et": {
     "popularStories": "Populaarsed lood",
@@ -726,7 +752,8 @@
     "apple": "Jätkake Apple'iga",
     "socialUnavailable": "See sisselogimisviis pole praegu saadaval.",
     "socialError": "Sisselogimist ei saanud lõpule viia. Palun proovi uuesti.",
-    "socialEmailMissing": "Lubage juurdepääs oma e-posti aadressile või kasutage mõnda muud sisselogimismeetodit."
+    "socialEmailMissing": "Lubage juurdepääs oma e-posti aadressile või kasutage mõnda muud sisselogimismeetodit.",
+    "localAuthNotice": "Kohalik testrežiim. Kontod on aktiivsest veebisaidist eraldi ja lähtestatakse arendusserveri taaskäivitamisel."
   },
   "lv": {
     "popularStories": "Populāri stāsti",
@@ -753,7 +780,8 @@
     "apple": "Turpiniet ar Apple",
     "socialUnavailable": "Šī pierakstīšanās metode pašlaik nav pieejama.",
     "socialError": "Pierakstīšanos nevarēja pabeigt. Lūdzu, mēģiniet vēlreiz.",
-    "socialEmailMissing": "Lūdzu, atļaujiet piekļuvi savai e-pasta adresei vai izmantojiet citu pierakstīšanās metodi."
+    "socialEmailMissing": "Lūdzu, atļaujiet piekļuvi savai e-pasta adresei vai izmantojiet citu pierakstīšanās metodi.",
+    "localAuthNotice": "Vietējais testa režīms. Konti ir atsevišķi no tiešsaistes vietnes un tiek atiestatīti, kad tiek restartēts izstrādes serveris."
   },
   "lt": {
     "popularStories": "Populiarios istorijos",
@@ -780,7 +808,8 @@
     "apple": "Tęskite su Apple",
     "socialUnavailable": "Šis prisijungimo būdas šiuo metu nepasiekiamas.",
     "socialError": "Nepavyko užbaigti prisijungimo. Bandykite dar kartą.",
-    "socialEmailMissing": "Leiskite pasiekti savo el. pašto adresą arba naudokite kitą prisijungimo būdą."
+    "socialEmailMissing": "Leiskite pasiekti savo el. pašto adresą arba naudokite kitą prisijungimo būdą.",
+    "localAuthNotice": "Vietinis bandymo režimas. Paskyros yra atskirtos nuo veikiančios svetainės ir nustatomos iš naujo, kai kūrimo serveris paleidžiamas iš naujo."
   },
   "lb": {
     "popularStories": "Populär Geschichten",
@@ -807,7 +836,8 @@
     "apple": "Weider mat Apple",
     "socialUnavailable": "Dës Umeldungsmethod ass momentan net verfügbar.",
     "socialError": "Umeldung konnt net ofgeschloss ginn. Probéiert w.e.g. nach eng Kéier.",
-    "socialEmailMissing": "Erlaabt w.e.g. Zougang zu Ärer E-Mailadress oder benotzt eng aner Umeldungsmethod."
+    "socialEmailMissing": "Erlaabt w.e.g. Zougang zu Ärer E-Mailadress oder benotzt eng aner Umeldungsmethod.",
+    "localAuthNotice": "Lokal Testmodus. Konte sinn getrennt vun der Live Websäit an zréckgesat wann den Entwécklungsserver nei start."
   },
   "mt": {
     "popularStories": "Stejjer popolari",
@@ -834,7 +864,8 @@
     "apple": "Kompli bl-Apple",
     "socialUnavailable": "Dan il-metodu ta' dħul bħalissa mhuwiex disponibbli.",
     "socialError": "Id-dħul ma setax jitlesta. Jekk jogħġbok erġa' pprova.",
-    "socialEmailMissing": "Jekk jogħġbok ħalli aċċess għall-indirizz tal-email tiegħek, jew uża metodu ieħor ta' dħul."
+    "socialEmailMissing": "Jekk jogħġbok ħalli aċċess għall-indirizz tal-email tiegħek, jew uża metodu ieħor ta' dħul.",
+    "localAuthNotice": "Modalità tat-test lokali. Il-kontijiet huma separati mill-websajt ħajjin u reset meta s-server tal-iżvilupp jerġa 'jibda."
   },
   "sq": {
     "popularStories": "Tregime të njohura",
@@ -861,7 +892,8 @@
     "apple": "Vazhdoni me Apple",
     "socialUnavailable": "Kjo metodë identifikimi nuk është aktualisht e disponueshme.",
     "socialError": "Identifikimi nuk mund të përfundonte. Ju lutemi provoni përsëri.",
-    "socialEmailMissing": "Ju lutemi, lejoni qasjen në adresën tuaj të emailit ose përdorni një metodë tjetër identifikimi."
+    "socialEmailMissing": "Ju lutemi, lejoni qasjen në adresën tuaj të emailit ose përdorni një metodë tjetër identifikimi.",
+    "localAuthNotice": "Mënyra e provës lokale. Llogaritë janë të ndara nga faqja e internetit e drejtpërdrejtë dhe rivendosen kur serveri i zhvillimit riniset."
   },
   "ca": {
     "popularStories": "Històries populars",
@@ -888,7 +920,8 @@
     "apple": "Continueu amb Apple",
     "socialUnavailable": "Aquest mètode d'inici de sessió no està disponible actualment.",
     "socialError": "No s'ha pogut completar l'inici de sessió. Si us plau, torna-ho a provar.",
-    "socialEmailMissing": "Permet l'accés a la teva adreça de correu electrònic o utilitza un altre mètode d'inici de sessió."
+    "socialEmailMissing": "Permet l'accés a la teva adreça de correu electrònic o utilitza un altre mètode d'inici de sessió.",
+    "localAuthNotice": "Mode de prova local. Els comptes estan separats del lloc web en directe i es restableixen quan es reinicia el servidor de desenvolupament."
   },
   "bs": {
     "popularStories": "Popularne priče",
@@ -915,7 +948,8 @@
     "apple": "Nastavite s Appleom",
     "socialUnavailable": "Ovaj način prijave trenutno nije dostupan.",
     "socialError": "Prijava nije mogla biti dovršena. Molimo pokušajte ponovo.",
-    "socialEmailMissing": "Dozvolite pristup vašoj adresi e-pošte ili koristite drugi način prijave."
+    "socialEmailMissing": "Dozvolite pristup vašoj adresi e-pošte ili koristite drugi način prijave.",
+    "localAuthNotice": "Lokalni način testiranja. Nalozi su odvojeni od veb lokacije uživo i resetuju se kada se razvojni server ponovo pokrene."
   },
   "be": {
     "popularStories": "Папулярныя гісторыі",
@@ -942,7 +976,8 @@
     "apple": "Працягвайце з Apple",
     "socialUnavailable": "Гэты метад уваходу зараз недаступны.",
     "socialError": "Не атрымалася выканаць уваход. Калі ласка, паспрабуйце яшчэ раз.",
-    "socialEmailMissing": "Дазвольце доступ да вашага адраса электроннай пошты або выкарыстоўвайце іншы спосаб уваходу."
+    "socialEmailMissing": "Дазвольце доступ да вашага адраса электроннай пошты або выкарыстоўвайце іншы спосаб уваходу.",
+    "localAuthNotice": "Лакальны тэставы рэжым. Уліковыя запісы асобныя ад дзеючага вэб-сайта і скідаюцца пры перазапуску сервера распрацоўкі."
   },
   "sr-Latn": {
     "popularStories": "Popularne priče",
@@ -969,7 +1004,8 @@
     "apple": "Nastavite sa Apple-om",
     "socialUnavailable": "Ovaj na?in prijavljivanja trenutno nije dostupan.",
     "socialError": "Prijavljivanje nije moglo da se zavr?i. Poku?ajte ponovo.",
-    "socialEmailMissing": "Dozvolite pristup svojoj adresi e-po?te ili koristite neki drugi na?in prijavljivanja."
+    "socialEmailMissing": "Dozvolite pristup svojoj adresi e-po?te ili koristite neki drugi na?in prijavljivanja.",
+    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene."
   },
   "sr": {
     "popularStories": "Популарне приче",
@@ -996,7 +1032,8 @@
     "apple": "Наставите са Аппле-ом",
     "socialUnavailable": "Овај метод пријављивања тренутно није доступан.",
     "socialError": "Пријављивање није могло да се заврши. Покушајте поново.",
-    "socialEmailMissing": "Дозволите приступ својој адреси е-поште или користите неки други начин пријављивања."
+    "socialEmailMissing": "Дозволите приступ својој адреси е-поште или користите неки други начин пријављивања.",
+    "localAuthNotice": "Локални режим тестирања. Налози су одвојени од веб локације уживо и ресетују се када се развојни сервер поново покрене."
   },
   "mk": {
     "popularStories": "Популарни приказни",
@@ -1023,7 +1060,8 @@
     "apple": "Продолжете со Apple",
     "socialUnavailable": "Овој метод за најавување во моментов е недостапен.",
     "socialError": "Најавувањето не може да се заврши. Ве молиме обидете се повторно.",
-    "socialEmailMissing": "Дозволете пристап до вашата адреса на е-пошта или користете друг метод за најавување."
+    "socialEmailMissing": "Дозволете пристап до вашата адреса на е-пошта или користете друг метод за најавување.",
+    "localAuthNotice": "Локален режим на тестирање. Сметките се одвоени од веб-локацијата во живо и се ресетираат кога се рестартира серверот за развој."
   },
   "ru": {
     "popularStories": "Популярные истории",
@@ -1050,7 +1088,8 @@
     "apple": "Продолжить с Apple",
     "socialUnavailable": "Этот метод входа в настоящее время недоступен.",
     "socialError": "Не удалось выполнить вход. Пожалуйста, попробуйте еще раз.",
-    "socialEmailMissing": "Пожалуйста, разрешите доступ к вашему адресу электронной почты или используйте другой метод входа."
+    "socialEmailMissing": "Пожалуйста, разрешите доступ к вашему адресу электронной почты или используйте другой метод входа.",
+    "localAuthNotice": "Локальный тестовый режим. Учетные записи отделены от действующего веб-сайта и сбрасываются при перезапуске сервера разработки."
   },
   "tr": {
     "popularStories": "Popüler hikayeler",
@@ -1077,6 +1116,7 @@
     "apple": "Apple'la devam et",
     "socialUnavailable": "Bu oturum açma yöntemi şu anda kullanılamıyor.",
     "socialError": "Oturum açma işlemi tamamlanamadı. Lütfen tekrar deneyin.",
-    "socialEmailMissing": "Lütfen e-posta adresinize erişime izin verin veya başka bir oturum açma yöntemi kullanın."
+    "socialEmailMissing": "Lütfen e-posta adresinize erişime izin verin veya başka bir oturum açma yöntemi kullanın.",
+    "localAuthNotice": "Yerel test modu. Hesaplar canlı web sitesinden ayrıdır ve geliştirme sunucusu yeniden başlatıldığında sıfırlanır."
   }
 }

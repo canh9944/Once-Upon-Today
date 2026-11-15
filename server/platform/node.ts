@@ -3,9 +3,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type {Platform,SqlDatabase,Statement} from './types';
 import {contentOrigin} from '../remote-content';
+import {localAuthEnabled} from '../local-auth';
 let singleton:Platform|undefined;
+let localAuth:Platform|undefined;
 export function getPlatform():Platform{
-  if(contentOrigin())throw new Error('Local database is disabled in API content mode.');
+  if(contentOrigin()){
+    if(!localAuthEnabled())throw new Error('Local database is disabled in API content mode.');
+    if(localAuth)return localAuth;
+    const connection=new Database(':memory:');
+    connection.exec('CREATE TABLE users (id TEXT PRIMARY KEY,email TEXT NOT NULL UNIQUE,name TEXT NOT NULL,passwordHash TEXT,googleSub TEXT UNIQUE,createdAt TEXT NOT NULL,facebookSub TEXT UNIQUE,appleSub TEXT UNIQUE);CREATE TABLE sessions (hash TEXT PRIMARY KEY,userId TEXT NOT NULL,expires INTEGER NOT NULL);CREATE TABLE rate_limits (key TEXT PRIMARY KEY,count INTEGER NOT NULL,resetAt INTEGER NOT NULL)');
+    const db:SqlDatabase={all:async<T>(sql:string,params:unknown[]=[])=>connection.prepare(sql).all(...params) as T[],run:async(sql,params=[])=>({changes:connection.prepare(sql).run(...params).changes}),batch:async(statements:Statement[])=>{connection.transaction(()=>{for(const s of statements)connection.prepare(s.sql).run(...(s.params||[]));})();}};
+    localAuth={kind:'node',db,env:process.env,objects:{put:async()=>{throw new Error('Uploads are disabled in API content mode.');},get:async()=>null}};
+    return localAuth;
+  }
   if(singleton)return singleton;
   const dbPath=path.resolve(process.env.DATABASE_PATH||'data/app.sqlite');fs.mkdirSync(path.dirname(dbPath),{recursive:true});
   const connection=new Database(dbPath);connection.pragma('journal_mode = WAL');connection.pragma('busy_timeout = 5000');

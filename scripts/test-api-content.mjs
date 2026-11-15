@@ -16,7 +16,8 @@ for(const post of local.posts){
 }
 assert.equal((await fetch(`${origin}/api/posts`,{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,403);
 assert.equal((await fetch(`${origin}/api/stats`)).status,403);
-assert.equal((await (await fetch(`${origin}/api/auth`)).json()).remoteOrigin,source);
+const auth=await (await fetch(`${origin}/api/auth`)).json();
+assert.ok(auth.authStorage==='memory'||auth.remoteOrigin===source);
 const browser=await chromium.launch({channel:'msedge',headless:true});
 try{
   const page=await browser.newPage(),errors=[];

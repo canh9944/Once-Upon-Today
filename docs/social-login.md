@@ -57,7 +57,7 @@ the Services ID with it, register `onceupontoday.site` and the return URL, and
 create the corresponding Sign in with Apple private key. Apple web login needs
 HTTPS and its configured production domain; plain localhost is unsupported.
 
-A provider button stays disabled until its required server configuration exists.
+A provider button is hidden until its required server configuration exists.
 Configuration presence alone cannot validate credentials with the provider.
 Use real provider accounts to smoke-test each enabled provider after deployment.
 
@@ -76,9 +76,20 @@ Node production applies migrations automatically. Import/backup tools use the
 same local migration ledger so repeated runs are safe. Backups include the new
 identity fields.
 
-Local development with `CONTENT_API_URL` remains API-only, creates no local
-database and sends sign-in to the production website as before. Persistent
-accounts and sessions belong to the server, not the API-only content preview.
+Local development with `CONTENT_API_URL` keeps public content on the production
+API and opens the existing sign-in dialog locally. Set `APP_URL` to
+`http://localhost:3000` and register the local Google/Facebook callback in the
+provider console. Local accounts, sessions and rate limits use an in-memory
+store: no SQLite file, production account writes or downloaded content are created.
+These test accounts are separate from production accounts and disappear when
+the dev server restarts (or its auth module reloads). Email sign-up/sign-in and
+configured OAuth providers work against this temporary store.
+
+`LOCAL_AUTH_ENABLED=false` restores sign-in on production instead. The local
+mode is restricted to development with a public content API and a loopback
+`APP_URL`; HTTPS development tunnels can opt in with `LOCAL_AUTH_ENABLED=true`.
+It is never enabled in production or Cloudflare builds. Apple requires an HTTPS
+origin registered in Apple Developer.
 
 ## Account behavior
 

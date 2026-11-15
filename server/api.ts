@@ -13,6 +13,7 @@ import {MAX_IMAGE_BYTES,MAX_POST_CONTENT,isImageSource} from '../shared/content'
 import {hasContent,sanitizeContent} from '../shared/sanitize-content';
 import {contentOrigin,remotePosts,remoteStory,remoteSearch} from './remote-content';
 import {categoryValue} from '../shared/categories';
+import {localAuthEnabled} from './local-auth';
 
 const json=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'private, no-store'}});
 async function body(req:Request){try{return await req.json();}catch{fail('validationError');}}
@@ -23,13 +24,13 @@ async function route(req:Request):Promise<Response>{
  const remote=contentOrigin();
  if(remote){
   if(path==='health'&&method==='GET')return json({ok:true,database:null,contentSource:remote});
-  if(path==='auth'&&method==='GET')return json({authenticated:false,user:null,googleEnabled:false,remoteOrigin:remote});
-  if(path==='auth'&&method==='DELETE')return json({ok:true});
+  if(path==='auth'&&method==='GET'&&!localAuthEnabled())return json({authenticated:false,user:null,googleEnabled:false,remoteOrigin:remote});
+  if(path==='auth'&&method==='DELETE'&&!localAuthEnabled())return json({ok:true});
   if(path==='events'&&method==='POST')return json({ok:true});
   if(path==='posts'&&method==='GET')return json({posts:await remotePosts({country:url.searchParams.get('country')||undefined,language:url.searchParams.get('language')||undefined})});
   if(path==='search'&&method==='GET')return json({posts:await remoteSearch({query:url.searchParams.get('q')||'',country:url.searchParams.get('country')||undefined,genre:url.searchParams.get('genre')||undefined,language:url.searchParams.get('language')||undefined})});
   if(path.startsWith('stories/')&&method==='GET'){const post=await remoteStory(decodeURIComponent(path.slice(8)));if(!post)fail('notFound',404);return json({post});}
-  fail('requestError',403);
+  if(!localAuthEnabled()||!/^auth(?:\/|$)/.test(path))fail('requestError',403);
  }
  const {db,objects,env}=getPlatform();
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(method))fail('maintenance',503);
@@ -39,7 +40,7 @@ async function route(req:Request):Promise<Response>{
   if(language&&language!=='all'&&!isLocale(language)||query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
   return json({posts:await searchStories({query,country,genre,language})});
  }
- if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple')});}
+ if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple'),...(localAuthEnabled()?{authStorage:'memory'}:{})});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
  if(path==='auth/account'&&method==='DELETE'){
   origin(req);const user=await currentUser(req);if(!user||user.id==='env-admin')fail('requestError',403);
