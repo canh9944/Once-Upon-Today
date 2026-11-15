@@ -55,6 +55,10 @@ For local Workers preview, copy `.dev.vars.example` to `.dev.vars`, replace the 
 
 The API entry point is `app/api/[...path]/route.ts`; authentication, posts, analytics and uploads execute in `server/`. Server rendered pages read the repository directly. No backend URL or separate API service is needed. The Cloudflare configuration follows the [OpenNext Workers setup](https://opennext.js.org/cloudflare/get-started).
 
+## UI conventions
+
+Use the existing shadcn/ui components whenever they cover an interaction. The Carousel (Embla), Popover, Command/Combobox, Select and Slider sources come from the official new-york registry and reuse the existing Radix, Button, Card, Dialog and theme setup. Domain components compose those primitives with API data and i18n; avoid implementing duplicate keyboard, overlay or carousel mechanics.
+
 ## Features
 
 Country and genre filters in the header; centered search; all countries uses English UI and shows all stories. All 50 selectable country/market options have an explicit language mapping across 43 locales. Shared dictionaries cover public pages, search suggestions, all eight story categories, authentication and the editorial interface. US-UK is the first country/market option and combines US, GB and legacy England codes; European countries follow in editorial language-priority order, then Asian markets. Country names and dates follow the selected locale; Belgium retains French, Dutch and German editions. Published article content keeps its original language.

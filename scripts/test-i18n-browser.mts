@@ -14,6 +14,8 @@ try{
   async function worker(){
     const context=await browser.newContext({viewport:{width:1440,height:1000}});
     // Test local dialogs without opening production authentication.
+    await context.route('https://www.googletagmanager.com/**',route=>route.fulfill({body:''}));
+    await context.route('https://pagead2.googlesyndication.com/**',route=>route.fulfill({body:''}));
     await context.route('**/api/auth',route=>route.fulfill({json:{authenticated:false,user:null,googleEnabled:false}}));
     const page=await context.newPage();page.on('pageerror',error=>errors.push(error.message));
     while(next<countries.length){
@@ -23,8 +25,8 @@ try{
       await expect(page.locator('.section-heading h1')).toContainText(t.stories);
       await expect(page.locator('.header-country button')).toContainText(countryName(country.code,locale));
       await page.locator('.header-genre button').click();
-      await expect(page.locator('.header-genre [role="option"]')).toHaveCount(9);
-      assert.deepEqual(await page.locator('.header-genre [role="option"] span').allTextContents(),[`${t.category}: ${t.all}`,...categories.map(c=>categoryName(c,locale))]);
+      await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(9);
+      assert.deepEqual(await page.locator('.searchable-select-popover [role="option"]>span').allTextContents(),[`${t.category}: ${t.all}`,...categories.map(c=>categoryName(c,locale))]);
       await page.keyboard.press('Escape');
       await page.locator('.header-search input').click();
       await expect(page.locator('.search-suggestions-heading')).toHaveText(ui.popularStories);
@@ -49,7 +51,7 @@ try{
     await page.goto(origin+browseHref(code));
     await expect(page.locator('html')).toHaveAttribute('lang',locale);
     await page.locator('.header-genre button').click();
-    await expect(page.locator('.header-genre [role="option"]')).toHaveCount(9);
+    await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(9);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${code}: mobile overflow`);
     await page.close();
   }

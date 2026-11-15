@@ -9,6 +9,8 @@ const browser=await chromium.launch({channel:'msedge',headless:true});
 try{
   for(const viewport of [{width:1440,height:1000},{width:375,height:812}]){
     const context=await browser.newContext({viewport,reducedMotion:'reduce'});
+    await context.route('https://www.googletagmanager.com/**',route=>route.fulfill({body:''}));
+    await context.route('https://pagead2.googlesyndication.com/**',route=>route.fulfill({body:''}));
     await context.route('**/api/auth',route=>route.fulfill({json:{authenticated:false,user:null,googleEnabled:false}}));
     const page=await context.newPage(),errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
     await page.goto(`${origin}/en`);
@@ -25,10 +27,10 @@ try{
     assert.equal(await page.locator('.site-header').evaluate(node=>getComputedStyle(node).position),'sticky');
     const previous=page.getByRole('button',{name:uiCopy('en').previousStories,exact:true}),next=page.getByRole('button',{name:uiCopy('en').nextStories,exact:true});
     await expect(previous).toBeDisabled();await expect(next).toBeEnabled();
-    await next.click();await expect.poll(()=>track.evaluate(node=>node.scrollLeft)).toBeGreaterThan(30);
-    await previous.click();await expect.poll(()=>track.evaluate(node=>node.scrollLeft)).toBeLessThan(3);
-    await page.locator('.related-card-link').last().focus();
-    await expect.poll(()=>track.evaluate(node=>node.scrollLeft)).toBeGreaterThan(30);
+    await next.click();await expect.poll(()=>track.evaluate(node=>-new DOMMatrix(getComputedStyle(node).transform).m41)).toBeGreaterThan(30);
+    await previous.click();await expect.poll(()=>track.evaluate(node=>-new DOMMatrix(getComputedStyle(node).transform).m41)).toBeLessThan(3);
+    await page.locator('.related-card-link').last().evaluate(node=>{document.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',code:'Tab',bubbles:true}));(node as HTMLElement).focus();});
+    await expect.poll(()=>track.evaluate(node=>-new DOMMatrix(getComputedStyle(node).transform).m41)).toBeGreaterThan(30);
     await expect(next).toBeDisabled();
     const target=page.locator('.related-card-link').last(),href=await target.getAttribute('href'),title=await target.locator('h3').innerText();
     await target.click();await expect(page).toHaveURL(origin+href);
@@ -38,7 +40,7 @@ try{
     await page.locator('.header-search input').click();
     await expect(page.locator('.search-suggestions')).toBeVisible();
     await page.keyboard.press('Escape');
-    await page.locator('.header-country button').click();await expect(page.locator('.header-country [role="listbox"]')).toBeVisible();await page.keyboard.press('Escape');
+    await page.locator('.header-country button').click();await expect(page.locator('.searchable-select-popover [role="listbox"]')).toBeVisible();await page.keyboard.press('Escape');
     await page.locator('.auth-login-trigger').click();await expect(page.getByRole('dialog')).toBeVisible();await page.keyboard.press('Escape');
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'No page overflow from carousel/sticky header');
     assert.deepEqual(errors,[]);

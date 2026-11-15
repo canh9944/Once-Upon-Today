@@ -3,6 +3,11 @@ import Link from 'next/link';
 import {uiCopy} from '@/lib/ui-i18n';
 import {usePathname,useRouter,useSearchParams} from 'next/navigation';
 import {useState,type ReactNode} from 'react';
+import {Button} from './ui/button';
+import {Label} from './ui/label';
+import {Popover,PopoverContent,PopoverTrigger} from './ui/popover';
+import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue} from './ui/select';
+import {Slider} from './ui/slider';
 import {ArrowUpRight,Globe2,Moon,SlidersHorizontal,Sun} from 'lucide-react';
 import {brand,categories,categoryName,categoryValue,isLocale,languageNames,locales} from '@/lib/i18n';
 import {countries} from '@/lib/data';
@@ -15,9 +20,7 @@ import {SearchableSelect} from './ui/searchable-select';
 // Editors retain an independent language control; public browsing uses CountrySelect.
 export function LanguageSelect(){
   const {locale,t}=useSite(),router=useRouter(),pathname=usePathname();
-  return <label className="language-select"><Globe2 size={15}/><span className="sr-only">{t.language}</span><select aria-label={t.language} value={locale} onChange={e=>{
-    const next=e.target.value;if(isLocale(next))router.push(`/${next}${pathname.split('/')[2]==='admin'?'/'+pathname.split('/').slice(2).join('/'):''}`);
-  }}>{locales.map(code=><option lang={code} key={code} value={code}>{languageNames[code]}</option>)}</select></label>;
+  return <div className="language-select"><Globe2 size={15}/><Select value={locale} onValueChange={next=>{if(isLocale(next))router.push('/'+next+(pathname.split('/')[2]==='admin'?'/'+pathname.split('/').slice(2).join('/'):''));}}><SelectTrigger size="sm" aria-label={t.language}><SelectValue/></SelectTrigger><SelectContent position="popper">{locales.map(code=><SelectItem lang={code} key={code} value={code}>{languageNames[code]}</SelectItem>)}</SelectContent></Select></div>;
 }
 export function Brand({footer=false}:{footer?:boolean}){const {country}=useSite();return <Link href={browseHref(country)} className={footer?'footer-logo once-brand':'logo once-brand'}><img className="brand-mark" src="/brand/mark.svg" alt="" width={48} height={48}/><span className="brand-wordmark">Once Upon<span className="brand-today">Today<span className="brand-dot">.</span></span></span></Link>;}
 
@@ -34,7 +37,9 @@ function HeaderFilters({children}:{children:ReactNode}){
   </>;
 }
 export function SiteHeader(){
-  const {locale,t,preferences,setPreferences}=useSite(),[settings,setSettings]=useState(false);
-  return <><div className="topline">{t.tagline.toLocaleUpperCase(locale)}<span>{t.slow}</span></div><header className="header site-header"><div className="header-main"><HeaderFilters><div className="header-tools"><AuthControl locale={locale}/><button aria-label={t.theme} className="icon-btn" onClick={()=>setPreferences({...preferences,dark:!preferences.dark})}>{preferences.dark?<Sun size={19}/>:<Moon size={19}/>}</button><button aria-label={t.reading} aria-expanded={settings} className="icon-btn" onClick={()=>setSettings(!settings)}><SlidersHorizontal size={19}/></button></div></HeaderFilters>{settings&&<div className="settings"><strong>{t.reading}</strong><label>{t.font}<select value={preferences.font} onChange={e=>setPreferences({...preferences,font:e.target.value as typeof preferences.font})}><option value="sans">{uiCopy(locale).sans}</option><option value="serif">{uiCopy(locale).serif}</option><option value="mono">{uiCopy(locale).mono}</option></select></label><label>{t.size}: {preferences.size}px<input type="range" min="16" max="26" value={preferences.size} onChange={e=>setPreferences({...preferences,size:+e.target.value})}/></label><button onClick={()=>setSettings(false)}>{t.done}</button></div>}</div></header></>;
+  const {locale,t,preferences,setPreferences}=useSite(),[settings,setSettings]=useState(false),ui=uiCopy(locale);
+  return <><div className="topline">{t.tagline.toLocaleUpperCase(locale)}<span>{t.slow}</span></div><header className="header site-header"><div className="header-main"><HeaderFilters><div className="header-tools"><AuthControl locale={locale}/><Button type="button" variant="ghost" size="icon" aria-label={t.theme} className="icon-btn" onClick={()=>setPreferences({...preferences,dark:!preferences.dark})}>{preferences.dark?<Sun size={19}/>:<Moon size={19}/>}</Button>
+    <Popover open={settings} onOpenChange={setSettings}><PopoverTrigger asChild><Button type="button" variant="ghost" size="icon" aria-label={t.reading} className="icon-btn"><SlidersHorizontal size={19}/></Button></PopoverTrigger><PopoverContent align="end" className="reading-settings" aria-label={t.reading}><strong>{t.reading}</strong><div className="reading-setting"><Label>{t.font}</Label><Select value={preferences.font} onValueChange={font=>{if(font==='sans'||font==='serif'||font==='mono')setPreferences({...preferences,font});}}><SelectTrigger aria-label={t.font}><SelectValue/></SelectTrigger><SelectContent position="popper"><SelectItem value="sans">{ui.sans}</SelectItem><SelectItem value="serif">{ui.serif}</SelectItem><SelectItem value="mono">{ui.mono}</SelectItem></SelectContent></Select></div><div className="reading-setting"><Label>{t.size}: {preferences.size}px</Label><Slider min={16} max={26} step={1} value={[preferences.size]} aria-label={t.size} onValueChange={([size])=>setPreferences({...preferences,size})}/></div><Button type="button" variant="outline" onClick={()=>setSettings(false)}>{t.done}</Button></PopoverContent></Popover>
+    </div></HeaderFilters></div></header></>;
 }
 export function SiteFooter(){const {locale,t}=useSite();return <footer><Brand footer/><span>© 2026 {brand}. {t.copyright}</span><Link href={`/${locale}/admin`}>{t.editors}<ArrowUpRight size={14}/></Link></footer>;}
