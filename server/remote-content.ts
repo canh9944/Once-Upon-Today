@@ -1,0 +1,49 @@
+import type {Post} from '../shared/data';
+import {normalizeSearch,type SearchStory} from '../shared/search';
+import {categoryValue} from '../shared/categories';
+import {englishMarket,normalizeCountry,matchesCountry,isCountryCode} from '../shared/countries';
+
+/** Local public preview only. Production continues to use its own storage adapter. */
+export function contentOrigin(){
+  if(process.env.NODE_ENV!=='development'||process.env.DEPLOY_TARGET==='cloudflare'||!process.env.CONTENT_API_URL)return null;
+  const url=new URL(process.env.CONTENT_API_URL);
+  if(url.protocol!=='https:'||url.username||url.password||url.pathname!=='/'||url.search||url.hash)throw new Error('CONTENT_API_URL must be an HTTPS website origin.');
+  if(process.env.APP_URL&&new URL(process.env.APP_URL).origin===url.origin)throw new Error('CONTENT_API_URL cannot point to this local server.');
+  return url.origin;
+}
+export async function contentResponse(endpoint:string){
+  const origin=contentOrigin();if(!origin)throw new Error('Remote content is not configured.');
+  return fetch(`${origin}/api/${endpoint}`,{cache:'no-store',redirect:'error',signal:AbortSignal.timeout(20_000),headers:{Accept:'application/json'}});
+}
+function remoteImage(value:string){return value.replace(/(^|["'\s(=])(\/api\/uploads\/[a-f0-9-]{36}\.(?:jpg|png|webp))/g,(_,prefix,src)=>`${prefix}${contentOrigin()}${src}`);}
+export function remotePost(post:Post):Post{return {...post,category:categoryValue(post.category),image:remoteImage(post.image),content:remoteImage(post.content)};}
+export async function remotePosts(filters:{country?:string;language?:string}={}):Promise<Post[]>{
+  const params=new URLSearchParams();if(filters.country&&filters.country!=='all'&&normalizeCountry(filters.country)!==englishMarket)params.set('country',filters.country);if(filters.language)params.set('language',filters.language);
+  let response=await contentResponse(`posts${params.size?'?'+params:''}`);
+  // The deployed API may not yet recognize countries added to this UI.
+  // Retry its public list, then filter locally without changing the selected country.
+  if(response.status===400&&params.has('country')&&filters.country&&isCountryCode(filters.country)){
+    params.delete('country');
+    response=await contentResponse(`posts${params.size?'?'+params:''}`);
+  }
+  if(!response.ok)throw new Error(`Content API returned HTTP ${response.status}`);
+  const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid content API response.');
+  return data.posts.filter((p:Post)=>p.published===true&&matchesCountry(p.country,filters.country)&&(!filters.language||p.language===filters.language)).map(remotePost);
+}
+export async function remoteStory(id:string):Promise<Post|null>{
+  const response=await contentResponse(`stories/${encodeURIComponent(id)}`);
+  if(response.status===404)return null;
+  if(!response.ok)throw new Error(`Content API returned HTTP ${response.status}`);
+  const {post}=await response.json();return post?.published===true?remotePost(post):null;
+}
+export async function remoteSearch(filters:{query?:string;country?:string;genre?:string}):Promise<SearchStory[]>{
+  const genre=categoryValue(filters.genre||'all');
+  const params=new URLSearchParams({q:filters.query||'',country:normalizeCountry(filters.country||'all'),genre});
+  const response=await contentResponse(`search?${params}`);
+  if(response.ok){const data=await response.json();if(!Array.isArray(data.posts))throw new Error('Invalid search API response.');return data.posts.map((p:SearchStory)=>({...p,category:categoryValue(p.category),image:remoteImage(p.image)}));}
+  // Older deployments may not yet expose the suggestions endpoint.
+  const unsupportedCountry=response.status===400&&filters.country&&isCountryCode(filters.country);
+  if(response.status!==404&&!unsupportedCountry)throw new Error(`Search API returned HTTP ${response.status}`);
+  const terms=normalizeSearch(filters.query||'').split(/\s+/).filter(Boolean);
+  return (await remotePosts({country:filters.country})).filter(p=>(genre==='all'||p.category===genre)&&terms.every(term=>normalizeSearch(`${p.title} ${p.excerpt} ${p.author} ${p.category}`).includes(term))).slice(0,6).map(({id,title,image,category,language,author})=>({id,title,image,category,language,author,views:0}));
+}

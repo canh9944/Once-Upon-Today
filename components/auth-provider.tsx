@@ -14,10 +14,11 @@ export function AuthProvider({locale,children}:{locale:Locale;children:ReactNode
   const [user,setUser]=useState<PublicUser|null>(null),[ready,setReady]=useState(false),[open,setOpen]=useState(false),[googleEnabled,setGoogleEnabled]=useState(false),[initialError,setInitialError]=useState(''),[initialTab,setInitialTab]=useState<'login'|'signup'>('login');
   const router=useRouter();
   const returnFocus=useRef<HTMLElement|null>(null);
-  const refresh=useCallback(async()=>{const response=await fetch('/api/auth',{cache:'no-store'});if(!response.ok)throw new Error();const data=await response.json();setUser(data.user);setGoogleEnabled(data.googleEnabled);setReady(true);},[]);
+  const remoteOrigin=useRef<string|null>(null);
+  const refresh=useCallback(async()=>{const response=await fetch('/api/auth',{cache:'no-store'});if(!response.ok)throw new Error();const data=await response.json();remoteOrigin.current=typeof data.remoteOrigin==='string'?data.remoteOrigin:null;setUser(data.user);setGoogleEnabled(data.googleEnabled);setReady(true);},[]);
   useEffect(()=>{void refresh().catch(()=>setReady(true));},[refresh]);
   useEffect(()=>{const url=new URL(window.location.href);const error=url.searchParams.get('authError');if(error){setInitialError(['oauthFailed','accountExists'].includes(error)?error:'oauthFailed');setOpen(true);url.searchParams.delete('authError');window.history.replaceState(null,'',url.pathname+url.search+url.hash);}},[]);
-  const openLogin=useCallback((tab:'login'|'signup'='login')=>{returnFocus.current=document.activeElement instanceof HTMLElement?document.activeElement:null;setInitialTab(tab);setInitialError('');setOpen(true);},[]);
+  const openLogin=useCallback((tab:'login'|'signup'='login')=>{if(remoteOrigin.current){window.location.assign(`${remoteOrigin.current}/${locale}/admin`);return;}returnFocus.current=document.activeElement instanceof HTMLElement?document.activeElement:null;setInitialTab(tab);setInitialError('');setOpen(true);},[locale]);
   const logout=useCallback(async()=>{const response=await fetch('/api/auth',{method:'DELETE'});if(!response.ok)throw new Error();setUser(null);router.refresh();},[router]);
   return <Context.Provider value={{user,ready,refresh,openLogin,logout}}>{children}<AuthDialog locale={locale} open={open} onOpenChange={setOpen} onAuthenticated={async()=>{await refresh();router.refresh();}} googleEnabled={googleEnabled} initialError={initialError} initialTab={initialTab} restoreFocus={()=>{const target=returnFocus.current?.isConnected?returnFocus.current:document.querySelector<HTMLElement>('.account-control button, .auth-login-trigger, .sidebar button');target?.focus();}}/></Context.Provider>;
 }

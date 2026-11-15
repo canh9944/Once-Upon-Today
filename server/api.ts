@@ -1,21 +1,41 @@
+import {isCountryCode} from '../shared/countries';
 import {NextResponse} from 'next/server';
 import {randomUUID} from 'node:crypto';
 import {imageSize} from 'image-size';
 import {getPlatform} from './platform';
-import {one,getPost,listPosts,upsertPost} from './repository';
+import {one,getPost,listPosts,upsertPost,searchStories} from './repository';
 import {ApiError,admin,configured,cookieOptions,currentUser,digest,equal,fail,hashPassword,limit,normalizeEmail,origin,readCookie,sessionCookie,setSession,validEmail,verifyPassword,type Account} from './security';
 import {authorizationUrl,createFlow,googleConfig,googleIdentity,oauthCookie,readFlow} from './google';
-import {countries,type Post} from '../shared/data';
+import type {Post} from '../shared/data';
 import {brand,isLocale} from '../shared/domain';
 import {MAX_IMAGE_BYTES,MAX_POST_CONTENT,isImageSource} from '../shared/content';
 import {hasContent,sanitizeContent} from '../shared/sanitize-content';
+import {contentOrigin,remotePosts,remoteStory,remoteSearch} from './remote-content';
+import {categoryValue} from '../shared/categories';
 
 const json=(data:unknown,status=200)=>NextResponse.json(data,{status,headers:{'Cache-Control':'private, no-store'}});
 async function body(req:Request){try{return await req.json();}catch{fail('validationError');}}
 async function route(req:Request):Promise<Response>{
- const url=new URL(req.url),path=url.pathname.replace(/^\/api\/?/,''),method=req.method,{db,objects,env}=getPlatform();
+ const url=new URL(req.url),path=url.pathname.replace(/^\/api\/?/,''),method=req.method;
+ const remote=contentOrigin();
+ if(remote){
+  if(path==='health'&&method==='GET')return json({ok:true,database:null,contentSource:remote});
+  if(path==='auth'&&method==='GET')return json({authenticated:false,user:null,googleEnabled:false,remoteOrigin:remote});
+  if(path==='auth'&&method==='DELETE')return json({ok:true});
+  if(path==='events'&&method==='POST')return json({ok:true});
+  if(path==='posts'&&method==='GET')return json({posts:await remotePosts({country:url.searchParams.get('country')||undefined,language:url.searchParams.get('language')||undefined})});
+  if(path==='search'&&method==='GET')return json({posts:await remoteSearch({query:url.searchParams.get('q')||'',country:url.searchParams.get('country')||undefined,genre:url.searchParams.get('genre')||undefined})});
+  if(path.startsWith('stories/')&&method==='GET'){const post=await remoteStory(decodeURIComponent(path.slice(8)));if(!post)fail('notFound',404);return json({post});}
+  fail('requestError',403);
+ }
+ const {db,objects,env}=getPlatform();
  if(env.READ_ONLY==='true'&&!['GET','HEAD'].includes(method))fail('maintenance',503);
  if(path==='health'&&method==='GET')return json({ok:true,database:getPlatform().kind==='node'?'sqlite':'d1'});
+ if(path==='search'&&method==='GET'){
+  const query=url.searchParams.get('q')||'',country=url.searchParams.get('country')||undefined,genre=url.searchParams.get('genre')||undefined;
+  if(query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
+  return json({posts:await searchStories({query,country,genre})});
+ }
  if(path==='auth'&&method==='GET'){const user=await currentUser(req);return json({authenticated:!!user,user,googleEnabled:!!(configured()&&env.GOOGLE_CLIENT_ID&&env.GOOGLE_CLIENT_SECRET&&env.APP_URL)});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
  if((path==='auth'||path==='auth/signup')&&method==='POST'){
@@ -33,13 +53,13 @@ async function route(req:Request):Promise<Response>{
   if(!flow||!equal(url.searchParams.get('state')||'',flow.state)||url.searchParams.has('error')||!url.searchParams.get('code'))return reject('oauthFailed');
   try{const identity=await googleIdentity(url.searchParams.get('code')!,flow);if(!validEmail(identity.email))return reject('oauthFailed');const email=normalizeEmail(identity.email),existing=await one<Account>('SELECT * FROM users WHERE googleSub=?',[identity.sub]),collision=await one<Account>('SELECT * FROM users WHERE email=?',[email]);if(collision&&collision.id!==existing?.id)return reject('accountExists');const id=existing?.id||randomUUID();if(existing)await db.run('UPDATE users SET email=?,name=? WHERE id=?',[email,identity.name.slice(0,80),id]);else await db.run('INSERT INTO users VALUES(?,?,?,NULL,?,?)',[id,email,identity.name.slice(0,80),identity.sub,new Date().toISOString()]);const res=NextResponse.redirect(destination,307);await setSession(req,res,id);res.cookies.set(oauthCookie,'',{...cookieOptions(),maxAge:0});return res;}catch{return reject('oauthFailed');}
  }
- if(path==='posts'&&method==='GET'){const language=url.searchParams.get('language')||undefined,country=url.searchParams.get('country')||undefined;if(language&&!isLocale(language)||country&&!countries.some(c=>c.code===country))fail('validationError');return json({posts:await listPosts({country,language,admin:(await currentUser(req))?.role==='admin'})});}
+ if(path==='posts'&&method==='GET'){const language=url.searchParams.get('language')||undefined,country=url.searchParams.get('country')||undefined;if(language&&!isLocale(language)||country&&!isCountryCode(country))fail('validationError');return json({posts:await listPosts({country,language,admin:(await currentUser(req))?.role==='admin'})});}
  if((path.startsWith('posts/')||path.startsWith('stories/'))&&method==='GET'){const editing=path.startsWith('posts/');if(editing)await admin(req);const post=await getPost(path.split('/')[1],editing);if(!post)fail('notFound',404);return json({post});}
  if(path==='posts'&&method==='POST'){
-  await admin(req,true);const p=await body(req);if(!p||!['title','excerpt','category'].every(k=>typeof p[k]==='string'&&p[k].trim()&&p[k].length<1000)||typeof p.content!=='string'||!p.content.trim()||p.content.length>MAX_POST_CONTENT||!countries.some(c=>c.code===p.country)||!isLocale(p.language)||typeof p.published!=='boolean'||p.contentFormat!==undefined&&!['text','html'].includes(p.contentFormat))fail('validationError');
+  await admin(req,true);const p=await body(req);if(!p||!['title','excerpt','category'].every(k=>typeof p[k]==='string'&&p[k].trim()&&p[k].length<1000)||typeof p.content!=='string'||!p.content.trim()||p.content.length>MAX_POST_CONTENT||!isCountryCode(p.country)||!isLocale(p.language)||typeof p.published!=='boolean'||p.contentFormat!==undefined&&!['text','html'].includes(p.contentFormat))fail('validationError');
   const author=typeof p.author==='string'?p.author.trim()||brand:p.author===undefined?brand:null;if(!author||author.length>180)fail('validationError');if(p.image&&!isImageSource(p.image))fail('imageError');if(p.id!==undefined&&(typeof p.id!=='string'||!/^[a-zA-Z0-9_-]{1,100}$/.test(p.id)))fail('validationError');
   const content=p.contentFormat==='html'?sanitizeContent(p.content):p.content;if(p.contentFormat==='html'&&!hasContent(content))fail('validationError');const old=p.id?await getPost(p.id,true):null;
-  const post:Post={id:p.id||randomUUID(),title:p.title.trim(),excerpt:p.excerpt.trim(),content,contentFormat:p.contentFormat||'text',country:p.country,language:p.language,category:p.category,image:p.image||'',author,date:old?.date||new Date().toISOString().slice(0,10),published:p.published};await upsertPost(post);return json({post});
+  const post:Post={id:p.id||randomUUID(),title:p.title.trim(),excerpt:p.excerpt.trim(),content,contentFormat:p.contentFormat||'text',country:p.country,language:p.language,category:categoryValue(p.category),image:p.image||'',author,date:old?.date||new Date().toISOString().slice(0,10),published:p.published};await upsertPost(post);return json({post});
  }
  if(path==='posts'&&method==='DELETE'){await admin(req,true);const p=await body(req);if(typeof p?.id!=='string')fail('validationError');await db.run('DELETE FROM posts WHERE id=?',[p.id]);return json({ok:true});}
  if(path==='events'&&method==='POST'){origin(req);await limit(req,'events',300);const p=await body(req);if(!p||typeof p.visitor!=='string'||p.visitor.length>80||!['view','like'].includes(p.type)||typeof p.postId!=='string')fail('validationError');if(p.postId!=='home'&&!await getPost(p.postId))return json({ok:true});const date=new Date().toISOString(),key=digest(JSON.stringify([p.visitor,p.type,p.postId,p.type==='view'?date.slice(0,10):'once']));await db.run('INSERT OR IGNORE INTO events VALUES(?,?,?,?,?)',[key,p.visitor,p.type,p.postId,date]);return json({ok:true});}

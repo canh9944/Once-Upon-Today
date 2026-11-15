@@ -14,7 +14,17 @@ npm run dev
 
 Open http://localhost:3000/en or http://localhost:3000/en/admin. Hot reload is enabled by `next dev`. There is no default admin password. Existing NestJS SQLite/legacy JSON data is imported without deleting the original. The active database is `data/app.sqlite` and uploaded images are in `data/uploads` by default. `backend/` is retained as an archived implementation and source backup.
 
+For local preview using the production API, skip `npm run db:import` and configure `CONTENT_API_URL` as described below. This mode does not create a local database.
+
 ## Deploy and migrate
+
+### Read production content locally through the API
+
+Set `CONTENT_API_URL=https://onceupontoday.site` in `.env.local` and run `npm run dev`. Local pages fetch public posts, article details and search suggestions directly from the server on each request (`cache: no-store`). Uploaded cover/inline images use the server URL. No local database, image copies, background sync or polling are needed. Production must be reachable.
+
+This mode only reads public content. Local analytics are ignored and sign-in opens the production editorial page; local writes are blocked. No production cookies or credentials are forwarded. The setting applies only to Next.js development; production builds and hosting continue to use their own storage. Remove `CONTENT_API_URL` to develop against a separate database again (run `npm run db:import` first if needed).
+
+With local dev running in API mode, `npm run test:api-content` verifies live content, remote images, search and article pages, blocked local writes, and that local database files remain absent.
 
 See [Cloudflare, VPS, backup and migration guide](docs/deployment.md) for the complete setup and commands.
 
@@ -47,9 +57,9 @@ The API entry point is `app/api/[...path]/route.ts`; authentication, posts, anal
 
 ## Features
 
-Country and genre filters in the header; centered search; all countries uses English UI and shows all stories. Country selection chooses the corresponding interface language. Stories open on dedicated URLs. English, Vietnamese, French, German, Spanish, Italian, Portuguese, Dutch, Polish, Belgian French/Dutch/German, Danish and Swedish dictionaries are included.
+Country and genre filters in the header; centered search; all countries uses English UI and shows all stories. All 50 selectable country/market options have an explicit language mapping across 43 locales. Shared dictionaries cover public pages, search suggestions, all eight story categories, authentication and the editorial interface. US-UK is the first country/market option and combines US, GB and legacy England codes; European countries follow in editorial language-priority order, then Asian markets. Country names and dates follow the selected locale; Belgium retains French, Dutch and German editions. Published article content keeps its original language.
 
-Light/dark theme, reading font and size controls, responsive layouts, login/signup dialog, password visibility toggle and Google OAuth. Only configured admins can write stories. Admin routes retain the sidebar while opening separate create/edit pages. Rich text supports up to 500,000 HTML characters; author defaults to Once Upon Today. Reusable cover/inline image upload converts images in the browser and validates allowed raster image types/server limits. Analytics deduplicate daily views and likes and display Recharts charts. Public drafts remain inaccessible. AdSense uses `NEXT_PUBLIC_ADSENSE_CLIENT` and `NEXT_PUBLIC_ADSENSE_SLOT`; Google approval is separate.
+Sticky public header, plus a responsive related-story carousel at the end of articles (same-category/topic/language/market ranking, swipe/arrow navigation, and current/draft/duplicate exclusion). Light/dark theme, reading font and size controls, responsive layouts, login/signup dialog, password visibility toggle and Google OAuth. Only configured admins can write stories. Admin routes retain the sidebar while opening separate create/edit pages. Rich text supports up to 500,000 HTML characters; author defaults to Once Upon Today. Reusable cover/inline image upload converts images in the browser and validates allowed raster image types/server limits. Analytics deduplicate daily views and likes and display Recharts charts. Public drafts remain inaccessible. AdSense uses `NEXT_PUBLIC_ADSENSE_CLIENT` and `NEXT_PUBLIC_ADSENSE_SLOT`; Google approval is separate.
 
 ## Verify
 

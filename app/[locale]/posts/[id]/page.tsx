@@ -1,10 +1,11 @@
-import {cache} from 'react';
+import {cache,Suspense} from 'react';
 import {notFound} from 'next/navigation';
 import {publicPost} from '@/lib/backend';
 import {isLocale,formatDate} from '@/lib/i18n';
 import {countryLocale,resolveCountry} from '@/lib/country-selection';
 import Article from '@/components/article';
 import PostContent from '@/components/post-content';
+import RelatedStories from '@/components/related-stories';
 
 export const dynamic='force-dynamic';
 type Params=Promise<{locale:string;id:string}>;
@@ -20,5 +21,5 @@ export async function generateMetadata({params}:{params:Params}){
 export default async function Page({params,searchParams}:{params:Params;searchParams:Promise<{country?:string|string[]}>}){
   const {locale,id}=await params;const post=await getPost(locale,id);if(!isLocale(locale))notFound();
   const query=await searchParams;const uiLocale=countryLocale(resolveCountry(locale,Array.isArray(query.country)?query.country[0]:query.country));
-  return <Article post={post} displayDate={formatDate(post.date,uiLocale)} body={<PostContent post={post}/>}/>;
+  return <Article post={post} displayDate={formatDate(post.date,uiLocale)} body={<PostContent post={post}/>} related={<Suspense fallback={null}><RelatedStories post={post} locale={uiLocale}/></Suspense>}/>;
 }

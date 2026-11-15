@@ -2,8 +2,10 @@ import Database from 'better-sqlite3';
 import fs from 'node:fs';
 import path from 'node:path';
 import type {Platform,SqlDatabase,Statement} from './types';
+import {contentOrigin} from '../remote-content';
 let singleton:Platform|undefined;
 export function getPlatform():Platform{
+  if(contentOrigin())throw new Error('Local database is disabled in API content mode.');
   if(singleton)return singleton;
   const dbPath=path.resolve(process.env.DATABASE_PATH||'data/app.sqlite');fs.mkdirSync(path.dirname(dbPath),{recursive:true});
   const connection=new Database(dbPath);connection.pragma('journal_mode = WAL');connection.pragma('busy_timeout = 5000');

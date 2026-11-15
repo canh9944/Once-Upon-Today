@@ -1,0 +1,3 @@
+export const additionalLocales=['ja','ko','th','nb','fi','is','el','cs','sk','ro','hu','uk','bg','hr','sl','et','lv','lt','lb','mt','sq','ca','bs','be','sr-Latn','mk','sr','ru','tr'] as const;
+export type AdditionalLocale=typeof additionalLocales[number];
+export const additionalLanguageNames:Record<AdditionalLocale,string>={ja:'日本語',ko:'한국어',th:'ไทย',nb:'Norsk bokmål',fi:'Suomi',is:'Íslenska',el:'Ελληνικά',cs:'Čeština',sk:'Slovenčina',ro:'Română',hu:'Magyar',uk:'Українська',bg:'Български',hr:'Hrvatski',sl:'Slovenščina',et:'Eesti',lv:'Latviešu',lt:'Lietuvių',lb:'Lëtzebuergesch',mt:'Malti',sq:'Shqip',ca:'Català',bs:'Bosanski',be:'Беларуская','sr-Latn':'Srpski (latinica)',mk:'Македонски',sr:'Српски',ru:'Русский',tr:'Türkçe'};

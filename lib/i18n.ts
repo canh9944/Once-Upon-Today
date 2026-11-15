@@ -1,6 +1,13 @@
+import additionalDictionaries from './translations/main.json';
+import {additionalLanguageNames} from '../shared/additional-locales';
+import {uiCopy} from './ui-i18n';
+import {normalizeCountry,englishMarket} from '../shared/countries';
+import {translatedCategory} from '../shared/categories';
+export {categories,categoryValue,categoryAliases} from '../shared/categories';
 import {locales,brand,isLocale,type Locale} from '../shared/domain';
 export {locales,brand,isLocale,type Locale};
 export const languageNames: Record<Locale, string> = {
+  ...additionalLanguageNames,
   en: 'English', vi: 'Tiếng Việt', fr: 'Français', de: 'Deutsch', es: 'Español',
   it: 'Italiano', pt: 'Português', nl: 'Nederlands', pl: 'Polski',
   'fr-BE': 'Français (Belgique)', 'nl-BE': 'Nederlands (België)', 'de-BE': 'Deutsch (Belgien)',
@@ -137,15 +144,19 @@ const sv: Dictionary = {
 };
 // Belgium has Dutch, French and German editions. Reuse their language dictionaries;
 // retain separate region tags for article filtering, dates and country names.
-const dictionaries: Record<Locale, Dictionary> = { en: english, vi, fr, de, es, it, pt, nl, pl, 'fr-BE':fr, 'nl-BE':nl, 'de-BE':de, da, sv };
+const dictionaries: Record<Locale, Dictionary> = { ...additionalDictionaries, en: english, vi, fr, de, es, it, pt, nl, pl, 'fr-BE':fr, 'nl-BE':nl, 'de-BE':de, da, sv };
 export function dictionary(locale: Locale): Dictionary { return dictionaries[locale]; }
-export const categories = ['Hành trình','Văn hóa','Đời sống','Ẩm thực','Cảm hứng'] as const;
+const legacyCategories = ['Hành trình','Văn hóa','Đời sống','Ẩm thực','Cảm hứng'] as const;
 const categoryKeys = ['travel','culture','life','food','inspiration'] as const;
 export function categoryName(category: string, locale: Locale) {
-  const index = categories.findIndex(c => c === category);
+  const translated=translatedCategory(category,locale);
+  if(translated)return translated;
+  if(category==='Stories')return uiCopy(locale).storyCategory;
+  const index = legacyCategories.findIndex(c => c === category);
   return index < 0 ? category : dictionary(locale)[categoryKeys[index]];
 }
 export function countryName(code: string, locale: Locale) {
+  if(normalizeCountry(code)===englishMarket)return englishMarket;
   return new Intl.DisplayNames([locale], { type: 'region' }).of(code) || code;
 }
 export function postHref(post: { id: string; language: Locale }) {

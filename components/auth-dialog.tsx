@@ -1,4 +1,5 @@
 'use client';
+import {uiCopy} from '@/lib/ui-i18n';
 import {useEffect,useId,useState,type FormEvent} from 'react';
 import {usePathname} from 'next/navigation';
 import {LoaderCircle} from 'lucide-react';
@@ -28,7 +29,7 @@ export function AuthDialog({locale,open,onOpenChange,onAuthenticated,googleEnabl
   }
   const fields=(signup:boolean)=><form onSubmit={submit} className="auth-form" aria-busy={busy}>
     {signup&&<div className="auth-field"><Label htmlFor={`${id}-name`}>{a.name}</Label><Input id={`${id}-name`} name="name" autoComplete="name" minLength={2} maxLength={80} required disabled={busy} value={name} onChange={e=>setName(e.target.value)}/></div>}
-    <div className="auth-field"><Label htmlFor={`${id}-${tab}-email`}>Email</Label><Input id={`${id}-${tab}-email`} name="email" type="email" autoComplete="username" maxLength={254} required disabled={busy} value={email} onChange={e=>setEmail(e.target.value)}/></div>
+    <div className="auth-field"><Label htmlFor={`${id}-${tab}-email`}>{uiCopy(locale).email}</Label><Input id={`${id}-${tab}-email`} name="email" type="email" autoComplete="username" maxLength={254} required disabled={busy} value={email} onChange={e=>setEmail(e.target.value)}/></div>
     <div className="auth-field"><Label htmlFor={`${id}-${tab}-password`}>{t.password}</Label><PasswordInput id={`${id}-${tab}-password`} name="password" autoComplete={signup?'new-password':'current-password'} minLength={signup?12:undefined} maxLength={128} required disabled={busy} value={password} onChange={e=>setPassword(e.target.value)} showLabel={a.showPassword} hideLabel={a.hidePassword} aria-describedby={signup?`${id}-hint`:undefined}/>{signup&&<p id={`${id}-hint`} className="auth-hint">{a.passwordHint}</p>}</div>
     {signup&&<div className="auth-field"><Label htmlFor={`${id}-confirm`}>{a.confirmPassword}</Label><PasswordInput id={`${id}-confirm`} name="confirmPassword" autoComplete="new-password" maxLength={128} required disabled={busy} value={confirm} onChange={e=>setConfirm(e.target.value)} showLabel={a.showPassword} hideLabel={a.hidePassword}/></div>}
     {error&&<p className="error" role="alert">{message(error)}</p>}<Button type="submit" disabled={busy} className="w-full">{busy&&<LoaderCircle className="animate-spin"/>}{busy?t.loading:signup?a.signup:t.login}</Button>
