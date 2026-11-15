@@ -23,7 +23,7 @@ try{
   const page=await browser.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));
   await page.goto(`${origin}/en`);
-  await expect(page.locator('.post-card')).toHaveCount(local.posts.length-1);
+  await expect(page.locator('.post-card')).toHaveCount(Math.max(0,Math.min(local.posts.length,10)-1));
   const cover=page.locator('.feature-image img');
   await expect(cover).toHaveAttribute('src',new RegExp(`^${source.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}/`));
   await expect.poll(()=>cover.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);

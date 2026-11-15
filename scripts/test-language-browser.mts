@@ -18,12 +18,12 @@ try{
     assert.ok(!(await options.allTextContents()).some(label=>label.includes('United Kingdom')||label.includes('France')));
     await options.nth(1).click();await expect(page).toHaveURL(origin+'/en?lang=en');
     const english=all.filter(p=>matchesLanguage(p.language,'en'));
-    if(english.length)await expect(page.locator('.title-button')).toHaveCount(english.length);else await expect(page.locator('.empty')).toBeVisible();
+    if(english.length)await expect(page.locator('.title-button')).toHaveCount(Math.min(english.length,viewport.width<768?5:10));else await expect(page.locator('.empty')).toBeVisible();
     const api=await page.request.get(origin+'/api/posts?language=nl');assert.equal(api.status(),200);assert.ok((await api.json()).posts.every((p:Post)=>matchesLanguage(p.language,'nl')));
     await page.goto(origin+'/nl?lang=nl');await expect(page.locator('html')).toHaveAttribute('lang','nl');await expect(page.locator('.header-language button')).toContainText('Nederlands');
     const dutch=all.filter(p=>matchesLanguage(p.language,'nl'));
     if(dutch.length){
-      await expect(page.locator('.title-button')).toHaveCount(dutch.length);await page.locator('.feature-copy .title-button').click();await expect(page.locator('.article-page')).toBeVisible();
+      await expect(page.locator('.title-button')).toHaveCount(Math.min(dutch.length,viewport.width<768?5:10));await page.locator('.feature-copy .title-button').click();await expect(page.locator('.article-page')).toBeVisible();
       await expect(page).toHaveURL(/lang=nl/);await expect(page.locator('.header-language button')).toContainText(/Nederlands/);
       const articleUrl=page.url();await page.locator('.header-search input').click();await page.locator('.article-page h1').click();assert.equal(page.url(),articleUrl);
       await page.locator('.related-stories').waitFor();const relatedHref=await page.locator('.related-card-link').first().getAttribute('href');assert.ok(relatedHref?.includes('lang=nl'));
@@ -44,7 +44,7 @@ try{
       await expect(page.locator('.article-page h1')).toHaveText(title!);
     }
     await page.goto(origin+'/vi');await page.locator('.header-language button').click();await expect(options.first()).toHaveText('Tất cả ngôn ngữ');
-    await options.first().click();await expect(page).toHaveURL(origin+'/en');await expect(page.locator('.title-button')).toHaveCount(all.length);
+    await options.first().click();await expect(page).toHaveURL(origin+'/en');await expect(page.locator('.title-button')).toHaveCount(Math.min(all.length,viewport.width<768?5:10));
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);
     await context.close();
   }

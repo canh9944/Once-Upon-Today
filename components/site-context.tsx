@@ -22,7 +22,7 @@ export function SiteProvider({locale:routeLocale,children,countryLabels}:{locale
   const country=resolveCountry(routeLocale,search.get('country'));
   const language=resolveLanguage(routeLocale,search.get('lang'),search.get('country'));
   const locale=pathname.split('/')[2]==='admin'?routeLocale:languageLocale(routeLocale,language);
-  const listHref=languageBrowseHref(language,{genre:search.get('genre')||undefined,query:search.get('q')||undefined});
+  const listHref=languageBrowseHref(language,{genre:search.get('genre')||undefined,query:search.get('q')||undefined,page:Number(search.get('page'))});
   const [preferences,setPreferences]=useState<Preferences>({dark:false,font:'sans',size:18});
   const [saved,setSaved]=useState<string[]>([]),[liked,setLiked]=useState<string[]>([]),[ready,setReady]=useState(false);
   // Root layouts persist during client navigation; keep lang in sync after switching editions.

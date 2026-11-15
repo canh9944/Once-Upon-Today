@@ -9,10 +9,11 @@ export function resolveLanguage(locale:Locale,value?:string|null,legacyCountry?:
   return locale==='en'?'all':normalizeLanguage(locale)||'all';
 }
 export function languageLocale(routeLocale:Locale,selected:LanguageSelection):Locale{return selected==='all'?'en':languageGroup(routeLocale)===selected?routeLocale:selected;}
-export function languageBrowseHref(language:LanguageSelection,filters:{genre?:string;query?:string}={}){
+export function languageBrowseHref(language:LanguageSelection,filters:{genre?:string;query?:string;page?:number}={}){
   const params=new URLSearchParams();if(language!=='all')params.set('lang',language);
   if(filters.genre&&filters.genre!=='all')params.set('genre',filters.genre);
   if(filters.query?.trim())params.set('q',filters.query.trim());
+  if(filters.page&&Number.isSafeInteger(filters.page)&&filters.page>1)params.set('page',String(filters.page));
   return `/${language==='all'?'en':language}${params.size?'?'+params:''}`;
 }
 export function languageSwitchHref(pathname:string,search:string,language:LanguageSelection){
@@ -28,9 +29,10 @@ export function languageSwitchHref(pathname:string,search:string,language:Langua
   }
   return languageBrowseHref(language,{genre:params.get('genre')||undefined,query:params.get('q')||undefined});
 }
-export function languageArticleHref(post:{id:string;language:Locale},language:LanguageSelection,filters:{genre?:string;query?:string}={}){
+export function languageArticleHref(post:{id:string;language:Locale},language:LanguageSelection,filters:{genre?:string;query?:string;page?:number}={}){
   const params=new URLSearchParams({lang:language});
   if(filters.genre&&filters.genre!=='all')params.set('genre',filters.genre);
   if(filters.query?.trim())params.set('q',filters.query.trim());
+  if(filters.page&&Number.isSafeInteger(filters.page)&&filters.page>1)params.set('page',String(filters.page));
   return `/${post.language}/posts/${encodeURIComponent(post.id)}?${params}`;
 }

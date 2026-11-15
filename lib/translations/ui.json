@@ -25,7 +25,12 @@
     "socialUnavailable": "This sign-in method is currently unavailable.",
     "socialError": "Sign-in could not be completed. Please try again.",
     "socialEmailMissing": "Please allow access to your email address, or use another sign-in method.",
-    "localAuthNotice": "Local test mode. Accounts are separate from the live website and reset when the development server restarts."
+    "localAuthNotice": "Local test mode. Accounts are separate from the live website and reset when the development server restarts.",
+    "pagination": "Story pages",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "morePages": "More pages",
+    "page": "Page"
   },
   "vi": {
     "popularStories": "Câu chuyện phổ biến",
@@ -53,7 +58,12 @@
     "socialUnavailable": "Phương thức đăng nhập này hiện chưa khả dụng.",
     "socialError": "Không thể hoàn tất đăng nhập. Vui lòng thử lại.",
     "socialEmailMissing": "Vui lòng cho phép truy cập địa chỉ email hoặc dùng phương thức đăng nhập khác.",
-    "localAuthNotice": "Chế độ kiểm thử local. Tài khoản tách biệt với website thật và sẽ mất khi khởi động lại dev server."
+    "localAuthNotice": "Chế độ kiểm thử local. Tài khoản tách biệt với website thật và sẽ mất khi khởi động lại dev server.",
+    "pagination": "Phân trang bài viết",
+    "previousPage": "Trang trước",
+    "nextPage": "Trang sau",
+    "morePages": "Các trang khác",
+    "page": "Trang"
   },
   "fr": {
     "popularStories": "Histoires populaires",
@@ -81,7 +91,12 @@
     "socialUnavailable": "Cette méthode de connexion est actuellement indisponible.",
     "socialError": "La connexion n'a pas pu être complétée. Veuillez réessayer.",
     "socialEmailMissing": "Veuillez autoriser l'accès à votre adresse e-mail ou utiliser une autre méthode de connexion.",
-    "localAuthNotice": "Mode test local. Les comptes sont séparés du site Web en direct et réinitialisés au redémarrage du serveur de développement."
+    "localAuthNotice": "Mode test local. Les comptes sont séparés du site Web en direct et réinitialisés au redémarrage du serveur de développement.",
+    "pagination": "Pages d'histoire",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "morePages": "Plus de pages",
+    "page": "Pages"
   },
   "de": {
     "popularStories": "Beliebte Geschichten",
@@ -109,7 +124,12 @@
     "socialUnavailable": "Diese Anmeldemethode ist derzeit nicht verfügbar.",
     "socialError": "Die Anmeldung konnte nicht abgeschlossen werden. Bitte versuchen Sie es erneut.",
     "socialEmailMissing": "Bitte erlauben Sie den Zugriff auf Ihre E-Mail-Adresse oder verwenden Sie eine andere Anmeldemethode.",
-    "localAuthNotice": "Lokaler Testmodus. Konten sind von der Live-Website getrennt und werden beim Neustart des Entwicklungsservers zurückgesetzt."
+    "localAuthNotice": "Lokaler Testmodus. Konten sind von der Live-Website getrennt und werden beim Neustart des Entwicklungsservers zurückgesetzt.",
+    "pagination": "Story-Seiten",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "morePages": "Weitere Seiten",
+    "page": "Seite"
   },
   "es": {
     "popularStories": "historias populares",
@@ -137,7 +157,12 @@
     "socialUnavailable": "Este método de inicio de sesión no está disponible actualmente.",
     "socialError": "No se pudo completar el inicio de sesión. Por favor inténtalo de nuevo.",
     "socialEmailMissing": "Permita el acceso a su dirección de correo electrónico o utilice otro método de inicio de sesión.",
-    "localAuthNotice": "Modo de prueba local. Las cuentas están separadas del sitio web activo y se restablecen cuando se reinicia el servidor de desarrollo."
+    "localAuthNotice": "Modo de prueba local. Las cuentas están separadas del sitio web activo y se restablecen cuando se reinicia el servidor de desarrollo.",
+    "pagination": "páginas de historia",
+    "previousPage": "Pagina anterior",
+    "nextPage": "Página siguiente",
+    "morePages": "Más páginas",
+    "page": "Página"
   },
   "it": {
     "popularStories": "Storie popolari",
@@ -165,7 +190,12 @@
     "socialUnavailable": "Questo metodo di accesso non è al momento disponibile.",
     "socialError": "Impossibile completare l'accesso. Per favore riprova.",
     "socialEmailMissing": "Consenti l'accesso al tuo indirizzo email o utilizza un altro metodo di accesso.",
-    "localAuthNotice": "Modalità di prova locale. Gli account sono separati dal sito Web live e vengono ripristinati al riavvio del server di sviluppo."
+    "localAuthNotice": "Modalità di prova locale. Gli account sono separati dal sito Web live e vengono ripristinati al riavvio del server di sviluppo.",
+    "pagination": "Pagine di storie",
+    "previousPage": "Pagina precedente",
+    "nextPage": "Pagina successiva",
+    "morePages": "Più pagine",
+    "page": "Pagina"
   },
   "pt": {
     "popularStories": "Histórias populares",
@@ -193,7 +223,12 @@
     "socialUnavailable": "Este método de login não está disponível no momento.",
     "socialError": "Não foi possível concluir o login. Por favor, tente novamente.",
     "socialEmailMissing": "Permita o acesso ao seu endereço de e-mail ou use outro método de login.",
-    "localAuthNotice": "Modo de teste local. As contas são separadas do site ativo e redefinidas quando o servidor de desenvolvimento é reiniciado."
+    "localAuthNotice": "Modo de teste local. As contas são separadas do site ativo e redefinidas quando o servidor de desenvolvimento é reiniciado.",
+    "pagination": "Páginas de história",
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "morePages": "Mais páginas",
+    "page": "Página"
   },
   "nl": {
     "popularStories": "Populaire verhalen",
@@ -221,7 +256,12 @@
     "socialUnavailable": "Deze inlogmethode is momenteel niet beschikbaar.",
     "socialError": "Het inloggen kon niet worden voltooid. Probeer het opnieuw.",
     "socialEmailMissing": "Geef toegang tot uw e-mailadres of gebruik een andere inlogmethode.",
-    "localAuthNotice": "Lokale testmodus. Accounts zijn gescheiden van de live website en worden opnieuw ingesteld wanneer de ontwikkelingsserver opnieuw wordt opgestart."
+    "localAuthNotice": "Lokale testmodus. Accounts zijn gescheiden van de live website en worden opnieuw ingesteld wanneer de ontwikkelingsserver opnieuw wordt opgestart.",
+    "pagination": "Verhaalpagina's",
+    "previousPage": "Vorige pagina",
+    "nextPage": "Volgende pagina",
+    "morePages": "Meer pagina's",
+    "page": "Pagina"
   },
   "pl": {
     "popularStories": "Popularne historie",
@@ -249,7 +289,12 @@
     "socialUnavailable": "Ta metoda logowania jest obecnie niedostępna.",
     "socialError": "Nie można ukończyć logowania. Spróbuj ponownie.",
     "socialEmailMissing": "Zezwól na dostęp do swojego adresu e-mail lub użyj innej metody logowania.",
-    "localAuthNotice": "Lokalny tryb testowy. Konta są oddzielone od działającej witryny internetowej i resetowane po ponownym uruchomieniu serwera programistycznego."
+    "localAuthNotice": "Lokalny tryb testowy. Konta są oddzielone od działającej witryny internetowej i resetowane po ponownym uruchomieniu serwera programistycznego.",
+    "pagination": "Strony z opowieściami",
+    "previousPage": "Poprzednia strona",
+    "nextPage": "Następna strona",
+    "morePages": "Więcej stron",
+    "page": "Strona"
   },
   "da": {
     "popularStories": "Populære historier",
@@ -277,7 +322,12 @@
     "socialUnavailable": "Denne login-metode er ikke tilgængelig i øjeblikket.",
     "socialError": "Login kunne ikke fuldføres. Prøv venligst igen.",
     "socialEmailMissing": "Tillad venligst adgang til din e-mailadresse, eller brug en anden login-metode.",
-    "localAuthNotice": "Lokal testtilstand. Konti er adskilt fra live-webstedet og nulstilles, når udviklingsserveren genstarter."
+    "localAuthNotice": "Lokal testtilstand. Konti er adskilt fra live-webstedet og nulstilles, når udviklingsserveren genstarter.",
+    "pagination": "Historiesider",
+    "previousPage": "Forrige side",
+    "nextPage": "Næste side",
+    "morePages": "Flere sider",
+    "page": "Side"
   },
   "sv": {
     "popularStories": "Populära berättelser",
@@ -305,7 +355,12 @@
     "socialUnavailable": "Den här inloggningsmetoden är för närvarande inte tillgänglig.",
     "socialError": "Inloggningen kunde inte slutföras. Försök igen.",
     "socialEmailMissing": "Tillåt åtkomst till din e-postadress eller använd en annan inloggningsmetod.",
-    "localAuthNotice": "Lokalt testläge. Konton är separata från livewebbplatsen och återställs när utvecklingsservern startar om."
+    "localAuthNotice": "Lokalt testläge. Konton är separata från livewebbplatsen och återställs när utvecklingsservern startar om.",
+    "pagination": "Berättelsesidor",
+    "previousPage": "Föregående sida",
+    "nextPage": "Nästa sida",
+    "morePages": "Fler sidor",
+    "page": "Sida"
   },
   "ja": {
     "popularStories": "人気のストーリー",
@@ -333,7 +388,12 @@
     "socialUnavailable": "このサインイン方法は現在利用できません。",
     "socialError": "サインインを完了できませんでした。もう一度試してください。",
     "socialEmailMissing": "電子メール アドレスへのアクセスを許可するか、別のサインイン方法を使用してください。",
-    "localAuthNotice": "ローカルテストモード。アカウントは実際の Web サイトとは別のものであり、開発サーバーが再起動するとリセットされます。"
+    "localAuthNotice": "ローカルテストモード。アカウントは実際の Web サイトとは別のものであり、開発サーバーが再起動するとリセットされます。",
+    "pagination": "ストーリーページ",
+    "previousPage": "前のページへ",
+    "nextPage": "次のページ",
+    "morePages": "さらにページを開く",
+    "page": "ページ"
   },
   "ko": {
     "popularStories": "인기있는 이야기",
@@ -361,7 +421,12 @@
     "socialUnavailable": "현재 이 로그인 방법을 사용할 수 없습니다.",
     "socialError": "로그인을 완료할 수 없습니다. 다시 시도해 주세요.",
     "socialEmailMissing": "귀하의 이메일 주소에 대한 액세스를 허용하거나 다른 로그인 방법을 사용하십시오.",
-    "localAuthNotice": "로컬 테스트 모드. 계정은 라이브 웹사이트와 별개이며 개발 서버가 다시 시작되면 재설정됩니다."
+    "localAuthNotice": "로컬 테스트 모드. 계정은 라이브 웹사이트와 별개이며 개발 서버가 다시 시작되면 재설정됩니다.",
+    "pagination": "스토리 페이지",
+    "previousPage": "이전 페이지",
+    "nextPage": "다음 페이지",
+    "morePages": "더 많은 페이지",
+    "page": "페이지"
   },
   "th": {
     "popularStories": "เรื่องราวยอดนิยม",
@@ -389,7 +454,12 @@
     "socialUnavailable": "วิธีการลงชื่อเข้าใช้นี้ไม่สามารถใช้งานได้ในขณะนี้",
     "socialError": "ไม่สามารถลงชื่อเข้าใช้ให้เสร็จสิ้นได้ โปรดลองอีกครั้ง",
     "socialEmailMissing": "โปรดอนุญาตให้เข้าถึงที่อยู่อีเมลของคุณหรือใช้วิธีการลงชื่อเข้าใช้อื่น",
-    "localAuthNotice": "โหมดทดสอบท้องถิ่น บัญชีจะแยกจากเว็บไซต์ที่ใช้งานจริงและรีเซ็ตเมื่อเซิร์ฟเวอร์การพัฒนารีสตาร์ท"
+    "localAuthNotice": "โหมดทดสอบท้องถิ่น บัญชีจะแยกจากเว็บไซต์ที่ใช้งานจริงและรีเซ็ตเมื่อเซิร์ฟเวอร์การพัฒนารีสตาร์ท",
+    "pagination": "หน้าเรื่องราว",
+    "previousPage": "หน้าก่อน",
+    "nextPage": "หน้าถัดไป",
+    "morePages": "หน้าเพิ่มเติม",
+    "page": "หน้า"
   },
   "nb": {
     "popularStories": "Populære historier",
@@ -417,7 +487,12 @@
     "socialUnavailable": "Denne påloggingsmetoden er for øyeblikket utilgjengelig.",
     "socialError": "Pålogging kunne ikke fullføres. Vennligst prøv igjen.",
     "socialEmailMissing": "Gi tilgang til e-postadressen din, eller bruk en annen påloggingsmetode.",
-    "localAuthNotice": "Lokal testmodus. Kontoer er atskilt fra live-nettstedet og tilbakestilles når utviklingsserveren starter på nytt."
+    "localAuthNotice": "Lokal testmodus. Kontoer er atskilt fra live-nettstedet og tilbakestilles når utviklingsserveren starter på nytt.",
+    "pagination": "Historiesider",
+    "previousPage": "Forrige side",
+    "nextPage": "Neste side",
+    "morePages": "Flere sider",
+    "page": "Side"
   },
   "fi": {
     "popularStories": "Suosittuja tarinoita",
@@ -445,7 +520,12 @@
     "socialUnavailable": "Tämä kirjautumistapa ei ole tällä hetkellä käytettävissä.",
     "socialError": "Kirjautumista ei voitu suorittaa loppuun. Yritä uudelleen.",
     "socialEmailMissing": "Anna pääsy sähköpostiosoitteeseesi tai käytä toista kirjautumistapaa.",
-    "localAuthNotice": "Paikallinen testitila. Tilit ovat erillään elävästä verkkosivustosta ja nollataan, kun kehityspalvelin käynnistyy uudelleen."
+    "localAuthNotice": "Paikallinen testitila. Tilit ovat erillään elävästä verkkosivustosta ja nollataan, kun kehityspalvelin käynnistyy uudelleen.",
+    "pagination": "Tarinasivut",
+    "previousPage": "Edellinen sivu",
+    "nextPage": "Seuraava sivu",
+    "morePages": "Lisää sivuja",
+    "page": "Sivu"
   },
   "el": {
     "popularStories": "Δημοφιλείς ιστορίες",
@@ -473,7 +553,12 @@
     "socialUnavailable": "Αυτή η μέθοδος σύνδεσης δεν είναι διαθέσιμη αυτήν τη στιγμή.",
     "socialError": "Δεν ήταν δυνατή η ολοκλήρωση της σύνδεσης. Δοκιμάστε ξανά.",
     "socialEmailMissing": "Επιτρέψτε την πρόσβαση στη διεύθυνση email σας ή χρησιμοποιήστε άλλη μέθοδο σύνδεσης.",
-    "localAuthNotice": "Λειτουργία τοπικής δοκιμής. Οι λογαριασμοί είναι ξεχωριστοί από τον ζωντανό ιστότοπο και επαναφέρονται κατά την επανεκκίνηση του διακομιστή ανάπτυξης."
+    "localAuthNotice": "Λειτουργία τοπικής δοκιμής. Οι λογαριασμοί είναι ξεχωριστοί από τον ζωντανό ιστότοπο και επαναφέρονται κατά την επανεκκίνηση του διακομιστή ανάπτυξης.",
+    "pagination": "Σελίδες ιστορίας",
+    "previousPage": "Προηγούμενη σελίδα",
+    "nextPage": "Επόμενη σελίδα",
+    "morePages": "Περισσότερες σελίδες",
+    "page": "Σελίδα"
   },
   "is": {
     "popularStories": "Vinsælar sögur",
@@ -501,7 +586,12 @@
     "socialUnavailable": "Þessi innskráningaraðferð er ekki tiltæk eins og er.",
     "socialError": "Ekki tókst að ljúka innskráningu. Vinsamlegast reyndu aftur.",
     "socialEmailMissing": "Vinsamlegast leyfðu aðgang að netfanginu þínu eða notaðu aðra innskráningaraðferð.",
-    "localAuthNotice": "Staðbundin prófunarhamur. Reikningar eru aðskildir frá lifandi vefsíðu og endurstilltir þegar þróunarþjónninn endurræsir sig."
+    "localAuthNotice": "Staðbundin prófunarhamur. Reikningar eru aðskildir frá lifandi vefsíðu og endurstilltir þegar þróunarþjónninn endurræsir sig.",
+    "pagination": "Sögusíður",
+    "previousPage": "Fyrri síða",
+    "nextPage": "Næsta síða",
+    "morePages": "Fleiri síður",
+    "page": "Bls"
   },
   "cs": {
     "popularStories": "Populární příběhy",
@@ -529,7 +619,12 @@
     "socialUnavailable": "Tato metoda přihlášení je momentálně nedostupná.",
     "socialError": "Přihlášení nebylo možné dokončit. Zkuste to prosím znovu.",
     "socialEmailMissing": "Povolte prosím přístup ke své e-mailové adrese nebo použijte jiný způsob přihlášení.",
-    "localAuthNotice": "Místní testovací režim. Účty jsou oddělené od živého webu a resetují se po restartování vývojového serveru."
+    "localAuthNotice": "Místní testovací režim. Účty jsou oddělené od živého webu a resetují se po restartování vývojového serveru.",
+    "pagination": "Stránky s příběhy",
+    "previousPage": "Předchozí stránka",
+    "nextPage": "Další stránka",
+    "morePages": "Více stránek",
+    "page": "stránku"
   },
   "sk": {
     "popularStories": "Populárne príbehy",
@@ -557,7 +652,12 @@
     "socialUnavailable": "Tento spôsob prihlásenia je momentálne nedostupný.",
     "socialError": "Prihlásenie nebolo možné dokončiť. Skúste to znova.",
     "socialEmailMissing": "Povoľte prístup k svojej e-mailovej adrese alebo použite iný spôsob prihlásenia.",
-    "localAuthNotice": "Miestny testovací režim. Účty sú oddelené od aktívnej webovej stránky a resetujú sa po reštartovaní vývojového servera."
+    "localAuthNotice": "Miestny testovací režim. Účty sú oddelené od aktívnej webovej stránky a resetujú sa po reštartovaní vývojového servera.",
+    "pagination": "Stránky s príbehmi",
+    "previousPage": "Predchádzajúca strana",
+    "nextPage": "Ďalšia strana",
+    "morePages": "Viac stránok",
+    "page": "Stránka"
   },
   "ro": {
     "popularStories": "Povești populare",
@@ -585,7 +685,12 @@
     "socialUnavailable": "Această metodă de conectare este momentan indisponibilă.",
     "socialError": "Conectarea nu a putut fi finalizată. Vă rugăm să încercați din nou.",
     "socialEmailMissing": "Vă rugăm să permiteți accesul la adresa dvs. de e-mail sau să utilizați o altă metodă de conectare.",
-    "localAuthNotice": "Mod de testare local. Conturile sunt separate de site-ul web live și se resetează atunci când serverul de dezvoltare repornește."
+    "localAuthNotice": "Mod de testare local. Conturile sunt separate de site-ul web live și se resetează atunci când serverul de dezvoltare repornește.",
+    "pagination": "Pagini de poveste",
+    "previousPage": "Pagina anterioară",
+    "nextPage": "Pagina următoare",
+    "morePages": "Mai multe pagini",
+    "page": "Pagina"
   },
   "hu": {
     "popularStories": "Népszerű történetek",
@@ -613,7 +718,12 @@
     "socialUnavailable": "Ez a bejelentkezési mód jelenleg nem érhető el.",
     "socialError": "A bejelentkezést nem sikerült befejezni. Kérjük, próbálja újra.",
     "socialEmailMissing": "Kérjük, engedélyezze az e-mail címéhez való hozzáférést, vagy használjon másik bejelentkezési módot.",
-    "localAuthNotice": "Helyi teszt mód. A fiókok elkülönülnek az élő webhelytől, és a fejlesztői szerver újraindulásakor visszaállnak."
+    "localAuthNotice": "Helyi teszt mód. A fiókok elkülönülnek az élő webhelytől, és a fejlesztői szerver újraindulásakor visszaállnak.",
+    "pagination": "Meseoldalak",
+    "previousPage": "Előző oldal",
+    "nextPage": "Következő oldal",
+    "morePages": "További oldalak",
+    "page": "oldal"
   },
   "uk": {
     "popularStories": "Популярні історії",
@@ -641,7 +751,12 @@
     "socialUnavailable": "Цей спосіб входу наразі недоступний.",
     "socialError": "Не вдалося виконати вхід. Спробуйте ще раз.",
     "socialEmailMissing": "Надайте доступ до своєї адреси електронної пошти або скористайтеся іншим способом входу.",
-    "localAuthNotice": "Локальний тестовий режим. Облікові записи відокремлені від активного веб-сайту та скидаються під час перезапуску сервера розробки."
+    "localAuthNotice": "Локальний тестовий режим. Облікові записи відокремлені від активного веб-сайту та скидаються під час перезапуску сервера розробки.",
+    "pagination": "Сторінки історії",
+    "previousPage": "Попередня сторінка",
+    "nextPage": "Наступна сторінка",
+    "morePages": "Більше сторінок",
+    "page": "Сторінка"
   },
   "bg": {
     "popularStories": "Популярни истории",
@@ -669,7 +784,12 @@
     "socialUnavailable": "Този метод за влизане в момента не е наличен.",
     "socialError": "Влизането не можа да бъде завършено. Моля, опитайте отново.",
     "socialEmailMissing": "Моля, разрешете достъп до вашия имейл адрес или използвайте друг метод за влизане.",
-    "localAuthNotice": "Локален тестов режим. Акаунтите са отделни от уебсайта на живо и се нулират, когато сървърът за разработка се рестартира."
+    "localAuthNotice": "Локален тестов режим. Акаунтите са отделни от уебсайта на живо и се нулират, когато сървърът за разработка се рестартира.",
+    "pagination": "Страници с истории",
+    "previousPage": "Предишна страница",
+    "nextPage": "Следваща страница",
+    "morePages": "Още страници",
+    "page": "Страница"
   },
   "hr": {
     "popularStories": "Popularne priče",
@@ -697,7 +817,12 @@
     "socialUnavailable": "Ovaj način prijave trenutno nije dostupan.",
     "socialError": "Prijava nije mogla biti dovršena. Molimo pokušajte ponovo.",
     "socialEmailMissing": "Please allow access to your email address, or use another sign-in method.",
-    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene."
+    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene.",
+    "pagination": "Stranice s pričama",
+    "previousPage": "Prethodna stranica",
+    "nextPage": "Sljedeća stranica",
+    "morePages": "Više stranica",
+    "page": "Stranica"
   },
   "sl": {
     "popularStories": "Priljubljene zgodbe",
@@ -725,7 +850,12 @@
     "socialUnavailable": "Ta način prijave trenutno ni na voljo.",
     "socialError": "Prijave ni bilo mogoče dokončati. prosim poskusite ponovno",
     "socialEmailMissing": "Dovolite dostop do svojega e-poštnega naslova ali uporabite drug način prijave.",
-    "localAuthNotice": "Lokalni testni način. Računi so ločeni od spletnega mesta v živo in se ponastavijo, ko se razvojni strežnik znova zažene."
+    "localAuthNotice": "Lokalni testni način. Računi so ločeni od spletnega mesta v živo in se ponastavijo, ko se razvojni strežnik znova zažene.",
+    "pagination": "Strani z zgodbami",
+    "previousPage": "Prejšnja stran",
+    "nextPage": "Naslednja stran",
+    "morePages": "Več strani",
+    "page": "Stran"
   },
   "et": {
     "popularStories": "Populaarsed lood",
@@ -753,7 +883,12 @@
     "socialUnavailable": "See sisselogimisviis pole praegu saadaval.",
     "socialError": "Sisselogimist ei saanud lõpule viia. Palun proovi uuesti.",
     "socialEmailMissing": "Lubage juurdepääs oma e-posti aadressile või kasutage mõnda muud sisselogimismeetodit.",
-    "localAuthNotice": "Kohalik testrežiim. Kontod on aktiivsest veebisaidist eraldi ja lähtestatakse arendusserveri taaskäivitamisel."
+    "localAuthNotice": "Kohalik testrežiim. Kontod on aktiivsest veebisaidist eraldi ja lähtestatakse arendusserveri taaskäivitamisel.",
+    "pagination": "Lugude leheküljed",
+    "previousPage": "Eelmine leht",
+    "nextPage": "Järgmine leht",
+    "morePages": "Veel lehti",
+    "page": "Lehekülg"
   },
   "lv": {
     "popularStories": "Populāri stāsti",
@@ -781,7 +916,12 @@
     "socialUnavailable": "Šī pierakstīšanās metode pašlaik nav pieejama.",
     "socialError": "Pierakstīšanos nevarēja pabeigt. Lūdzu, mēģiniet vēlreiz.",
     "socialEmailMissing": "Lūdzu, atļaujiet piekļuvi savai e-pasta adresei vai izmantojiet citu pierakstīšanās metodi.",
-    "localAuthNotice": "Vietējais testa režīms. Konti ir atsevišķi no tiešsaistes vietnes un tiek atiestatīti, kad tiek restartēts izstrādes serveris."
+    "localAuthNotice": "Vietējais testa režīms. Konti ir atsevišķi no tiešsaistes vietnes un tiek atiestatīti, kad tiek restartēts izstrādes serveris.",
+    "pagination": "Stāstu lapas",
+    "previousPage": "Iepriekšējā lapa",
+    "nextPage": "Nākamā lapa",
+    "morePages": "Vairāk lapas",
+    "page": "Lapa"
   },
   "lt": {
     "popularStories": "Populiarios istorijos",
@@ -809,7 +949,12 @@
     "socialUnavailable": "Šis prisijungimo būdas šiuo metu nepasiekiamas.",
     "socialError": "Nepavyko užbaigti prisijungimo. Bandykite dar kartą.",
     "socialEmailMissing": "Leiskite pasiekti savo el. pašto adresą arba naudokite kitą prisijungimo būdą.",
-    "localAuthNotice": "Vietinis bandymo režimas. Paskyros yra atskirtos nuo veikiančios svetainės ir nustatomos iš naujo, kai kūrimo serveris paleidžiamas iš naujo."
+    "localAuthNotice": "Vietinis bandymo režimas. Paskyros yra atskirtos nuo veikiančios svetainės ir nustatomos iš naujo, kai kūrimo serveris paleidžiamas iš naujo.",
+    "pagination": "Istorijos puslapiai",
+    "previousPage": "Ankstesnis puslapis",
+    "nextPage": "Kitas puslapis",
+    "morePages": "Daugiau puslapių",
+    "page": "Puslapis"
   },
   "lb": {
     "popularStories": "Populär Geschichten",
@@ -837,7 +982,12 @@
     "socialUnavailable": "Dës Umeldungsmethod ass momentan net verfügbar.",
     "socialError": "Umeldung konnt net ofgeschloss ginn. Probéiert w.e.g. nach eng Kéier.",
     "socialEmailMissing": "Erlaabt w.e.g. Zougang zu Ärer E-Mailadress oder benotzt eng aner Umeldungsmethod.",
-    "localAuthNotice": "Lokal Testmodus. Konte sinn getrennt vun der Live Websäit an zréckgesat wann den Entwécklungsserver nei start."
+    "localAuthNotice": "Lokal Testmodus. Konte sinn getrennt vun der Live Websäit an zréckgesat wann den Entwécklungsserver nei start.",
+    "pagination": "Geschicht Säiten",
+    "previousPage": "Virdrun Säit",
+    "nextPage": "Nächst Säit",
+    "morePages": "Méi Säiten",
+    "page": "Säit"
   },
   "mt": {
     "popularStories": "Stejjer popolari",
@@ -865,7 +1015,12 @@
     "socialUnavailable": "Dan il-metodu ta' dħul bħalissa mhuwiex disponibbli.",
     "socialError": "Id-dħul ma setax jitlesta. Jekk jogħġbok erġa' pprova.",
     "socialEmailMissing": "Jekk jogħġbok ħalli aċċess għall-indirizz tal-email tiegħek, jew uża metodu ieħor ta' dħul.",
-    "localAuthNotice": "Modalità tat-test lokali. Il-kontijiet huma separati mill-websajt ħajjin u reset meta s-server tal-iżvilupp jerġa 'jibda."
+    "localAuthNotice": "Modalità tat-test lokali. Il-kontijiet huma separati mill-websajt ħajjin u reset meta s-server tal-iżvilupp jerġa 'jibda.",
+    "pagination": "Paġni tal-istorja",
+    "previousPage": "Paġna ta' qabel",
+    "nextPage": "Il-paġna li jmiss",
+    "morePages": "Aktar paġni",
+    "page": "Paġna"
   },
   "sq": {
     "popularStories": "Tregime të njohura",
@@ -893,7 +1048,12 @@
     "socialUnavailable": "Kjo metodë identifikimi nuk është aktualisht e disponueshme.",
     "socialError": "Identifikimi nuk mund të përfundonte. Ju lutemi provoni përsëri.",
     "socialEmailMissing": "Ju lutemi, lejoni qasjen në adresën tuaj të emailit ose përdorni një metodë tjetër identifikimi.",
-    "localAuthNotice": "Mënyra e provës lokale. Llogaritë janë të ndara nga faqja e internetit e drejtpërdrejtë dhe rivendosen kur serveri i zhvillimit riniset."
+    "localAuthNotice": "Mënyra e provës lokale. Llogaritë janë të ndara nga faqja e internetit e drejtpërdrejtë dhe rivendosen kur serveri i zhvillimit riniset.",
+    "pagination": "Faqet e tregimeve",
+    "previousPage": "Faqja e mëparshme",
+    "nextPage": "Faqja tjetër",
+    "morePages": "Më shumë faqe",
+    "page": "Faqe"
   },
   "ca": {
     "popularStories": "Històries populars",
@@ -921,7 +1081,12 @@
     "socialUnavailable": "Aquest mètode d'inici de sessió no està disponible actualment.",
     "socialError": "No s'ha pogut completar l'inici de sessió. Si us plau, torna-ho a provar.",
     "socialEmailMissing": "Permet l'accés a la teva adreça de correu electrònic o utilitza un altre mètode d'inici de sessió.",
-    "localAuthNotice": "Mode de prova local. Els comptes estan separats del lloc web en directe i es restableixen quan es reinicia el servidor de desenvolupament."
+    "localAuthNotice": "Mode de prova local. Els comptes estan separats del lloc web en directe i es restableixen quan es reinicia el servidor de desenvolupament.",
+    "pagination": "Pàgines de contes",
+    "previousPage": "Pàgina anterior",
+    "nextPage": "Pàgina següent",
+    "morePages": "Més pàgines",
+    "page": "Pàgina"
   },
   "bs": {
     "popularStories": "Popularne priče",
@@ -949,7 +1114,12 @@
     "socialUnavailable": "Ovaj način prijave trenutno nije dostupan.",
     "socialError": "Prijava nije mogla biti dovršena. Molimo pokušajte ponovo.",
     "socialEmailMissing": "Dozvolite pristup vašoj adresi e-pošte ili koristite drugi način prijave.",
-    "localAuthNotice": "Lokalni način testiranja. Nalozi su odvojeni od veb lokacije uživo i resetuju se kada se razvojni server ponovo pokrene."
+    "localAuthNotice": "Lokalni način testiranja. Nalozi su odvojeni od veb lokacije uživo i resetuju se kada se razvojni server ponovo pokrene.",
+    "pagination": "Stranice sa pričama",
+    "previousPage": "Prethodna stranica",
+    "nextPage": "Sljedeća stranica",
+    "morePages": "Više stranica",
+    "page": "Stranica"
   },
   "be": {
     "popularStories": "Папулярныя гісторыі",
@@ -977,7 +1147,12 @@
     "socialUnavailable": "Гэты метад уваходу зараз недаступны.",
     "socialError": "Не атрымалася выканаць уваход. Калі ласка, паспрабуйце яшчэ раз.",
     "socialEmailMissing": "Дазвольце доступ да вашага адраса электроннай пошты або выкарыстоўвайце іншы спосаб уваходу.",
-    "localAuthNotice": "Лакальны тэставы рэжым. Уліковыя запісы асобныя ад дзеючага вэб-сайта і скідаюцца пры перазапуску сервера распрацоўкі."
+    "localAuthNotice": "Лакальны тэставы рэжым. Уліковыя запісы асобныя ад дзеючага вэб-сайта і скідаюцца пры перазапуску сервера распрацоўкі.",
+    "pagination": "Старонкі гісторыі",
+    "previousPage": "Папярэдняя старонка",
+    "nextPage": "Наступная старонка",
+    "morePages": "Больш старонак",
+    "page": "старонка"
   },
   "sr-Latn": {
     "popularStories": "Popularne priče",
@@ -1005,7 +1180,12 @@
     "socialUnavailable": "Ovaj na?in prijavljivanja trenutno nije dostupan.",
     "socialError": "Prijavljivanje nije moglo da se zavr?i. Poku?ajte ponovo.",
     "socialEmailMissing": "Dozvolite pristup svojoj adresi e-po?te ili koristite neki drugi na?in prijavljivanja.",
-    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene."
+    "localAuthNotice": "Lokalni testni način. Računi su odvojeni od aktivne web stranice i poništavaju se kada se razvojni poslužitelj ponovno pokrene.",
+    "pagination": "Stranice s pričama",
+    "previousPage": "Prethodna stranica",
+    "nextPage": "Sljedeća stranica",
+    "morePages": "Više stranica",
+    "page": "Stranica"
   },
   "sr": {
     "popularStories": "Популарне приче",
@@ -1033,7 +1213,12 @@
     "socialUnavailable": "Овај метод пријављивања тренутно није доступан.",
     "socialError": "Пријављивање није могло да се заврши. Покушајте поново.",
     "socialEmailMissing": "Дозволите приступ својој адреси е-поште или користите неки други начин пријављивања.",
-    "localAuthNotice": "Локални режим тестирања. Налози су одвојени од веб локације уживо и ресетују се када се развојни сервер поново покрене."
+    "localAuthNotice": "Локални режим тестирања. Налози су одвојени од веб локације уживо и ресетују се када се развојни сервер поново покрене.",
+    "pagination": "Странице са причама",
+    "previousPage": "Претходна страница",
+    "nextPage": "Следећа страница",
+    "morePages": "Више страница",
+    "page": "Страница"
   },
   "mk": {
     "popularStories": "Популарни приказни",
@@ -1061,7 +1246,12 @@
     "socialUnavailable": "Овој метод за најавување во моментов е недостапен.",
     "socialError": "Најавувањето не може да се заврши. Ве молиме обидете се повторно.",
     "socialEmailMissing": "Дозволете пристап до вашата адреса на е-пошта или користете друг метод за најавување.",
-    "localAuthNotice": "Локален режим на тестирање. Сметките се одвоени од веб-локацијата во живо и се ресетираат кога се рестартира серверот за развој."
+    "localAuthNotice": "Локален режим на тестирање. Сметките се одвоени од веб-локацијата во живо и се ресетираат кога се рестартира серверот за развој.",
+    "pagination": "Страници со приказна",
+    "previousPage": "Претходна страница",
+    "nextPage": "Следна страница",
+    "morePages": "Повеќе страници",
+    "page": "Страница"
   },
   "ru": {
     "popularStories": "Популярные истории",
@@ -1089,7 +1279,12 @@
     "socialUnavailable": "Этот метод входа в настоящее время недоступен.",
     "socialError": "Не удалось выполнить вход. Пожалуйста, попробуйте еще раз.",
     "socialEmailMissing": "Пожалуйста, разрешите доступ к вашему адресу электронной почты или используйте другой метод входа.",
-    "localAuthNotice": "Локальный тестовый режим. Учетные записи отделены от действующего веб-сайта и сбрасываются при перезапуске сервера разработки."
+    "localAuthNotice": "Локальный тестовый режим. Учетные записи отделены от действующего веб-сайта и сбрасываются при перезапуске сервера разработки.",
+    "pagination": "Страницы историй",
+    "previousPage": "Предыдущая страница",
+    "nextPage": "Следующая страница",
+    "morePages": "Больше страниц",
+    "page": "Страница"
   },
   "tr": {
     "popularStories": "Popüler hikayeler",
@@ -1117,6 +1312,11 @@
     "socialUnavailable": "Bu oturum açma yöntemi şu anda kullanılamıyor.",
     "socialError": "Oturum açma işlemi tamamlanamadı. Lütfen tekrar deneyin.",
     "socialEmailMissing": "Lütfen e-posta adresinize erişime izin verin veya başka bir oturum açma yöntemi kullanın.",
-    "localAuthNotice": "Yerel test modu. Hesaplar canlı web sitesinden ayrıdır ve geliştirme sunucusu yeniden başlatıldığında sıfırlanır."
+    "localAuthNotice": "Yerel test modu. Hesaplar canlı web sitesinden ayrıdır ve geliştirme sunucusu yeniden başlatıldığında sıfırlanır.",
+    "pagination": "Hikaye sayfaları",
+    "previousPage": "Önceki sayfa",
+    "nextPage": "Sonraki sayfa",
+    "morePages": "Daha fazla sayfa",
+    "page": "Sayfa"
   }
 }
