@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {languages,languageGroup,languageMembers,matchesLanguage,languageLabel} from '../shared/languages';
 import {locales} from '../shared/domain';
-import {resolveLanguage,languageLocale,languageBrowseHref,languageArticleHref} from '../lib/language-selection';
+import {resolveLanguage,languageLocale,languageBrowseHref,languageArticleHref,languageSwitchHref} from '../lib/language-selection';
 import {uiCopy} from '../lib/ui-i18n';
 import {remotePosts,remoteSearch} from '../server/remote-content';
 
@@ -11,6 +11,9 @@ assert.equal(resolveLanguage('en'), 'all');assert.equal(resolveLanguage('en','en
 assert.equal(resolveLanguage('nl-BE'), 'nl');assert.equal(resolveLanguage('en',undefined,'BE'),'fr');
 assert.equal(languageLocale('nl-BE','all'),'en');assert.equal(languageLocale('nl-BE','nl'),'nl-BE');
 assert.equal(languageBrowseHref('en'),'/en?lang=en');assert.equal(languageBrowseHref('all'),'/en');
+assert.equal(languageSwitchHref('/en/posts/story','lang=en&genre=Mystery&q=family','vi'),'/en/posts/story?lang=vi&genre=Mystery&q=family');
+assert.equal(languageSwitchHref('/fr-BE/posts/story','lang=fr','all'),'/fr-BE/posts/story?lang=all');
+assert.equal(languageSwitchHref('/en','genre=Mystery&q=family','vi'),'/vi?lang=vi&genre=Mystery&q=family');
 assert.ok(languageArticleHref({id:'story',language:'fr-BE'},'fr').endsWith('?lang=fr'));
 assert.deepEqual(languageMembers('fr'),['fr','fr-BE']);assert.ok(matchesLanguage('fr-BE','fr'));assert.ok(matchesLanguage('sr-Latn','sr'));assert.ok(!matchesLanguage('nl-BE','en'));
 const previousFetch=globalThis.fetch,previousEnv={...process.env};

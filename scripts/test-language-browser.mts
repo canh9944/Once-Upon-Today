@@ -28,6 +28,21 @@ try{
       const articleUrl=page.url();await page.locator('.header-search input').click();await page.locator('.article-page h1').click();assert.equal(page.url(),articleUrl);
       await page.locator('.related-stories').waitFor();const relatedHref=await page.locator('.related-card-link').first().getAttribute('href');assert.ok(relatedHref?.includes('lang=nl'));
     }
+    if(all.length){
+      const post=all[0],path=`/${post.language}/posts/${encodeURIComponent(post.id)}`;
+      await page.goto(origin+path+'?lang=en&q=family');
+      const title=await page.locator('.article-page h1').textContent();
+      await page.locator('.header-language button').click();
+      await options.filter({hasText:/^Vietnamese$/}).click();
+      await expect(page).toHaveURL(origin+path+'?lang=vi&q=family');
+      await expect(page.locator('html')).toHaveAttribute('lang','vi');
+      await expect(page.locator('.article-page h1')).toHaveText(title!);
+      await page.reload();await expect(page.locator('.article-page h1')).toHaveText(title!);
+      await page.locator('.header-language button').click();await options.first().click();
+      await expect(page).toHaveURL(origin+path+'?lang=all&q=family');
+      await expect(page.locator('html')).toHaveAttribute('lang','en');
+      await expect(page.locator('.article-page h1')).toHaveText(title!);
+    }
     await page.goto(origin+'/vi');await page.locator('.header-language button').click();await expect(options.first()).toHaveText('Tất cả ngôn ngữ');
     await options.first().click();await expect(page).toHaveURL(origin+'/en');await expect(page.locator('.title-button')).toHaveCount(all.length);
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);

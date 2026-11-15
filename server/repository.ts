@@ -16,7 +16,7 @@ export async function searchStories({query='',country,genre,language}:{query?:st
   const terms=normalizeSearch(query).split(/\s+/).filter(Boolean);
   return posts.filter(post=>{const text=normalizeSearch(`${post.title} ${post.excerpt} ${post.author} ${post.category}`);return terms.every(term=>text.includes(term));}).slice(0,6).map(({excerpt,...post})=>post);
 }
-export const tables={posts:['id','title','excerpt','content','contentFormat','country','language','category','image','author','date','published'],users:['id','email','name','passwordHash','googleSub','createdAt'],events:['key','visitor','type','postId','date'],uploads:['filename','mime','size','createdAt'],imports:['source','completedAt']} as const;
+export const tables={posts:['id','title','excerpt','content','contentFormat','country','language','category','image','author','date','published'],users:['id','email','name','passwordHash','googleSub','createdAt','facebookSub','appleSub'],events:['key','visitor','type','postId','date'],uploads:['filename','mime','size','createdAt'],imports:['source','completedAt']} as const;
 export async function one<T>(sql:string,params:unknown[]=[]):Promise<T|null>{return (await getPlatform().db.all<T>(sql,params))[0]||null;}
 export function normalizePost(post:Post):Post{return {...post,category:categoryValue(post.category),published:!!post.published};}
 export async function listPosts(filters:{country?:string;language?:string;admin?:boolean}={}):Promise<Post[]>{

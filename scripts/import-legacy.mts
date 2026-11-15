@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import Database from 'better-sqlite3';
+import {migrateLocal} from './migrate-local.mjs';
 import {seed} from '../shared/data';
 import {brand,isLocale} from '../shared/domain';
 // CLI only: never runs during a build or modifies the original store.
@@ -11,7 +12,7 @@ fs.mkdirSync(path.dirname(target),{recursive:true});
 const previous=path.resolve('backend/data/app.sqlite');
 if(!fs.existsSync(target)&&fs.existsSync(previous)&&!process.env.LEGACY_STORE_PATH){const old=new Database(previous,{readonly:true});await old.backup(target);old.close();console.log('Copied existing NestJS database; original preserved.');}
 const db=new Database(target);db.pragma('journal_mode = WAL');db.pragma('busy_timeout = 5000');
-for(const file of fs.readdirSync('database/migrations').filter(f=>f.endsWith('.sql')).sort())db.exec(fs.readFileSync(path.join('database/migrations',file),'utf8'));
+migrateLocal(db);
 const source=path.resolve(process.env.LEGACY_STORE_PATH||'data/store.json');
 if(!db.prepare('SELECT 1 FROM imports WHERE source=?').get(source)){
  const legacy=fs.existsSync(source)?JSON.parse(fs.readFileSync(source,'utf8')):{posts:seed};

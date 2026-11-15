@@ -6,6 +6,7 @@ import {getPlatform} from './platform';
 import {one,getPost,listPosts,upsertPost,searchStories} from './repository';
 import {ApiError,admin,configured,cookieOptions,currentUser,digest,equal,fail,hashPassword,limit,normalizeEmail,origin,readCookie,sessionCookie,setSession,validEmail,verifyPassword,type Account} from './security';
 import {authorizationUrl,createFlow,googleConfig,googleIdentity,oauthCookie,readFlow} from './google';
+import {createSocialFlow,readSocialFlow,socialAuthorizationUrl,socialConfig,socialCookie,socialCookieOptions,socialIdentity,validateSocialResponse,type SocialProvider} from './social';
 import type {Post} from '../shared/data';
 import {brand,isLocale} from '../shared/domain';
 import {MAX_IMAGE_BYTES,MAX_POST_CONTENT,isImageSource} from '../shared/content';
@@ -38,7 +39,7 @@ async function route(req:Request):Promise<Response>{
   if(language&&language!=='all'&&!isLocale(language)||query.length>200||country&&country!=='all'&&!isCountryCode(country))fail('validationError');
   return json({posts:await searchStories({query,country,genre,language})});
  }
- if(path==='auth'&&method==='GET'){const user=await currentUser(req);return json({authenticated:!!user,user,googleEnabled:!!(configured()&&env.GOOGLE_CLIENT_ID&&env.GOOGLE_CLIENT_SECRET&&env.APP_URL)});}
+ if(path==='auth'&&method==='GET'){const user=await currentUser(req);const enabled=(provider:SocialProvider)=>{try{socialConfig(provider);return true;}catch{return false;}};let googleEnabled=false;try{googleConfig();googleEnabled=true;}catch{}return json({authenticated:!!user,user,googleEnabled,facebookEnabled:enabled('facebook'),appleEnabled:enabled('apple')});}
  if(path==='auth'&&method==='DELETE'){origin(req);const raw=readCookie(req,sessionCookie);if(raw)await db.run('DELETE FROM sessions WHERE hash=?',[digest(raw)]);const res=json({ok:true});res.cookies.set(sessionCookie,'',{...cookieOptions(),maxAge:0});return res;}
  if((path==='auth'||path==='auth/signup')&&method==='POST'){
   origin(req);if(!configured())fail('configError',503);const signup=path.endsWith('signup');await limit(req,signup?'signup':'login',signup?5:10);const p=await body(req);
@@ -53,7 +54,31 @@ async function route(req:Request):Promise<Response>{
   const flow=readFlow(readCookie(req,oauthCookie)),destination=new URL(flow?.returnTo||'/en',env.APP_URL||url.origin);
   const reject=(code:string)=>{destination.searchParams.set('authError',code);const res=NextResponse.redirect(destination,307);res.cookies.set(oauthCookie,'',{...cookieOptions(),maxAge:0});return res;};
   if(!flow||!equal(url.searchParams.get('state')||'',flow.state)||url.searchParams.has('error')||!url.searchParams.get('code'))return reject('oauthFailed');
-  try{const identity=await googleIdentity(url.searchParams.get('code')!,flow);if(!validEmail(identity.email))return reject('oauthFailed');const email=normalizeEmail(identity.email),existing=await one<Account>('SELECT * FROM users WHERE googleSub=?',[identity.sub]),collision=await one<Account>('SELECT * FROM users WHERE email=?',[email]);if(collision&&collision.id!==existing?.id)return reject('accountExists');const id=existing?.id||randomUUID();if(existing)await db.run('UPDATE users SET email=?,name=? WHERE id=?',[email,identity.name.slice(0,80),id]);else await db.run('INSERT INTO users VALUES(?,?,?,NULL,?,?)',[id,email,identity.name.slice(0,80),identity.sub,new Date().toISOString()]);const res=NextResponse.redirect(destination,307);await setSession(req,res,id);res.cookies.set(oauthCookie,'',{...cookieOptions(),maxAge:0});return res;}catch{return reject('oauthFailed');}
+  try{const identity=await googleIdentity(url.searchParams.get('code')!,flow);if(!validEmail(identity.email))return reject('oauthFailed');const email=normalizeEmail(identity.email),existing=await one<Account>('SELECT * FROM users WHERE googleSub=?',[identity.sub]),collision=await one<Account>('SELECT * FROM users WHERE email=?',[email]);if(collision&&collision.id!==existing?.id)return reject('accountExists');const id=existing?.id||randomUUID();if(existing)await db.run('UPDATE users SET email=?,name=? WHERE id=?',[email,identity.name.slice(0,80),id]);else await db.run('INSERT INTO users(id,email,name,passwordHash,googleSub,createdAt) VALUES(?,?,?,NULL,?,?)',[id,email,identity.name.slice(0,80),identity.sub,new Date().toISOString()]);const res=NextResponse.redirect(destination,307);await setSession(req,res,id);res.cookies.set(oauthCookie,'',{...cookieOptions(),maxAge:0});return res;}catch{return reject('oauthFailed');}
+ }
+ const socialMatch=/^auth\/(facebook|apple)(\/callback)?$/.exec(path);
+ if(socialMatch){
+  const provider=socialMatch[1] as SocialProvider,cookieName=socialCookie(provider),options=socialCookieOptions(provider);
+  if(!socialMatch[2]&&method==='POST'){
+   origin(req);await limit(req,provider,20);const p=await body(req);
+   try{const {flow,cookie}=createSocialFlow(provider,isLocale(p?.locale)?p.locale:'en',p?.returnTo),res=json({url:socialAuthorizationUrl(flow)});res.cookies.set(cookieName,cookie,{...options,maxAge:600});return res;}catch{fail('socialUnavailable',503);}
+  }
+  if(socialMatch[2]&&method===(provider==='apple'?'POST':'GET')){
+   const flow=readSocialFlow(provider,readCookie(req,cookieName)),destination=new URL(flow?.returnTo||'/en',env.APP_URL||url.origin);
+   const finish=(error?:string)=>{if(error)destination.searchParams.set('authError',error);const res=NextResponse.redirect(destination,303);res.cookies.set(cookieName,'',{...options,maxAge:0});return res;};
+   try{
+    const params=provider==='apple'?await req.formData():url.searchParams,state=params.get('state'),code=params.get('code');
+    if(!flow||typeof state!=='string'||!equal(state,flow.state)||params.has('error')||typeof code!=='string'||!code||code.length>8192)return finish('oauthFailed');
+    validateSocialResponse(flow,params instanceof URLSearchParams?params:new URLSearchParams([...params].filter((entry):entry is [string,string]=>typeof entry[1]==='string')));
+    const identity=await socialIdentity(code,flow,typeof params.get('user')==='string'?String(params.get('user')):undefined),column=provider==='apple'?'appleSub':'facebookSub';
+    const existing=await one<Account>(`SELECT * FROM users WHERE ${column}=?`,[identity.sub]),collision=await one<Account>('SELECT * FROM users WHERE email=?',[identity.email]);
+    if(identity.email===normalizeEmail(env.ADMIN_EMAIL||'')||collision&&collision.id!==existing?.id)return finish('accountExists');
+    const id=existing?.id||randomUUID();
+    if(existing)await db.run('UPDATE users SET email=? WHERE id=?',[identity.email,id]);
+    else await db.run(`INSERT INTO users(id,email,name,passwordHash,googleSub,createdAt,${column}) VALUES(?,?,?,NULL,NULL,?,?)`,[id,identity.email,identity.name,new Date().toISOString(),identity.sub]);
+    const res=finish();await setSession(req,res,id);return res;
+   }catch(e){return finish(e instanceof Error&&e.message==='socialEmailMissing'?'socialEmailMissing':'oauthFailed');}
+  }
  }
  if(path==='posts'&&method==='GET'){const language=url.searchParams.get('language')||undefined,country=url.searchParams.get('country')||undefined;if(language&&language!=='all'&&!isLocale(language)||country&&!isCountryCode(country))fail('validationError');return json({posts:await listPosts({country,language,admin:(await currentUser(req))?.role==='admin'})});}
  if((path.startsWith('posts/')||path.startsWith('stories/'))&&method==='GET'){const editing=path.startsWith('posts/');if(editing)await admin(req);const post=await getPost(path.split('/')[1],editing);if(!post)fail('notFound',404);return json({post});}

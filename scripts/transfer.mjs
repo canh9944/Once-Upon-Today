@@ -1,3 +1,4 @@
+import {migrateLocal} from './migrate-local.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
@@ -13,7 +14,7 @@ const config=cloud?JSON.parse(fs.readFileSync(process.env.ONCE_WRANGLER_CONFIG||
 function wrangler(args,json=false){if(process.env.ONCE_WRANGLER_CONFIG)args.push('--config',process.env.ONCE_WRANGLER_CONFIG);if(process.env.ONCE_PERSIST_TO)args.push('--persist-to',process.env.ONCE_PERSIST_TO);const result=spawnSync(process.execPath,['node_modules/wrangler/bin/wrangler.js',...args],{encoding:'utf8',maxBuffer:256*1024*1024,env:{...process.env,WRANGLER_SEND_METRICS:'false'}});if(result.status!==0)throw new Error(result.stderr||result.stdout);if(json){const start=result.stdout.indexOf('[');if(start<0)throw new Error('Invalid Wrangler JSON');return JSON.parse(result.stdout.slice(start));}return result.stdout;}
 if(provider==='cloudflare'&&config.d1_databases.some(db=>db.database_id.includes('REPLACE_')))throw new Error('Set the D1 database_id in wrangler.jsonc first.');
 let local;
-if(!cloud){try{process.loadEnvFile('.env.local');}catch{}const file=path.resolve(process.env.DATABASE_PATH||'data/app.sqlite');if(action==='export'&&!fs.existsSync(file))throw new Error('Database does not exist; run npm run db:import');fs.mkdirSync(path.dirname(file),{recursive:true});local=new Database(file);for(const f of fs.readdirSync('database/migrations').filter(f=>f.endsWith('.sql')).sort())local.exec(fs.readFileSync(path.join('database/migrations',f),'utf8'));}
+if(!cloud){try{process.loadEnvFile('.env.local');}catch{}const file=path.resolve(process.env.DATABASE_PATH||'data/app.sqlite');if(action==='export'&&!fs.existsSync(file))throw new Error('Database does not exist; run npm run db:import');fs.mkdirSync(path.dirname(file),{recursive:true});local=new Database(file);migrateLocal(local);}
 const read=table=>cloud?wrangler(['d1','execute','DB',remote,'--command',`SELECT * FROM ${table}`,'--json'],true).flatMap(r=>r.results):local.prepare(`SELECT * FROM ${table}`).all();
 const quote=value=>value===null?'NULL':typeof value==='number'?String(value):"'"+String(value).replaceAll("'","''")+"'";
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
