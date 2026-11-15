@@ -206,3 +206,8 @@ footer{flex-wrap:wrap}.footer-legal{display:flex;flex:0 0 100%;justify-content:c
 .legal-container{width:100%;max-width:1000px;margin:auto;padding:36px 6% 70px}.legal-page{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:clamp(24px,5vw,60px);margin-top:26px;overflow-wrap:anywhere}.legal-heading{padding-bottom:24px;border-bottom:1px solid var(--line);margin-bottom:32px}.legal-page h1{font:400 clamp(32px,5vw,52px)/1.15 Georgia,serif;letter-spacing:-1px;margin:18px 0}.legal-updated{font-size:12px;color:var(--muted)}.legal-page .legal-lead{font-size:18px;line-height:1.8}.legal-page section{margin:30px 0}.legal-page h2{font-size:20px;line-height:1.4;margin-bottom:14px}.legal-page p,.legal-page li{line-height:1.9}.legal-page section p{white-space:pre-line}.legal-page section a{color:var(--green);text-decoration:underline;text-underline-offset:3px}.legal-actions{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:12px}.legal-notice{padding:18px;background:var(--soft);border-radius:8px;line-height:1.8}.legal-delete{margin-top:32px;padding-top:26px;border-top:1px solid var(--line)}
 
 .analytics-panel .analytics-tabs{width:100%;max-width:100%;flex-wrap:wrap}.analytics-panel .analytics-tabs [data-slot=tabs-trigger]{min-width:0;white-space:normal}
+
+/* Separate ads from reading controls and reserve space while the provider loads. */
+.ad{min-height:300px;margin:48px 0;padding:16px;clear:both;max-width:100%}
+.ad-label{display:block;font:11px Arial,sans-serif;letter-spacing:1px;margin-bottom:12px}
+.ad:has(ins[data-ad-status="unfilled"]){display:none}

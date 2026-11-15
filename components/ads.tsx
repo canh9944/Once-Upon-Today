@@ -1,5 +1,6 @@
 'use client';
-import {adsenseClient,adsenseSlot} from '@/lib/adsense';
+import {adsenseClient,adsenseSlot,adsenseEnabled} from '@/lib/adsense';
+import Script from 'next/script';
 import {useEffect,useRef,useState} from 'react';
 import {trafficSession} from '@/lib/traffic-client';
 import {useSite} from './site-context';
@@ -22,7 +23,11 @@ function requestAds(){
   });
 }
 
-export default function Ads({placement}:{placement:'home-feature'|'home-feed'|'article-inline'|'article-end'}){
+type Placement='home-feature'|'home-feed'|'article-inline'|'article-end';
+export default function Ads({placement}:{placement:Placement}){
+  return adsenseEnabled?<AdUnit placement={placement}/>:null;
+}
+function AdUnit({placement}:{placement:Placement}){
   const {t,locale}=useSite(),container=useRef<HTMLElement>(null);
   const [ready,setReady]=useState(false),[channel,setChannel]=useState<string|undefined>();
   useEffect(()=>{let active=true;const session=trafficSession();if(session.source!=='facebook'||!session.fanpage){setReady(true);return;}void fetch('/api/analytics/channel?fanpage='+encodeURIComponent(session.fanpage),{signal:AbortSignal.timeout(2500)}).then(r=>r.ok?r.json():null).then(data=>{if(active&&typeof data?.channel==='string'&&/^\d{1,20}$/.test(data.channel))setChannel(data.channel);}).catch(()=>{}).finally(()=>{if(active)setReady(true);});return ()=>{active=false;};},[]);
@@ -33,6 +38,8 @@ export default function Ads({placement}:{placement:'home-feature'|'home-feed'|'a
     return ()=>observer.disconnect();
   },[ready]);
   return <aside ref={container} className="ad" data-ad-placement={placement} lang={locale} aria-label={t.ad}>
+    <Script id="google-adsense" src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`} strategy="afterInteractive" crossOrigin="anonymous"/>
+    <span className="ad-label">{t.ad}</span>
     <ins className="adsbygoogle" data-site-ad={ready?'true':'false'} data-ad-channel={channel} style={{display:'block'}} data-ad-client={adsenseClient} data-ad-slot={adsenseSlot} data-ad-format="auto" data-full-width-responsive="true"/>
   </aside>;
 }

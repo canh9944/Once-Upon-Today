@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {chromium,expect} from '@playwright/test';
 
 const origin=process.env.TEST_ORIGIN||'http://localhost:3000';
+if(process.env.TEST_ADSENSE_ENABLED!=='true'){console.log('SKIP: enabled-unit test requires a build with both AdSense flags enabled and TEST_ADSENSE_ENABLED=true. Run test:adsense for default disabled serving.');process.exit(0);}
 const browser=await chromium.launch({channel:'msedge',headless:true});
 try{
   for(const viewport of [{width:1440,height:1000},{width:375,height:812}]){
@@ -20,6 +21,7 @@ try{
     await expect(page.locator('[data-ad-placement="home-feature"]')).toHaveCount(1);
     await expect(page.locator('[data-ad-placement="home-feed"]')).toHaveCount(1);
     await expect(page.locator('ins.adsbygoogle')).toHaveCount(2);
+    for(const label of await page.locator('.ad-label').all())await expect(label).toBeVisible();
     for(const ins of await page.locator('ins.adsbygoogle').all()){
       await expect(ins).toHaveAttribute('data-ad-client','ca-pub-7681125837419532');await expect(ins).toHaveAttribute('data-ad-slot','9654708635');
       await expect(ins).toHaveAttribute('data-ad-format','auto');await expect(ins).toHaveAttribute('data-full-width-responsive','true');await expect(ins).toHaveAttribute('data-adsbygoogle-status','done');

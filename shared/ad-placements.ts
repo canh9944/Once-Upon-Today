@@ -1,5 +1,8 @@
 const textLength=(html:string)=>html.replace(/<[^>]*>/g,' ').replace(/&(?:nbsp|#160);/g,' ').replace(/\s+/g,' ').trim().length;
 
+// An internal density safeguard, not a Google minimum or a content policy verdict.
+export function articleAdsEligible(content:string):boolean{return textLength(content)>=1600;}
+
 /** Split sanitized HTML only after a complete top-level paragraph, never inside a list or quote. */
 export function articleAdBreak(html:string):number|undefined{
   const total=textLength(html);if(total<4000)return undefined;

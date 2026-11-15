@@ -77,3 +77,7 @@ npm run test:cloudflare
 ```
 
 The browser test uses installed Microsoft Edge. API/browser tests use temporary SQLite databases. The Cloudflare test uses temporary workerd/D1/R2 resources and checks migration to SQLite/filesystem. Tests never use production Cloudflare data. Google account login, remote free-tier CPU limits and Docker require separate deployment verification.
+
+## AdSense safeguards
+
+Ad serving and Google Tag Manager default to disabled pending account, content and consent review. See [the AdSense deployment review](docs/adsense-compliance.md) for enablement, CMP setup and validation. Public configuration changes require a rebuild.
