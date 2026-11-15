@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "test:adsense": "node scripts/runtime.mjs scripts/test-adsense.mjs",
     "dev": "node scripts/runtime.mjs node_modules/next/dist/bin/next dev",
     "dev:frontend": "node scripts/runtime.mjs node_modules/next/dist/bin/next dev",
     "build": "node scripts/runtime.mjs node_modules/next/dist/bin/next build --webpack",
