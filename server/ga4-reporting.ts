@@ -8,18 +8,15 @@ import type { Ga4Article, Ga4Articles, Ga4Property, Ga4Report, Ga4Row } from '..
 
 const tokenUrl = 'https://oauth2.googleapis.com/token';
 const metricNames = ['activeUsers', 'sessions', 'screenPageViews', 'engagementRate'];
-let tokenCache: { key: string; expires: number; pending: Promise<string> } | undefined;
+let tokenCache: { key: string; expires: number; token: string } | undefined;
 
-function accessToken(email: string, privateKey: string) {
+async function accessToken(email: string, privateKey: string) {
   const key = createHash('sha256').update(JSON.stringify([email, privateKey])).digest('hex');
-  if (tokenCache?.key === key && tokenCache.expires > Date.now()) return tokenCache.pending;
-  const entry = { key, expires: Infinity, pending: exchangeToken(email, privateKey).then(result => {
-    entry.expires = result.expires;
-    return result.token;
-  }) };
-  tokenCache = entry;
-  void entry.pending.catch(() => { if (tokenCache === entry) tokenCache = undefined; });
-  return entry.pending;
+  if (tokenCache?.key === key && tokenCache.expires > Date.now()) return tokenCache.token;
+  // Workers isolate request I/O. Cache the resolved token, never an in-flight fetch.
+  const result = await exchangeToken(email, privateKey);
+  tokenCache = { key, ...result };
+  return result.token;
 }
 
 async function exchangeToken(email: string, privateKey: string) {
@@ -33,12 +30,15 @@ async function exchangeToken(email: string, privateKey: string) {
     .sign(signingKey);
   const response = await fetch(tokenUrl, {
     method: 'POST',
-    redirect: 'error',
+    redirect: 'manual',
     cache: 'no-store',
     signal: AbortSignal.timeout(8000),
     body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion }),
   });
-  if (!response.ok) throw new Error('GA4 token exchange failed');
+  if (!response.ok) {
+    console.warn('GA4 token exchange HTTP error', { status: response.status });
+    throw new Error('GA4 token exchange failed');
+  }
   const data = await response.json();
   if (typeof data.access_token !== 'string' || !data.access_token ||
       typeof data.expires_in !== 'number' || !Number.isFinite(data.expires_in)) {
@@ -52,7 +52,7 @@ function runReport(property: Ga4Property, range: DateRange, token: string, metri
   return fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${property.propertyId}:runReport`, {
       method: 'POST',
       cache: 'no-store',
-      redirect: 'error',
+      redirect: 'manual',
       signal: AbortSignal.timeout(8000),
       headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -66,6 +66,7 @@ function runReport(property: Ga4Property, range: DateRange, token: string, metri
 async function reportProperty(property: Ga4Property, range: DateRange, token: string): Promise<Ga4Row> {
   try {
     const response = await runReport(property, range, token, metricNames);
+    if (!response.ok) console.warn('GA4 overview HTTP error', { country: property.country, status: response.status });
     if (response.status === 403) return { ...property, status: 'forbidden' };
     if (!response.ok) return { ...property, status: 'error' };
     const data = await response.json();
@@ -106,6 +107,7 @@ async function reportArticles(property: Ga4Property, range: DateRange, token: st
       ],
       limit: '1000',
     });
+    if (!response.ok) console.warn('GA4 articles HTTP error', { country: property.country, status: response.status });
     if (response.status === 403) return { status: 'forbidden' };
     if (!response.ok) return { status: 'error' };
     const data = await response.json();
@@ -173,7 +175,10 @@ export async function ga4Report(range: DateRange, property?: Ga4Property, view: 
       return { status: 'authorizationError' };
     }
     token = await accessToken(credentials.client_email, credentials.private_key);
-  } catch {
+  } catch (error) {
+    console.warn('GA4 service account configuration or token exchange failed', {
+      reason: error instanceof SyntaxError ? 'invalid-json' : error instanceof Error ? error.name : 'unknown',
+    });
     return { status: 'authorizationError' };
   }
 

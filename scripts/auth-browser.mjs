@@ -170,6 +170,8 @@ try {
   await dialog.getByRole("button", { name: "Sign up", exact: true }).click();
   await expect(dialog).toBeHidden();
   await expect(page.locator(".account-control")).toBeVisible();
+  await page.locator(".account-control button").hover();
+  await expect(page.getByRole("link", { name: "Admin dashboard" })).toHaveCount(0);
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await dialog.getByLabel("Username", { exact: true }).fill("browser_reader");
