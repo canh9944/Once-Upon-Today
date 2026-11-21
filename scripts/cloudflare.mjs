@@ -5,7 +5,29 @@ import {pathToFileURL} from 'node:url';
 const command=process.argv[2];
 if(!['build','preview','deploy'].includes(command))throw new Error('Invalid command');
 const output=path.resolve('.open-next');
+function verifyStaticAssets(){
+ const next=path.join(output,'server-functions/default/.next');
+ const assets=path.join(output,'assets/_next');
+ const references=new Set();
+ function readManifest(file){
+  const contents=fs.readFileSync(file,'utf8');
+  for(const [reference] of contents.matchAll(/static\/(?:chunks|css|media)\/[^"'\s,]+?\.(?:js|css|woff2?)\b/g))references.add(reference);
+ }
+ function readClientManifests(directory){
+  for(const entry of fs.readdirSync(directory,{withFileTypes:true})){
+   const file=path.join(directory,entry.name);
+   if(entry.isDirectory())readClientManifests(file);
+   else if(entry.name.endsWith('_client-reference-manifest.js'))readManifest(file);
+  }
+ }
+ readManifest(path.join(next,'build-manifest.json'));
+ readClientManifests(path.join(next,'server/app'));
+ if(!references.size)throw new Error('No Next.js static assets found in the Worker manifests.');
+ const missing=[...references].filter(reference=>!fs.existsSync(path.join(assets,decodeURIComponent(reference))));
+ if(missing.length)throw new Error(`Cloudflare build is missing ${missing.length} referenced static assets: ${missing.slice(0,5).join(', ')}. Run npm run build:cloudflare before deploying.`);
+}
 async function sanitizeBuild(){
+ verifyStaticAssets();
  const file=path.join(output,'cloudflare/next-env.mjs'),envs=await import(pathToFileURL(file).href+'?t='+Date.now());
  const privateValues=Object.values(envs).flatMap(env=>Object.entries(env).filter(([key,value])=>!key.startsWith('NEXT_PUBLIC_')&&typeof value==='string'&&value.length>=8).map(([,value])=>value));
  fs.writeFileSync(file,['production','development','test'].map(mode=>`export const ${mode} = ${JSON.stringify(Object.fromEntries(Object.entries(envs[mode]).filter(([key])=>key.startsWith('NEXT_PUBLIC_'))))};`).join('\n'));
