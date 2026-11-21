@@ -1,8 +1,13 @@
 import {NextResponse, type NextRequest} from 'next/server';
-import {isLocale} from './lib/i18n';
+import {isContentLanguage,isLocale} from './shared/domain';
 import {resolveLanguage,languageLocale} from './lib/language-selection';
 export function proxy(request:NextRequest){
   const segment=request.nextUrl.pathname.split('/')[1];
+  if(isContentLanguage(segment)&&!isLocale(segment)){
+    const target=request.nextUrl.clone();
+    target.pathname='/en'+target.pathname.slice(segment.length+1);
+    return NextResponse.redirect(target,308);
+  }
   const headers=new Headers(request.headers);
   const routeLocale=isLocale(segment)?segment:'en';
   const locale=request.nextUrl.pathname.split('/')[2]==='admin'?routeLocale:languageLocale(routeLocale,resolveLanguage(routeLocale,request.nextUrl.searchParams.get('lang'),request.nextUrl.searchParams.get('country')));

@@ -6,7 +6,7 @@ import {useRouter} from 'next/navigation';
 import {useCallback,useEffect,useState,type FormEvent} from 'react';
 import {ArrowLeft,LoaderCircle} from 'lucide-react';
 import {countries,type Post} from '@/lib/data';
-import {brand,categories,categoryName,categoryValue,languageNames,type Locale} from '@/lib/i18n';
+import {brand,categories,categoryName,categoryValue,contentLanguageName,locales,type Locale} from '@/lib/i18n';
 import {countryLocale,resolveCountry} from '@/lib/country-selection';
 import {editorCopy} from '@/lib/editor-i18n';
 import {MAX_POST_CONTENT,textToHtml} from '@/lib/content';
@@ -32,8 +32,8 @@ export default function PostEditor({id}:{id?:string}){
   useEffect(()=>{const listener=(e:BeforeUnloadEvent)=>{if(dirty){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',listener);return()=>window.removeEventListener('beforeunload',listener);},[dirty]);
   const update=<K extends keyof Form>(key:K,value:Form[K])=>{setForm(p=>({...p,[key]:value}));setDirty(true);};
   const contentChange=useCallback((content:string)=>{setForm(p=>({...p,content}));setDirty(true);},[]);
-  const options=countries.flatMap(c=>{const languages:Locale[]=c.code==='BE'?['fr-BE','nl-BE','de-BE']:[countryLocale(c.code)];return languages.map(language=>({value:`${c.code}:${language}`,label:`${c.flag} ${countryLabels[c.code]} · ${languageNames[language]}`}));});
-  const selected=`${form.country}:${form.language}`;if(!options.some(o=>o.value===selected))options.push({value:selected,label:`${countryLabels[form.country]} · ${languageNames[form.language]}`});
+  const options=countries.flatMap(c=>{return locales.map(language=>({value:`${c.code}:${language}`,label:`${c.flag} ${countryLabels[c.code]} · ${contentLanguageName(language,locale)}`}));});
+  const selected=`${form.country}:${form.language}`;if(!options.some(o=>o.value===selected))options.push({value:selected,label:`${countryLabels[form.country]} · ${contentLanguageName(form.language,locale)}`});
   async function submit(e:FormEvent){e.preventDefault();setError('');if(form.content.length>MAX_POST_CONTENT){setError(copy.tooLong);return;}setBusy(true);
     try{const response=await fetch('/api/posts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(form)});const result=await response.json();if(!response.ok){setError(result.code==='imageError'?t.imageError:t.validationError);return;}setDirty(false);router.push(`/${locale}/admin/posts`);}catch{setError(t.requestError);}finally{setBusy(false);}
   }

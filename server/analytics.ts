@@ -5,8 +5,8 @@ import {fail} from './security';
 import {categoryValue} from '../shared/categories';
 import {cleanTag,fanpageSlug,type DateRange,type TrafficGroup} from '../shared/analytics';
 
-export function dateRange(url:URL):DateRange{
- const end=url.searchParams.get('end')||new Date().toISOString().slice(0,10),start=url.searchParams.get('start')||new Date(Date.now()-29*86400000).toISOString().slice(0,10);
+export function dateRange(url:URL,defaultDays=30):DateRange{
+ const end=url.searchParams.get('end')||new Date().toISOString().slice(0,10),start=url.searchParams.get('start')||new Date(Date.now()-(defaultDays-1)*86400000).toISOString().slice(0,10);
  const valid=(value:string)=>/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(value))&&new Date(value).toISOString().slice(0,10)===value;
  if(!valid(start)||!valid(end)||start>end||Date.parse(end)-Date.parse(start)>89*86400000||end>new Date().toISOString().slice(0,10))fail('validationError');return {start,end};
 }

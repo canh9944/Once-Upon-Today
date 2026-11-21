@@ -1,40 +1,388 @@
-import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import {randomUUID} from 'node:crypto';
-import {attributionFrom} from '../shared/analytics';
-import {mockAdSense} from './mock-adsense.mjs';
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { randomUUID } from "node:crypto";
+import { attributionFrom } from "../shared/analytics";
+import { mockAdSense } from "./mock-adsense.mjs";
 
-const dir=fs.mkdtempSync(path.join(os.tmpdir(),'once-analytics-')),origin='http://localhost:3000';
-Object.assign(process.env,{CONTENT_API_URL:'',DATABASE_PATH:path.join(dir,'analytics.sqlite'),UPLOAD_DIR:path.join(dir,'uploads'),APP_URL:origin,SESSION_SECRET:'analytics-test-only-'.repeat(3),ADMIN_EMAIL:'admin@example.com',ADMIN_PASSWORD:'test-admin-password',GOOGLE_CLIENT_ID:'test-client',GOOGLE_CLIENT_SECRET:'test-secret'});
-const {handle}=await import('../server/api'),{getPlatform}=await import('../server/platform/node'),{earningsMicros}=await import('../server/adsense-reporting');
-globalThis.fetch=async(input,init)=>{const value=await mockAdSense(input,init);if(!value)throw Error('Unexpected network request');return value;};
-async function request(route:string,method='GET',body?:unknown,cookie?:string,extra:Record<string,string>={}){return handle(new Request(origin+'/api/'+route,{method,headers:{Origin:origin,'Content-Type':'application/json',...(cookie?{Cookie:cookie}:{}),...extra},...(body?{body:JSON.stringify(body)}:{})}));}
-const cookies=(response:Response)=>response.headers.get('set-cookie')!.split(';')[0];
-const auth=await request('auth','POST',{email:'admin@example.com',password:'test-admin-password'});assert.equal(auth.status,200);const adminCookie=cookies(auth),db=getPlatform().db;
-for(const [id,genre,country] of [['story-1','Emotional Family Stories','NL'],['story-2','Mystery and Hidden Secrets','FR']])await db.run('INSERT INTO posts(id,title,excerpt,content,country,language,category,image,author,date,published) VALUES(?,?,?,?,?,?,?,?,?,?,1)',[id,id,'Excerpt','Story content',country,'en',genre,'','Author','2026-11-15']);
-assert.equal((await request('analytics')).status,401);assert.equal((await request('analytics/fanpages','POST',{slug:'page-a',name:'Page A'},adminCookie,{Origin:'https://evil.example'})).status,403);
-assert.equal((await request('analytics/fanpages','POST',{slug:'page-a',name:'Page A',adChannel:'111'},adminCookie)).status,200);
-assert.equal((await request('analytics/fanpages','POST',{slug:'page-b',name:'Page B',adChannel:'111'},adminCookie)).status,409);
-assert.deepEqual(await (await request('analytics/channel?fanpage=page-a')).json(),{channel:'111'});
-const visitor='visitor-one',session=randomUUID(),ids=[randomUUID(),randomUUID(),randomUUID()];
-const event=(id:string,postId:string,source='facebook',fanpage='page-a',sid=session,reader=visitor)=>({type:'view',id,postId,visitor:reader,sessionId:sid,attribution:{source,medium:'social',campaign:'campaign-1',fanpage,referrer:'l.facebook.com',landing:'/en/posts/story-1'},country:'VN',language:'en',device:'desktop'});
-for(const [id,post,geo] of [[ids[0],'story-1','US'],[ids[1],'story-2','US']])assert.equal((await request('traffic','POST',event(id,post),undefined,{'cf-ipcountry':geo})).status,200);
-assert.equal((await request('traffic','POST',event(ids[0],'story-1'),undefined,{'cf-ipcountry':'US'})).status,200);
-await request('traffic','POST',event(ids[2],'story-1','facebook','',randomUUID(),'visitor-two'),undefined,{'cf-ipcountry':'GB'});
-await db.run('UPDATE traffic_views SET createdAt=? WHERE id=?',[new Date(Date.now()-35000).toISOString(),ids[0]]);await request('traffic','POST',{type:'engagement',id:ids[0],visitor,sessionId:session,engagedMs:30000,readHalf:false});
-const result=await (await request('analytics','GET',undefined,adminCookie)).json();assert.equal(result.summary.views,3);assert.equal(result.summary.sessions,2);assert.equal(result.summary.users,2);assert.equal(result.summary.engagedViews,1);assert.equal(result.fanpages.find((row:{key:string})=>row.key==='page-a').views,2);assert.ok(result.fanpages.find((row:{key:string})=>row.key==='unknown'));assert.equal(result.countries.find((row:{key:string})=>row.key==='US').views,2);assert.ok(result.postCountries.find((row:{key:string})=>row.key==='NL'));assert.equal(result.revenue.connected,false);assert.deepEqual(result.revenue.reports,[]);
-const stored=(await db.all<Record<string,unknown>>('SELECT * FROM traffic_views WHERE id=?',[ids[0]]))[0];assert.notEqual(stored.visitor,visitor);assert.equal(stored.country,'US');assert.equal(stored.postCountry,'NL');
-await db.run("UPDATE posts SET category='Moral Dilemmas' WHERE id='story-1'");assert.equal((await db.all<{genre:string}>('SELECT genre FROM traffic_views WHERE id=?',[ids[0]]))[0].genre,'Emotional Family Stories');
-for(const query of ['start=2026-02-30','start=2020-01-01&end=2026-11-15'])assert.equal((await request('analytics?'+query,'GET',undefined,adminCookie)).status,400);
-const start=await request('adsense/connect','POST',{locale:'en'},adminCookie);assert.equal(start.status,200);const flowCookie=cookies(start),authorization=new URL((await start.json()).url);assert.equal(authorization.searchParams.get('scope'),'https://www.googleapis.com/auth/adsense.readonly');assert.equal(authorization.searchParams.get('redirect_uri'),origin+'/api/adsense/callback');
-const invalid=await request('adsense/callback?code=fake&state=wrong','GET',undefined,adminCookie+'; '+flowCookie);assert.ok(invalid.headers.get('location')!.includes('adsense=error'));
-const callback=await request('adsense/callback?code=fake&state='+authorization.searchParams.get('state'),'GET',undefined,adminCookie+'; '+flowCookie);assert.ok(callback.headers.get('location')!.includes('adsense=connected'));
-const credentials=(await db.all<{refreshToken:string}>('SELECT refreshToken FROM adsense_connection'))[0];assert.ok(!credentials.refreshToken.includes('test-refresh-token-private'));
-assert.equal((await request('adsense/sync','POST',{},adminCookie)).status,200);const revenues=await (await request('analytics','GET',undefined,adminCookie)).json();assert.equal(revenues.revenue.connected,true);assert.equal(revenues.revenue.reports.find((report:{kind:string})=>report.kind==='country').totals.micros,7750000);assert.equal(revenues.revenue.reports.find((report:{kind:string})=>report.kind==='channel').rows[0].micros,3000000);assert.ok(!JSON.stringify(revenues).includes('refreshToken'));assert.ok(!JSON.stringify(revenues).includes('test-refresh-token-private'));
-assert.equal(earningsMicros('0.000001'),1);assert.equal(earningsMicros('-1.25'),-1250000);
-const unknown=attributionFrom(new URL('https://onceupontoday.site/en?fbclid=private'),'https://l.facebook.com/');assert.equal(unknown.source,'facebook');assert.equal(unknown.fanpage,'');assert.ok(!JSON.stringify(unknown).includes('private'));
-await request('adsense/disconnect','POST',{},adminCookie);assert.equal((await (await request('analytics','GET',undefined,adminCookie)).json()).revenue.connected,false);
-console.log('PASS: admin authorization/CSRF, Fanpage mapping, idempotent traffic, visitor vs story country, session/user aggregation, engagement bounds, genre snapshots, unknown Facebook attribution, OAuth readonly/state, encrypted credentials and measured AdSense revenue.');
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), "once-analytics-")),
+  origin = "http://localhost:3000";
+Object.assign(process.env, {
+  CONTENT_API_URL: "",
+  DATABASE_PATH: path.join(dir, "analytics.sqlite"),
+  UPLOAD_DIR: path.join(dir, "uploads"),
+  APP_URL: origin,
+  SESSION_SECRET: "analytics-test-only-".repeat(3),
+  ADMIN_USERNAME: "admin@example.com",
+  ADMIN_PASSWORD: "test-admin-password",
+  GOOGLE_CLIENT_ID: "test-client",
+  GOOGLE_CLIENT_SECRET: "test-secret",
+});
+const { handle } = await import("../server/api"),
+  { getPlatform } = await import("../server/platform/node"),
+  { earningsMicros } = await import("../server/adsense-reporting");
+globalThis.fetch = async (input, init) => {
+  const value = await mockAdSense(input, init);
+  if (!value) throw Error("Unexpected network request");
+  return value;
+};
+async function request(
+  route: string,
+  method = "GET",
+  body?: unknown,
+  cookie?: string,
+  extra: Record<string, string> = {},
+) {
+  return handle(
+    new Request(origin + "/api/" + route, {
+      method,
+      headers: {
+        Origin: origin,
+        "Content-Type": "application/json",
+        ...(cookie ? { Cookie: cookie } : {}),
+        ...extra,
+      },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    }),
+  );
+}
+const cookies = (response: Response) =>
+  response.headers.get("set-cookie")!.split(";")[0];
+const auth = await request("auth", "POST", {
+  email: "admin@example.com",
+  password: "test-admin-password",
+});
+assert.equal(auth.status, 200);
+const adminCookie = cookies(auth),
+  db = getPlatform().db;
+for (const [id, genre, country] of [
+  ["story-1", "Emotional Family Stories", "NL"],
+  ["story-2", "Mystery and Hidden Secrets", "FR"],
+])
+  await db.run(
+    "INSERT INTO posts(id,title,excerpt,content,country,language,category,image,author,date,published) VALUES(?,?,?,?,?,?,?,?,?,?,1)",
+    [
+      id,
+      id,
+      "Excerpt",
+      "Story content",
+      country,
+      "en",
+      genre,
+      "",
+      "Author",
+      "2026-11-15",
+    ],
+  );
+assert.equal((await request("analytics")).status, 401);
+assert.equal(
+  (
+    await request(
+      "analytics/fanpages",
+      "POST",
+      { slug: "page-a", name: "Page A" },
+      adminCookie,
+      { Origin: "https://evil.example" },
+    )
+  ).status,
+  403,
+);
+assert.equal((await request("analytics/adsconex")).status, 401);
+assert.equal(
+  (
+    await request(
+      "analytics/adsconex?start=2026-02-30",
+      "GET",
+      undefined,
+      adminCookie,
+    )
+  ).status,
+  400,
+);
+const originalFetch = globalThis.fetch;
+process.env.ADSCONEX_API_TOKEN = "private-test-token";
+const adsConexHosts = new Set<string>();
+globalThis.fetch = async (input) => {
+  const url = new URL(String(input));
+  assert.equal(
+    url.origin + url.pathname,
+    "https://adsconex.com/api/revenue/stats",
+  );
+  assert.equal(
+    url.searchParams.get("api_token"),
+    process.env.ADSCONEX_API_TOKEN,
+  );
+  assert.equal(url.searchParams.get("start_day"), "2025-12-07");
+  assert.equal(url.searchParams.get("end_day"), "2025-12-08");
+  const site = url.searchParams.get("site")!;
+  adsConexHosts.add(site);
+  if (site === "lifestories-de.danhngon.pro")
+    return new Response(null, { status: 502 });
+  return Response.json({
+    code: "1",
+    data:
+      site === "lifestories.gigglelo.com"
+        ? [
+            {
+              site,
+              revenue: "0.00",
+              views: "142",
+              impressions: "124",
+              cpm: "1.59",
+              rpm: "1.39",
+            },
+          ]
+        : [],
+  });
+};
+try {
+  const response = await request(
+    "analytics/adsconex?start=2025-12-07&end=2025-12-08",
+    "GET",
+    undefined,
+    adminCookie,
+  );
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cache-control"), "private, no-store");
+  const report = await response.json();
+  assert.equal(adsConexHosts.size, 9);
+  assert.equal(report.sites.length, 9);
+  assert.deepEqual(report.sites[0], {
+    site: "lifestories.gigglelo.com",
+    status: "ok",
+    metrics: { revenue: 0, views: 142, impressions: 124, cpm: 1.59, rpm: 1.39 },
+  });
+  assert.equal(
+    report.sites.find(
+      (row: { site: string }) => row.site === "lifestories-de.danhngon.pro",
+    )?.status,
+    "error",
+  );
+  assert.equal(report.sites[1].status, "empty");
+  assert.ok(!JSON.stringify(report).includes(process.env.ADSCONEX_API_TOKEN));
+} finally {
+  delete process.env.ADSCONEX_API_TOKEN;
+  globalThis.fetch = originalFetch;
+}
+assert.equal(
+  (
+    await request(
+      "analytics/fanpages",
+      "POST",
+      { slug: "page-a", name: "Page A", adChannel: "111" },
+      adminCookie,
+    )
+  ).status,
+  200,
+);
+assert.equal(
+  (
+    await request(
+      "analytics/fanpages",
+      "POST",
+      { slug: "page-b", name: "Page B", adChannel: "111" },
+      adminCookie,
+    )
+  ).status,
+  409,
+);
+assert.deepEqual(
+  await (await request("analytics/channel?fanpage=page-a")).json(),
+  { channel: "111" },
+);
+const visitor = "visitor-one",
+  session = randomUUID(),
+  ids = [randomUUID(), randomUUID(), randomUUID()];
+const event = (
+  id: string,
+  postId: string,
+  source = "facebook",
+  fanpage = "page-a",
+  sid = session,
+  reader = visitor,
+) => ({
+  type: "view",
+  id,
+  postId,
+  visitor: reader,
+  sessionId: sid,
+  attribution: {
+    source,
+    medium: "social",
+    campaign: "campaign-1",
+    fanpage,
+    referrer: "l.facebook.com",
+    landing: "/en/posts/story-1",
+  },
+  country: "VN",
+  language: "en",
+  device: "desktop",
+});
+for (const [id, post, geo] of [
+  [ids[0], "story-1", "US"],
+  [ids[1], "story-2", "US"],
+])
+  assert.equal(
+    (
+      await request("traffic", "POST", event(id, post), undefined, {
+        "cf-ipcountry": geo,
+      })
+    ).status,
+    200,
+  );
+assert.equal(
+  (
+    await request("traffic", "POST", event(ids[0], "story-1"), undefined, {
+      "cf-ipcountry": "US",
+    })
+  ).status,
+  200,
+);
+await request(
+  "traffic",
+  "POST",
+  event(ids[2], "story-1", "facebook", "", randomUUID(), "visitor-two"),
+  undefined,
+  { "cf-ipcountry": "GB" },
+);
+await db.run("UPDATE traffic_views SET createdAt=? WHERE id=?", [
+  new Date(Date.now() - 35000).toISOString(),
+  ids[0],
+]);
+await request("traffic", "POST", {
+  type: "engagement",
+  id: ids[0],
+  visitor,
+  sessionId: session,
+  engagedMs: 30000,
+  readHalf: false,
+});
+const result = await (
+  await request("analytics", "GET", undefined, adminCookie)
+).json();
+assert.equal(result.summary.views, 3);
+assert.equal(result.summary.sessions, 2);
+assert.equal(result.summary.users, 2);
+assert.equal(result.summary.engagedViews, 1);
+assert.equal(
+  result.fanpages.find((row: { key: string }) => row.key === "page-a").views,
+  2,
+);
+assert.ok(
+  result.fanpages.find((row: { key: string }) => row.key === "unknown"),
+);
+assert.equal(
+  result.countries.find((row: { key: string }) => row.key === "US").views,
+  2,
+);
+assert.ok(
+  result.postCountries.find((row: { key: string }) => row.key === "NL"),
+);
+assert.equal(result.revenue.connected, false);
+assert.deepEqual(result.revenue.reports, []);
+const stored = (
+  await db.all<Record<string, unknown>>(
+    "SELECT * FROM traffic_views WHERE id=?",
+    [ids[0]],
+  )
+)[0];
+assert.notEqual(stored.visitor, visitor);
+assert.equal(stored.country, "US");
+assert.equal(stored.postCountry, "NL");
+await db.run("UPDATE posts SET category='Moral Dilemmas' WHERE id='story-1'");
+assert.equal(
+  (
+    await db.all<{ genre: string }>(
+      "SELECT genre FROM traffic_views WHERE id=?",
+      [ids[0]],
+    )
+  )[0].genre,
+  "Emotional Family Stories",
+);
+for (const query of ["start=2026-02-30", "start=2020-01-01&end=2026-11-15"])
+  assert.equal(
+    (await request("analytics?" + query, "GET", undefined, adminCookie)).status,
+    400,
+  );
+const start = await request(
+  "adsense/connect",
+  "POST",
+  { locale: "en" },
+  adminCookie,
+);
+assert.equal(start.status, 200);
+const flowCookie = cookies(start),
+  authorization = new URL((await start.json()).url);
+assert.equal(
+  authorization.searchParams.get("scope"),
+  "https://www.googleapis.com/auth/adsense.readonly",
+);
+assert.equal(
+  authorization.searchParams.get("redirect_uri"),
+  origin + "/api/adsense/callback",
+);
+const invalid = await request(
+  "adsense/callback?code=fake&state=wrong",
+  "GET",
+  undefined,
+  adminCookie + "; " + flowCookie,
+);
+assert.ok(invalid.headers.get("location")!.includes("adsense=error"));
+const callback = await request(
+  "adsense/callback?code=fake&state=" + authorization.searchParams.get("state"),
+  "GET",
+  undefined,
+  adminCookie + "; " + flowCookie,
+);
+assert.equal(
+  callback.headers.get("location"),
+  origin + "/en/admin/revenue?adsense=connected",
+);
+const credentials = (
+  await db.all<{ refreshToken: string }>(
+    "SELECT refreshToken FROM adsense_connection",
+  )
+)[0];
+assert.ok(!credentials.refreshToken.includes("test-refresh-token-private"));
+assert.equal(
+  (await request("adsense/sync", "POST", {}, adminCookie)).status,
+  200,
+);
+const revenues = await (
+  await request("analytics", "GET", undefined, adminCookie)
+).json();
+assert.equal(revenues.revenue.connected, true);
+assert.equal(
+  revenues.revenue.reports.find(
+    (report: { kind: string }) => report.kind === "country",
+  ).totals.micros,
+  7750000,
+);
+assert.equal(
+  revenues.revenue.reports.find(
+    (report: { kind: string }) => report.kind === "channel",
+  ).rows[0].micros,
+  3000000,
+);
+assert.ok(!JSON.stringify(revenues).includes("refreshToken"));
+assert.ok(!JSON.stringify(revenues).includes("test-refresh-token-private"));
+assert.equal(earningsMicros("0.000001"), 1);
+assert.equal(earningsMicros("-1.25"), -1250000);
+const unknown = attributionFrom(
+  new URL("https://onceupontoday.site/en?fbclid=private"),
+  "https://l.facebook.com/",
+);
+assert.equal(unknown.source, "facebook");
+assert.equal(unknown.fanpage, "");
+assert.ok(!JSON.stringify(unknown).includes("private"));
+await request("adsense/disconnect", "POST", {}, adminCookie);
+assert.equal(
+  (await (await request("analytics", "GET", undefined, adminCookie)).json())
+    .revenue.connected,
+  false,
+);
+console.log(
+  "PASS: admin authorization/CSRF, Fanpage mapping, idempotent traffic, visitor vs story country, session/user aggregation, engagement bounds, genre snapshots, unknown Facebook attribution, OAuth readonly/state, encrypted credentials and measured AdSense revenue.",
+);
 // Runtime SQLite handles close at process exit; fixtures stay in the OS temp folder.

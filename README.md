@@ -14,6 +14,8 @@ npm run dev
 
 Open http://localhost:3000/en or http://localhost:3000/en/admin. Hot reload is enabled by `next dev`. There is no default admin password. Existing NestJS SQLite/legacy JSON data is imported without deleting the original. The active database is `data/app.sqlite` and uploaded images are in `data/uploads` by default. `backend/` is retained as an archived implementation and source backup.
 
+New reader accounts use a username and password. Existing email-based accounts can still sign in with their email. Set `ADMIN_USERNAME` alongside `ADMIN_PASSWORD` to enable username sign-in for the configured admin.
+
 For local preview using the production API, skip `npm run db:import` and configure `CONTENT_API_URL` as described below. This mode does not create a local database.
 
 ## Deploy and migrate
@@ -22,7 +24,7 @@ For local preview using the production API, skip `npm run db:import` and configu
 
 Set `CONTENT_API_URL=https://onceupontoday.site` in `.env.local` and run `npm run dev`. Local pages fetch public posts, article details and search suggestions directly from the server on each request (`cache: no-store`). Uploaded cover/inline images use the server URL. No local database, image copies, background sync or polling are needed. Production must be reachable.
 
-This mode only reads public content. Local analytics are ignored and sign-in opens the production editorial page; local writes are blocked. No production cookies or credentials are forwarded. The setting applies only to Next.js development; production builds and hosting continue to use their own storage. Remove `CONTENT_API_URL` to develop against a separate database again (run `npm run db:import` first if needed).
+This mode reads public content and blocks editorial writes. With local authentication enabled, local admins can view AdsConex in the Revenue tab. Traffic and AdSense reports are available on the production dashboard. When local authentication is disabled, sign-in opens the production editorial page. No production cookies or credentials are forwarded. The setting applies only to Next.js development. Remove `CONTENT_API_URL` to develop against a separate database again (run `npm run db:import` first if needed).
 
 With local dev running in API mode, `npm run test:api-content` verifies live content, remote images, search and article pages, blocked local writes, and that local database files remain absent.
 
@@ -44,7 +46,7 @@ npm run cloudflare:d1:create
 npm run cloudflare:r2:create
 # Set the returned D1 database_id and production HTTPS APP_URL in wrangler.jsonc.
 npm run db:migrate:cloudflare
-npx wrangler secret put ADMIN_EMAIL
+npx wrangler secret put ADMIN_USERNAME
 npx wrangler secret put ADMIN_PASSWORD
 npx wrangler secret put SESSION_SECRET
 npm run build:cloudflare
@@ -61,7 +63,7 @@ Use the existing shadcn/ui components whenever they cover an interaction. The Ca
 
 ## Features
 
-Language and genre filters in the header; centered search; All languages uses English UI and shows all stories. The public selector contains 39 unique language groups, with English first, and groups regional editions together. Published posts are filtered by their language, independently of country. All 50 selectable country/market options have an explicit language mapping across 43 locales. Shared dictionaries cover public pages, search suggestions, all eight story categories, authentication and the editorial interface. The language selector retains the previous language-priority order. Country metadata remains available to editorial tools; legacy country URLs resolve to their language. Country names and dates follow the selected locale; Belgium retains French, Dutch and German editions. Published article content keeps its original language.
+The public site and editorial interface support English and Vietnamese. The public language selector filters stories by English or Vietnamese. All languages shows every published story with the English interface. Previous locale URLs redirect to the English interface, and published stories keep their original language. Country metadata remains available to editorial tools.
 
 Sticky public header, plus a responsive related-story carousel at the end of articles (same-category/topic/language/market ranking, swipe/arrow navigation, and current/draft/duplicate exclusion). Light/dark theme, reading font and size controls, responsive layouts, login/signup dialog, password visibility toggle and Google OAuth. Only configured admins can write stories. Admin routes retain the sidebar while opening separate create/edit pages. Rich text supports up to 500,000 HTML characters; author defaults to Once Upon Today. Reusable cover/inline image upload converts images in the browser and validates allowed raster image types/server limits. Analytics deduplicate daily views and likes and display Recharts charts. Public drafts remain inaccessible. AdSense uses `NEXT_PUBLIC_ADSENSE_CLIENT` and `NEXT_PUBLIC_ADSENSE_SLOT`; Google approval is separate. Publisher `ca-pub-7681125837419532` and responsive display unit `9654708635` are configured by default. Manual placements appear after the featured story (at least four results), after the feed (at least seven results), after a full article, and once near the middle of long articles at a complete paragraph boundary. Empty result pages have no manual units. The script remains global in the initial HTML head; each ad unit is queued once after its container has a measurable width. Set `NEXT_PUBLIC_ADSENSE_SLOT` at build time and deploy to publish changes. `npm run test:ad-placements` tests safe paragraph breaks; `npm run test:ad-units` verifies placements with mocked Google requests.
 

@@ -35,5 +35,5 @@ try{
  await page.getByRole('button',{name:copy.deleteButton,exact:true}).click();await page.getByRole('button',{name:copy.confirm,exact:true}).click();await expect(page.getByRole('status')).toHaveText(copy.deleted);assert.equal(deletions,1);
  assert.ok(await page.evaluate(()=>['atlas-saved','atlas-liked','atlas-visitor'].every(key=>localStorage.getItem(key)===null)));
  await page.close();
- console.log('PASS: 43 policy locales, three public pages/metadata/footer links, desktop/mobile layout, language switching and confirmed deletion UI with browser-data cleanup.');
+ console.log('PASS: English and Vietnamese policies, three public pages/metadata/footer links, desktop/mobile layout, language switching and confirmed deletion UI with browser-data cleanup.');
 }finally{await browser.close();}

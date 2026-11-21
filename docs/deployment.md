@@ -2,12 +2,12 @@
 
 ## Cấu trúc để có thể chuyển đi
 
-| Thành phần | Cloudflare | VPS / máy local |
-| --- | --- | --- |
-| Web và API | Next.js qua OpenNext Workers | Next.js Node server |
-| Database | D1 binding `DB` | SQLite `DATABASE_PATH` |
-| Ảnh | R2 binding `MEDIA` | thư mục `UPLOAD_DIR` |
-| Schema | `database/migrations/*.sql` | cùng migration SQL |
+| Thành phần | Cloudflare                   | VPS / máy local        |
+| ---------- | ---------------------------- | ---------------------- |
+| Web và API | Next.js qua OpenNext Workers | Next.js Node server    |
+| Database   | D1 binding `DB`              | SQLite `DATABASE_PATH` |
+| Ảnh        | R2 binding `MEDIA`           | thư mục `UPLOAD_DIR`   |
+| Schema     | `database/migrations/*.sql`  | cùng migration SQL     |
 
 `server/api.ts` xử lý HTTP; `server/security.ts` xử lý tài khoản/session; `server/repository.ts` sử dụng SQL có tham số. Chỉ `server/platform/` biết D1, R2, SQLite hay filesystem. Adapter được chọn lúc build qua `DEPLOY_TARGET=cloudflare`; build thông thường chọn Node. Không dùng D1 trong components và không lưu URL bucket R2 trong bài viết. URL ảnh `/api/uploads/<uuid>.<extension>` giữ nguyên khi chuyển máy chủ.
 
@@ -30,7 +30,7 @@ Yêu cầu Node 22.12+ và npm. Trên Windows nên dùng WSL/Linux hoặc CI Lin
 5. Khai báo secrets bằng prompt của CLI, không truyền giá trị vào command history:
 
    ```sh
-   npx wrangler secret put ADMIN_EMAIL
+   npx wrangler secret put ADMIN_USERNAME
    npx wrangler secret put ADMIN_PASSWORD
    npx wrangler secret put SESSION_SECRET
    # Khi dùng Google:
@@ -86,6 +86,7 @@ npm run preview:cloudflare
    ```
 
    Bundle gồm `data.json` (version, posts/users/events/uploads/import markers) và `media/` với SHA-256 từng ảnh. Có email và password hashes, phải giữ kín và sao lưu ngoài máy. Không commit bundle. Lệnh export không ghi đè thư mục backup có sẵn. R2 keys giữ nguyên. External HTTPS images không được tải về; chúng vẫn phụ thuộc nhà cung cấp ảnh đó.
+
 3. Trên VPS mới: cài Node 22, `npm ci`, tạo `.env.local` với `APP_URL` HTTPS, admin/Google secrets, `DATABASE_PATH=data/app.sqlite`, `UPLOAD_DIR=data/uploads`. Khôi phục vào database mới, chưa seed:
 
    ```sh

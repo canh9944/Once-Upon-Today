@@ -26,13 +26,13 @@ Backend đọc biến môi trường theo ưu tiên: biến đã đặt trên pr
 
 ## Kết nối
 
-| Thành phần | Địa chỉ mặc định |
-| --- | --- |
-| Frontend | `http://localhost:3000` |
-| Backend | `http://127.0.0.1:4000/api` |
+| Thành phần   | Địa chỉ mặc định                   |
+| ------------ | ---------------------------------- |
+| Frontend     | `http://localhost:3000`            |
+| Backend      | `http://127.0.0.1:4000/api`        |
 | Health check | `http://127.0.0.1:4000/api/health` |
-| SQLite | `backend/data/app.sqlite` |
-| Ảnh upload | `backend/data/uploads` |
+| SQLite       | `backend/data/app.sqlite`          |
+| Ảnh upload   | `backend/data/uploads`             |
 
 Frontend đọc `BACKEND_URL` ở server (mặc định URL backend ở trên). Browser gọi `/api/*` trên domain frontend; Next.js proxy request/cookie/body và trả status/cookie của NestJS. Server Components gọi NestJS trực tiếp bằng `fetch` no-store. Cookie không được đưa vào dữ liệu công khai hay localStorage.
 
@@ -52,23 +52,23 @@ flowchart LR
 - `DATABASE_PATH`: đường dẫn file SQLite, mặc định `data/app.sqlite`, tính từ thư mục backend nếu là đường dẫn tương đối.
 - `UPLOAD_DIR`: mặc định `data/uploads`, quy tắc đường dẫn như database.
 - `LEGACY_STORE_PATH`: nguồn JSON cho lệnh import, mặc định `../data/store.json`.
-- `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_GOOGLE_EMAILS`: giữ ý nghĩa như frontend trước đây, nay được xử lý ở NestJS. `SESSION_SECRET` cần ít nhất 32 ký tự.
+- `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `SESSION_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `ADMIN_GOOGLE_EMAILS`: giữ ý nghĩa như frontend trước đây, nay được xử lý ở NestJS. `SESSION_SECRET` cần ít nhất 32 ký tự.
 - `NODE_ENV=production`: bật Secure cookie; frontend HTTPS cũng tự bật Secure cookie. Production cần HTTPS ở reverse proxy.
 
 Google redirect URI vẫn là **URL frontend** `/api/auth/google/callback` (ví dụ `http://localhost:3000/api/auth/google/callback`), không phải cổng 4000. Frontend proxy callback về NestJS. Không cần đổi Google client khi domain frontend không đổi.
 
 ## Database và migration
 
-| Bảng | Dữ liệu |
-| --- | --- |
-| `posts` | Nội dung plain/rich text, ngôn ngữ/quốc gia, tác giả, trạng thái |
-| `users` | Tên, email unique, password hash hoặc Google subject unique |
-| `sessions` | Hash token, user ID, hạn phiên; `env-admin` là ID admin cấu hình bằng env |
-| `events` | Lượt xem/yêu thích; khóa unique gộp lượt xem theo bài/ngày và yêu thích theo bài |
-| `uploads` | Tên file, MIME, kích thước, ngày tạo; bytes lưu trên đĩa |
-| `rate_limits` | Bộ đếm đăng nhập/đăng ký/OAuth, tồn tại qua restart |
-| `imports` | Dấu hoàn thành import cũ, tránh ghi lại dữ liệu |
-| `migrations` | Lịch sử schema TypeORM |
+| Bảng          | Dữ liệu                                                                          |
+| ------------- | -------------------------------------------------------------------------------- |
+| `posts`       | Nội dung plain/rich text, ngôn ngữ/quốc gia, tác giả, trạng thái                 |
+| `users`       | Tên, email unique, password hash hoặc Google subject unique                      |
+| `sessions`    | Hash token, user ID, hạn phiên; `env-admin` là ID admin cấu hình bằng env        |
+| `events`      | Lượt xem/yêu thích; khóa unique gộp lượt xem theo bài/ngày và yêu thích theo bài |
+| `uploads`     | Tên file, MIME, kích thước, ngày tạo; bytes lưu trên đĩa                         |
+| `rate_limits` | Bộ đếm đăng nhập/đăng ký/OAuth, tồn tại qua restart                              |
+| `imports`     | Dấu hoàn thành import cũ, tránh ghi lại dữ liệu                                  |
+| `migrations`  | Lịch sử schema TypeORM                                                           |
 
 SQLite dùng WAL và busy timeout 5 giây. Schema được tạo bằng migration có phiên bản, `synchronize: false`. Thêm migration mới và đăng ký trong `database.service.ts` khi thay đổi schema; không sửa migration đã chạy trên database thực.
 
@@ -80,20 +80,20 @@ Sao lưu: dừng backend rồi sao chép toàn bộ `backend/data`, hoặc dùng
 
 ## API
 
-| Method | Path (sau `/api`) | Quyền |
-| --- | --- | --- |
-| GET | `/health` | Công khai |
-| GET | `/posts?country=FR&language=en` | Công khai chỉ bài published; admin có thể xem draft |
-| GET | `/stories/:id` | Công khai, chỉ bài published |
-| GET | `/posts/:id` | Admin, gồm draft để sửa |
-| POST / DELETE | `/posts` | Admin + Origin hợp lệ |
-| GET / POST / DELETE | `/auth` | Session / login / logout |
-| POST | `/auth/signup` | Đăng ký reader |
-| POST / GET | `/auth/google`, `/auth/google/callback` | OAuth Google |
-| POST | `/events` | Origin hợp lệ |
-| GET | `/stats` | Admin |
-| POST | `/uploads` | Admin, multipart trường `file`, tối đa 5 MB |
-| GET | `/uploads/:filename` | Công khai, ảnh WebP đã đăng ký trong DB |
+| Method              | Path (sau `/api`)                       | Quyền                                               |
+| ------------------- | --------------------------------------- | --------------------------------------------------- |
+| GET                 | `/health`                               | Công khai                                           |
+| GET                 | `/posts?country=FR&language=en`         | Công khai chỉ bài published; admin có thể xem draft |
+| GET                 | `/stories/:id`                          | Công khai, chỉ bài published                        |
+| GET                 | `/posts/:id`                            | Admin, gồm draft để sửa                             |
+| POST / DELETE       | `/posts`                                | Admin + Origin hợp lệ                               |
+| GET / POST / DELETE | `/auth`                                 | Session / login / logout                            |
+| POST                | `/auth/signup`                          | Đăng ký reader                                      |
+| POST / GET          | `/auth/google`, `/auth/google/callback` | OAuth Google                                        |
+| POST                | `/events`                               | Origin hợp lệ                                       |
+| GET                 | `/stats`                                | Admin                                               |
+| POST                | `/uploads`                              | Admin, multipart trường `file`, tối đa 5 MB         |
+| GET                 | `/uploads/:filename`                    | Công khai, ảnh WebP đã đăng ký trong DB             |
 
 Rich text tối đa 500.000 ký tự HTML, lọc DOMPurify. Ảnh được sharp giải mã, giới hạn pixel, chuyển WebP; từ chối SVG, ảnh giả và file quá lớn. Secret, password hash và session token không xuất hiện trong JSON trả về tài khoản.
 

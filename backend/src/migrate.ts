@@ -7,7 +7,7 @@ import {PostEntity,UserEntity,SessionEntity,EventEntity,UploadEntity,ImportEntit
 import {settings} from './config';
 import {eventKey} from './analytics/analytics.controller';
 import {seed} from '../../shared/data';
-import {brand,isLocale} from '../../shared/domain';
+import {brand,isContentLanguage} from '../../shared/domain';
 
 async function main(){
   const db=new DatabaseService();await db.onModuleInit();
@@ -21,7 +21,7 @@ async function main(){
       images.push({filename,mime:'image/webp',size:info.size,createdAt:info.birthtime.toISOString()});
     }
     await db.source.transaction(async manager=>{
-      for(const p of legacy.posts||[]){if(!p.id||typeof p.content!=='string')throw new Error('Invalid legacy post');await manager.createQueryBuilder().insert().into(PostEntity).values({id:p.id,title:p.title,excerpt:p.excerpt,content:p.content,contentFormat:p.contentFormat==='html'?'html':'text',country:p.country,language:isLocale(p.language)?p.language:'vi',category:p.category,image:p.image||'',author:p.author||brand,date:p.date,published:!!p.published}).orIgnore().execute();}
+      for(const p of legacy.posts||[]){if(!p.id||typeof p.content!=='string')throw new Error('Invalid legacy post');await manager.createQueryBuilder().insert().into(PostEntity).values({id:p.id,title:p.title,excerpt:p.excerpt,content:p.content,contentFormat:p.contentFormat==='html'?'html':'text',country:p.country,language:isContentLanguage(p.language)?p.language:'vi',category:p.category,image:p.image||'',author:p.author||brand,date:p.date,published:!!p.published}).orIgnore().execute();}
       for(const u of legacy.users||[])await manager.createQueryBuilder().insert().into(UserEntity).values({id:u.id,email:u.email.trim().toLowerCase(),name:u.name,passwordHash:u.passwordHash||null,googleSub:u.googleSub||null,createdAt:u.createdAt}).orIgnore().execute();
       for(const s of legacy.sessions||[])if(s.expires>Date.now())await manager.createQueryBuilder().insert().into(SessionEntity).values({hash:s.hash,userId:s.userId,expires:s.expires}).orIgnore().execute();
       for(const e of legacy.events||[])await manager.createQueryBuilder().insert().into(EventEntity).values({key:eventKey(e.visitor,e.type,e.postId,e.date),visitor:e.visitor,type:e.type,postId:e.postId,date:e.date}).orIgnore().execute();

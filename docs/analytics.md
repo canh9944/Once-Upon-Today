@@ -1,4 +1,24 @@
-# Traffic attribution and AdSense reporting
+# Traffic attribution and revenue reporting
+
+The admin overview shows traffic. Open Revenue in the admin menu to view
+AdsConex and AdSense reports for the selected date range.
+
+Traffic opens on the last seven days. Overview shows the totals and the
+country breakdown. Articles shows views, active users and sessions by
+hostname and path. The country selector applies to both tabs. All countries
+sums the selected metrics across GA4 properties. Users may be counted by more
+than one property. Each property's article report includes up to 1,000 URLs
+ordered by views. Table headers sort columns and the fields below them filter
+by text or minimum numeric value.
+
+The service account needs Viewer access
+to each property and the Google Analytics Data API enabled in its Cloud project.
+For Node.js, set `GOOGLE_APPLICATION_CREDENTIALS` to the service account JSON file.
+For Cloudflare, set `GA4_SERVICE_ACCOUNT_JSON` as a Worker secret.
+
+Set `ADSCONEX_API_TOKEN` in `.env.local` for local Node.js development or
+as a Worker secret for production. AdsConex returns revenue without a
+currency code, so the dashboard displays the amount as provided.
 
 ## Production setup
 

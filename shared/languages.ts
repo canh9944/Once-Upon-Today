@@ -1,8 +1,8 @@
-import {isLocale,type Locale} from './domain';
+import {isLocale,locales,type Locale} from './domain';
 import labels from './language-labels.json';
 
-// One option per language; regional editions and Serbian scripts share their filter.
-export const languages=['en','es','fr','de','pt','ru','it','tr','pl','uk','ro','nl','el','cs','sv','hu','bg','sr','da','fi','nb','hr','bs','sk','sq','lt','sl','lv','et','ca','be','mk','is','lb','mt','vi','ja','ko','th'] as const;
+// Public language options follow the supported interface locales.
+export const languages=locales;
 export type Language=typeof languages[number];
 export type LanguageSelection=Language|'all';
 export function languageGroup(locale:string){return locale==='sr-Latn'?'sr':locale.split('-')[0];}

@@ -211,3 +211,6 @@ footer{flex-wrap:wrap}.footer-legal{display:flex;flex:0 0 100%;justify-content:c
 .ad{min-height:300px;margin:48px 0;padding:16px;clear:both;max-width:100%}
 .ad-label{display:block;font:11px Arial,sans-serif;letter-spacing:1px;margin-bottom:12px}
 .ad:has(ins[data-ad-status="unfilled"]){display:none}
+
+.analytics-data-table th > button { font-size: 16px; font-weight: 700; }
+.analytics-data-table td.analytics-number { color: var(--green); }

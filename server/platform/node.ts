@@ -5,16 +5,18 @@ import type {Platform,SqlDatabase,Statement} from './types';
 import {contentOrigin} from '../remote-content';
 import {localAuthEnabled} from '../local-auth';
 let singleton:Platform|undefined;
-let localAuth:Platform|undefined;
+// Development recompiles can recreate modules while the same server process is running.
+const processState=globalThis as typeof globalThis & { onceUsernamePreviewPlatform?:Platform };
 export function getPlatform():Platform{
   if(contentOrigin()){
     if(!localAuthEnabled())throw new Error('Local database is disabled in API content mode.');
-    if(localAuth)return localAuth;
+    if(processState.onceUsernamePreviewPlatform)return processState.onceUsernamePreviewPlatform;
     const connection=new Database(':memory:');
-    connection.exec('CREATE TABLE users (id TEXT PRIMARY KEY,email TEXT NOT NULL UNIQUE,name TEXT NOT NULL,passwordHash TEXT,googleSub TEXT UNIQUE,createdAt TEXT NOT NULL,facebookSub TEXT UNIQUE,appleSub TEXT UNIQUE);CREATE TABLE sessions (hash TEXT PRIMARY KEY,userId TEXT NOT NULL,expires INTEGER NOT NULL);CREATE TABLE rate_limits (key TEXT PRIMARY KEY,count INTEGER NOT NULL,resetAt INTEGER NOT NULL)');
+    connection.exec('CREATE TABLE users (id TEXT PRIMARY KEY,email TEXT UNIQUE,username TEXT COLLATE NOCASE UNIQUE,name TEXT NOT NULL,passwordHash TEXT,googleSub TEXT UNIQUE,createdAt TEXT NOT NULL,facebookSub TEXT UNIQUE,appleSub TEXT UNIQUE,CHECK (email IS NOT NULL OR username IS NOT NULL));CREATE TABLE sessions (hash TEXT PRIMARY KEY,userId TEXT NOT NULL,expires INTEGER NOT NULL);CREATE TABLE rate_limits (key TEXT PRIMARY KEY,count INTEGER NOT NULL,resetAt INTEGER NOT NULL)');
     const db:SqlDatabase={all:async<T>(sql:string,params:unknown[]=[])=>connection.prepare(sql).all(...params) as T[],run:async(sql,params=[])=>({changes:connection.prepare(sql).run(...params).changes}),batch:async(statements:Statement[])=>{connection.transaction(()=>{for(const s of statements)connection.prepare(s.sql).run(...(s.params||[]));})();}};
-    localAuth={kind:'node',db,env:process.env,objects:{put:async()=>{throw new Error('Uploads are disabled in API content mode.');},get:async()=>null}};
-    return localAuth;
+    const platform:Platform={kind:'node',db,env:process.env,objects:{put:async()=>{throw new Error('Uploads are disabled in API content mode.');},get:async()=>null}};
+    processState.onceUsernamePreviewPlatform=platform;
+    return platform;
   }
   if(singleton)return singleton;
   const dbPath=path.resolve(process.env.DATABASE_PATH||'data/app.sqlite');fs.mkdirSync(path.dirname(dbPath),{recursive:true});

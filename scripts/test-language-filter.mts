@@ -5,16 +5,15 @@ import {resolveLanguage,languageLocale,languageBrowseHref,languageArticleHref,la
 import {uiCopy} from '../lib/ui-i18n';
 import {remotePosts,remoteSearch} from '../server/remote-content';
 
-assert.equal(languages[0],'en');assert.equal(new Set(languages).size,languages.length);
+assert.deepEqual(languages,['en','vi']);
 for(const locale of locales){assert.ok(languages.some(l=>l===languageGroup(locale)));assert.ok(uiCopy(locale).allLanguages);for(const language of languages)assert.ok(languageLabel(language,locale));}
 assert.equal(resolveLanguage('en'), 'all');assert.equal(resolveLanguage('en','en'),'en');
-assert.equal(resolveLanguage('nl-BE'), 'nl');assert.equal(resolveLanguage('en',undefined,'BE'),'fr');
-assert.equal(languageLocale('nl-BE','all'),'en');assert.equal(languageLocale('nl-BE','nl'),'nl-BE');
+assert.equal(resolveLanguage('en','nl-BE'), 'all');assert.equal(resolveLanguage('en',undefined,'BE'),'all');
+assert.equal(languageLocale('vi','all'),'en');assert.equal(languageLocale('en','vi'),'vi');
 assert.equal(languageBrowseHref('en'),'/en?lang=en');assert.equal(languageBrowseHref('all'),'/en');
 assert.equal(languageSwitchHref('/en/posts/story','lang=en&genre=Mystery&q=family','vi'),'/en/posts/story?lang=vi&genre=Mystery&q=family');
-assert.equal(languageSwitchHref('/fr-BE/posts/story','lang=fr','all'),'/fr-BE/posts/story?lang=all');
 assert.equal(languageSwitchHref('/en','genre=Mystery&q=family','vi'),'/vi?lang=vi&genre=Mystery&q=family');
-assert.ok(languageArticleHref({id:'story',language:'fr-BE'},'fr').endsWith('?lang=fr'));
+assert.equal(languageArticleHref({id:'story',language:'fr-BE'},'all'),'/en/posts/story?lang=all');
 assert.deepEqual(languageMembers('fr'),['fr','fr-BE']);assert.ok(matchesLanguage('fr-BE','fr'));assert.ok(matchesLanguage('sr-Latn','sr'));assert.ok(!matchesLanguage('nl-BE','en'));
 const previousFetch=globalThis.fetch,previousEnv={...process.env};
 Object.assign(process.env,{NODE_ENV:'development',DEPLOY_TARGET:'',CONTENT_API_URL:'https://content.example',APP_URL:'http://localhost:3000'});

@@ -2,6 +2,7 @@ import {cache,Suspense} from 'react';
 import {notFound} from 'next/navigation';
 import {publicPost} from '@/lib/backend';
 import {isLocale,formatDate} from '@/lib/i18n';
+import {contentLocale} from '@/shared/domain';
 import {resolveLanguage,languageLocale} from '@/lib/language-selection';
 import Article from '@/components/article';
 import PostContent from '@/components/post-content';
@@ -12,7 +13,7 @@ type Params=Promise<{locale:string;id:string}>;
 const getPost=cache(async(locale:string,id:string)=>{
   if(!isLocale(locale))notFound();
   const post=await publicPost(id);
-  if(!post||post.language!==locale)notFound();return post;
+  if(!post||contentLocale(post.language)!==locale)notFound();return post;
 });
 export async function generateMetadata({params}:{params:Params}){
   const {locale,id}=await params;const post=await getPost(locale,id);

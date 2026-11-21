@@ -13,3 +13,4 @@ data
 backups
 artifacts
 *.tsbuildinfo
+secret/

@@ -6,8 +6,10 @@ import {authCopy} from '../lib/auth-i18n';
 import {editorCopy} from '../lib/editor-i18n';
 import {uiCopy} from '../lib/ui-i18n';
 import {analyticsCopy} from '../lib/analytics-i18n';
-import {countryLocale,countryLocales,resolveCountry,browseHref} from '../lib/country-selection';
+import {countryLocale,resolveCountry,browseHref} from '../lib/country-selection';
 
+assert.deepEqual(locales,['en','vi']);
+assert.equal(isLocale('fr'),false);
 const keys=(object:object)=>Object.keys(object).sort();
 const reference={main:keys(dictionary('en')),auth:keys(authCopy('en')),editor:keys(editorCopy('en')),ui:keys(uiCopy('en')),analytics:keys(analyticsCopy('en'))};
 for(const locale of locales){
@@ -32,10 +34,10 @@ for(const locale of locales){
   for(const country of countries){const name=countryName(country.code,locale);assert.ok(name&&(name!==country.code||country.code==='US-UK'),`${locale}: missing country label ${country.code}`);}
 }
 for(const country of countries){
-  assert.ok(countryLocales[country.code],`Missing language mapping for ${country.code}`);
   const locale=countryLocale(country.code),href=browseHref(country.code);
   assert.ok(href.startsWith(`/${locale}?`));
   assert.equal(resolveCountry(locale,country.code),country.code);
 }
-for(const [country,locale] of Object.entries({JP:'ja',KR:'ko',TH:'th',NO:'nb',FI:'fi',GR:'el',CZ:'cs',UA:'uk',LU:'lb',MT:'mt',AD:'ca',ME:'sr-Latn',RU:'ru',TR:'tr'}))assert.equal(countryLocale(country),locale);
+assert.equal(countryLocale('VN'),'vi');
+assert.equal(countryLocale('FR'),'en');
 console.log(`PASS: ${countries.length} country mappings, ${locales.length} complete locale dictionaries, auth/editor/search/category labels, localized country names and date formatting.`);

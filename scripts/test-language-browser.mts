@@ -14,22 +14,15 @@ try{
     await page.goto(origin+'/en');await expect(page.locator('.header-language button')).toContainText('All languages');
     await page.locator('.header-language button').click();
     const options=page.locator('.searchable-select-popover [role="option"]');
-    await expect(options).toHaveCount(languages.length+1);await expect(options.nth(1)).toHaveText('English');await expect(options.nth(2)).toHaveText('Spanish');
+    await expect(options).toHaveCount(languages.length+1);await expect(options.nth(1)).toHaveText('English');await expect(options.nth(2)).toHaveText('Vietnamese');
     assert.ok(!(await options.allTextContents()).some(label=>label.includes('United Kingdom')||label.includes('France')));
     await options.nth(1).click();await expect(page).toHaveURL(origin+'/en?lang=en');
     const english=all.filter(p=>matchesLanguage(p.language,'en'));
     if(english.length)await expect(page.locator('.title-button')).toHaveCount(Math.min(english.length,4)+Math.min(Math.max(0,english.length-4),viewport.width<768?6:12));else await expect(page.locator('.empty')).toBeVisible();
     const api=await page.request.get(origin+'/api/posts?language=nl');assert.equal(api.status(),200);assert.ok((await api.json()).posts.every((p:Post)=>matchesLanguage(p.language,'nl')));
-    await page.goto(origin+'/nl?lang=nl');await expect(page.locator('html')).toHaveAttribute('lang','nl');await expect(page.locator('.header-language button')).toContainText('Nederlands');
-    const dutch=all.filter(p=>matchesLanguage(p.language,'nl'));
-    if(dutch.length){
-      await expect(page.locator('.title-button')).toHaveCount(Math.min(dutch.length,4)+Math.min(Math.max(0,dutch.length-4),viewport.width<768?6:12));await page.locator('.feature-copy .title-button').click();await expect(page.locator('.article-page')).toBeVisible();
-      await expect(page).toHaveURL(/lang=nl/);await expect(page.locator('.header-language button')).toContainText(/Nederlands/);
-      const articleUrl=page.url();await page.locator('.header-search input').click();await page.locator('.article-page h1').click();assert.equal(page.url(),articleUrl);
-      await page.locator('.related-stories').waitFor();const relatedHref=await page.locator('.related-card-link').first().getAttribute('href');assert.ok(relatedHref?.includes('lang=nl'));
-    }
+    await page.goto(origin+'/nl?lang=nl');await expect(page).toHaveURL(origin+'/en?lang=nl');await expect(page.locator('html')).toHaveAttribute('lang','en');
     if(all.length){
-      const post=all[0],path=`/${post.language}/posts/${encodeURIComponent(post.id)}`;
+      const post=all[0],path=`/${post.language==='vi'?'vi':'en'}/posts/${encodeURIComponent(post.id)}`;
       await page.goto(origin+path+'?lang=en&q=family');
       const title=await page.locator('.article-page h1').textContent();
       await page.locator('.header-language button').click();

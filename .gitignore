@@ -19,3 +19,4 @@ backend/.env
 backups/
 
 .next-app/
+/secret/

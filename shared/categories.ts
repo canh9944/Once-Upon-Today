@@ -18,7 +18,7 @@ type Labels=readonly string[];
 const fr:Labels=['Histoires familiales émouvantes','Drames relationnels et trahisons','Mystères et secrets cachés','Événements de vie inattendus','Dilemmes moraux','Histoires inspirantes et réconfortantes','Histoires psychologiques et rebondissements','Histoires d’animaux et de compagnons'];
 const de:Labels=['Emotionale Familiengeschichten','Beziehungsdramen und Verrat','Mysterien und verborgene Geheimnisse','Unerwartete Lebensereignisse','Moralische Dilemmata','Inspirierende und herzerwärmende Geschichten','Psychologische Geschichten und überraschende Wendungen','Haustier- und Tiergeschichten'];
 const nl:Labels=['Ontroerende familieverhalen','Relatiedrama en verraad','Mysteries en verborgen geheimen','Onverwachte levensgebeurtenissen','Morele dilemma’s','Inspirerende en hartverwarmende verhalen','Psychologische verhalen en verrassende wendingen','Verhalen over huisdieren en dieren'];
-export const categoryLabels:Record<Locale,Labels>={
+const categoryLabels:Record<string,Labels>={
   ...additionalCategoryLabels,
   en:categories,
   vi:['Câu chuyện gia đình cảm động','Bi kịch tình cảm và sự phản bội','Bí ẩn và những bí mật ẩn giấu','Biến cố bất ngờ trong cuộc sống','Những tình huống khó xử về đạo đức','Câu chuyện truyền cảm hứng và ấm áp','Câu chuyện tâm lý và những cú ngoặt bất ngờ','Câu chuyện về thú cưng và động vật'],

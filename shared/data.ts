@@ -1,5 +1,5 @@
-import type {Locale} from './domain';
-export type Post = { id:string; title:string; excerpt:string; content:string; contentFormat?:'text'|'html'; country:string; language:Locale; category:string; image:string; author:string; date:string; published:boolean };
+import type {ContentLanguage} from './domain';
+export type Post = { id:string; title:string; excerpt:string; content:string; contentFormat?:'text'|'html'; country:string; language:ContentLanguage; category:string; image:string; author:string; date:string; published:boolean };
 export {countries} from './countries';
 const photo = (id:string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1400&q=85`;
 const vietnameseSeed:Omit<Post,'language'>[] = [

@@ -1,4 +1,4 @@
-import {languageGroup,languageLabel,type Language} from '../shared/languages';
+import {languageLabel} from '../shared/languages';
 import assert from 'node:assert/strict';
 import {chromium,expect} from '@playwright/test';
 import {countries} from '../shared/data';
@@ -24,7 +24,7 @@ try{
       const response=await page.goto(origin+browseHref(country.code));assert.equal(response?.status(),200,`${country.code} page failed`);
       await expect(page.locator('html')).toHaveAttribute('lang',locale);
       await expect(page.locator('.section-heading h1')).toContainText(t.stories);
-      await expect(page.locator('.header-country button')).toContainText(languageLabel(languageGroup(locale) as Language,locale));
+      await expect(page.locator('.header-country button')).toContainText(locale==='vi'?languageLabel('vi',locale):ui.allLanguages);
       await page.locator('.header-genre button').click();
       await expect(page.locator('.searchable-select-popover [role="option"]')).toHaveCount(9);
       assert.deepEqual(await page.locator('.searchable-select-popover [role="option"]>span').allTextContents(),[`${t.category}: ${t.all}`,...categories.map(c=>categoryName(c,locale))]);
@@ -38,7 +38,7 @@ try{
       await page.locator('.auth-login-trigger').click();
       await expect(page.getByRole('dialog')).toBeVisible();
       await expect(page.getByRole('tab',{name:auth.signup,exact:true})).toBeVisible();
-      await expect(page.getByRole('dialog').getByLabel(ui.email,{exact:true})).toBeVisible();
+      await expect(page.getByRole('dialog').getByLabel(locale==='vi'?'Tên đăng nhập':'Username',{exact:true})).toBeVisible();
       await page.keyboard.press('Escape');
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`${country.code}: horizontal overflow`);
       checked++;
