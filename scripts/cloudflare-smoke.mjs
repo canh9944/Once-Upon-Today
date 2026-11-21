@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import sharp from "sharp";
 import Database from "better-sqlite3";
 const dir = fs.mkdtempSync(path.join(tmpdir(), "once-cloudflare-")),
-  origin = "http://localhost:8787",
+  origin = "http://127.0.0.1:8787",
   password = randomBytes(24).toString("hex");
 const config = JSON.parse(fs.readFileSync("wrangler.jsonc", "utf8"));
 config.main = path.resolve(".open-next/worker.js");
@@ -24,7 +24,7 @@ const file = path.join(dir, "wrangler.json");
 fs.writeFileSync(file, JSON.stringify(config));
 const cli = "node_modules/wrangler/bin/wrangler.js",
   args = ["--config", file, "--persist-to", path.join(dir, "state")],
-  env = { ...process.env, WRANGLER_SEND_METRICS: "false" };
+  env = { ...process.env, WRANGLER_SEND_METRICS: "false", CLOUDFLARE_LOAD_DEV_VARS_FROM_DOT_ENV: "false" };
 const migration = spawnSync(
   process.execPath,
   [cli, "d1", "migrations", "apply", "DB", "--local", ...args],
@@ -72,7 +72,7 @@ try {
     email: "test@example.com",
     password,
   });
-  assert.equal(login.status, 200, await login.clone().text());
+  assert.equal(login.status, 200, (await login.clone().text()) + "\n" + output.slice(-3500));
   cookie = login.headers.get("set-cookie").split(";")[0];
   const adminCookie = cookie;
   const readerPassword = randomBytes(20).toString("hex"),

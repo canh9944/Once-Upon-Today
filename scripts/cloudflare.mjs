@@ -19,6 +19,11 @@ function patchOpenNextBuild(){
  const bundleSource=fs.readFileSync(bundleFile,'utf8');
  const bundlePatched=bundleSource.replace('alias: getShimAliases(path.join(outputDir, "cloudflare-templates/shims"), useOg),','alias: { ...getShimAliases(path.join(outputDir, "cloudflare-templates/shims"), useOg), sharp: path.join(outputDir, "cloudflare-templates/shims/throw.js") },');
  if(bundlePatched!==bundleSource)fs.writeFileSync(bundleFile,bundlePatched);
+ // Route this manifest through OpenNext's manifest inliner on Workers.
+ const serverFile=require.resolve('next/dist/server/next-server.js');
+ const serverSource=fs.readFileSync(serverFile,'utf8');
+ const serverPatched=serverSource.replace('const manifest = require(this.middlewareManifestPath);','const manifest = (0, _loadmanifestexternal.loadManifest)(this.middlewareManifestPath);');
+ if(serverPatched!==serverSource)fs.writeFileSync(serverFile,serverPatched);
  if(process.platform==='win32'){
   // pnpm's directory links can be recreated as junctions without symlink privileges.
   const traceFile=cloudflareRequire.resolve('@opennextjs/aws/build/copyTracedFiles.js');
