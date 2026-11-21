@@ -64,6 +64,10 @@ try {
   }
   assert.ok(ready, output.slice(-6000));
   assert.equal((await (await request("/api/health")).json()).database, "d1");
+  const browserSession = await fetch(origin + "/api/auth", {
+    headers: { Cookie: "diagnostic=1" },
+  });
+  assert.equal(browserSession.status, 200, await browserSession.clone().text());
   const login = await request("/api/auth", "POST", {
     email: "test@example.com",
     password,
